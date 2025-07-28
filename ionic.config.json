@@ -1,0 +1,7 @@
+{
+  "name": "snipper_ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
