@@ -1,0 +1,183 @@
+.watch-edit-content {
+  --background: var(--ion-background-color, #f8f9fa);
+}
+
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}
+
+.content-container {
+  padding: 16px;
+}
+
+.custom-header {
+  --background: linear-gradient(to right, #145583, #6cb1df);
+  --color: #fff;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  text-align: center;
+  padding: 20px;
+  background: var(--ion-card-background, var(--ion-background-color, #ffffff));
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.loading-content ion-spinner {
+  margin-bottom: 16px;
+}
+
+.item-info-card {
+  margin: 0 0 20px 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--ion-card-background, var(--ion-background-color, #ffffff));
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.item-header ion-icon {
+  margin-right: 12px;
+  font-size: 24px;
+}
+
+.item-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ion-text-color, #333);
+}
+
+.item-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-number {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  display: flex;
+  align-items: center;
+}
+
+.item-number ion-icon {
+  margin-right: 6px;
+  font-size: 16px;
+}
+
+.form-container {
+  background: var(--ion-card-background, var(--ion-background-color, #ffffff));
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-list {
+  margin-bottom: 24px;
+}
+
+.form-list ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --border-color: var(--ion-color-light);
+  margin-bottom: 16px;
+  --background: transparent;
+}
+
+.form-list ion-label {
+  font-weight: 500;
+  color: var(--ion-text-color, #333);
+}
+
+.action-buttons {
+  padding: 0;
+}
+
+.action-buttons ion-col {
+  padding: 0 0 12px 0;
+}
+
+ion-toggle[slot="end"] {
+  --handle-background: #1d1b1b; /* OFF circle */
+  --background: #565656; /* OFF track */
+  --handle-background-checked: #145583; /* ON circle */
+  --background-checked: #6cb1df; /* ON track */
+}
+
+.cancel-btn {
+  --color: #145583;
+  --border-color: #145583;
+  --background: transparent;
+}
+
+.add-update-watch {
+  --background: #145583;
+  --color: #fff;
+}
+
+.action-buttons ion-button {
+  --border-radius: 8px;
+  height: 48px;
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .content-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .item-info-card,
+  .form-container {
+    margin: 0 auto 20px auto;
+  }
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+  .loading-overlay {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .loading-content {
+    background: var(
+      --ion-card-background,
+      var(--ion-background-color, #1e1e1e)
+    );
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  .form-container,
+  .item-info-card {
+    background: var(
+      --ion-card-background,
+      var(--ion-background-color, #1e1e1e)
+    );
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+}

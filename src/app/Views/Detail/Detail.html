@@ -1,0 +1,235 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-title>Item Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="viewOnEbay_click()">
+        <ion-icon slot="icon-only" name="globe-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="detail-content">
+  <!-- Error loading panel -->
+  <div class="error-state" *ngIf="viewModel.showError">
+    <ion-card class="error-card">
+      <ion-card-content class="error-content">
+        <div class="error-icon">
+          <ion-icon name="cloud-offline-outline" color="danger"></ion-icon>
+        </div>
+        <h3>Connection Error</h3>
+        <p>Unexpected error; please try again.</p>
+        <ion-button fill="solid" color="primary" (click)="retry_click()">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Try Again
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Full-view spinner -->
+  <div class="loading-state" *ngIf="viewModel.showSpinner">
+    <div class="loading-content">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Loading item details...</p>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!viewModel.showError && !viewModel.showSpinner"
+    class="detail-container"
+  >
+    <!-- Hero Image Section -->
+    <div class="hero-section" *ngIf="viewModel.item">
+      <div class="item-image-container">
+        <img
+          [src]="viewModel.item.PictureUrl"
+          [alt]="viewModel.item.Title"
+          class="item-image"
+          (error)="onImageError($event)"
+        />
+
+        <!-- Status Badge -->
+        <div
+          class="status-badge"
+          [ngClass]="{ 'ended': viewModel.item.HasEnded }"
+        >
+          <ion-icon
+            [name]="viewModel.item.HasEnded ? 'close-circle-outline' : 'time-outline'"
+          ></ion-icon>
+          <span
+            >{{ viewModel.item.HasEnded ? 'Ended' : viewModel.item.CountDownTime
+            }}</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Item Details Section -->
+    <div class="details-section" *ngIf="viewModel.item">
+      <ion-card class="detail-card">
+        <ion-card-content>
+          <h1 class="item-title">{{ viewModel.item.Title }}</h1>
+
+          <div class="price-section">
+            <div class="current-price">
+              <span class="price-label">Current Price</span>
+              <span class="price-value">
+                {{ viewModel.item.Currency }}{{ viewModel.item.CurrentPrice |
+                number:'1.2-2' }}
+              </span>
+            </div>
+
+            <div class="bids-section">
+              <ion-icon name="hammer-outline" color="medium"></ion-icon>
+              <span>{{ viewModel.item.Bids }} bids</span>
+            </div>
+          </div>
+
+          <div class="meta-section">
+            <div class="meta-item">
+              <ion-icon name="calendar-outline" color="medium"></ion-icon>
+              <span
+                >Ends: {{ viewModel.item.EndTime | date:"MM/dd/yyyy 'at' h:mma"
+                }}</span
+              >
+            </div>
+
+            <div class="meta-item" *ngIf="viewModel.item.FreeShipping">
+              <ion-icon name="car-outline" color="success"></ion-icon>
+              <span class="free-shipping">Free Shipping</span>
+            </div>
+
+            <div class="meta-item" *ngIf="!viewModel.item.Auction">
+              <ion-icon name="pricetag-outline" color="warning"></ion-icon>
+              <span>Fixed Price Item</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Action Buttons Section -->
+    <div class="actions-section" *ngIf="viewModel.item">
+      <!-- Snipe Actions -->
+      <ion-card class="actions-card" *ngIf="!viewModel.item.HasEnded">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="locate-outline"></ion-icon>
+            Snipe Actions
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="action-buttons">
+            <!-- Add to Snipes -->
+            <ion-button
+              expand="block"
+              [fill]="!viewModel.item.Auction ? 'outline' : null"
+              [disabled]="!viewModel.item.Auction"
+              *ngIf="!viewModel.itemHasActiveSnipe"
+              (click)="addToSnipes_click()"
+            >
+              <ion-icon name="crosshairs-outline" slot="start"></ion-icon>
+              Add to Snipes
+              <span class="disabled-text" *ngIf="!viewModel.item.Auction"
+                >(Disabled non-auction)</span
+              >
+            </ion-button>
+
+            <!-- Update Snipe -->
+            <ion-button
+              expand="block"
+              *ngIf="viewModel.itemHasActiveSnipe"
+              (click)="updateSnipe_click(viewModel.item.Id)"
+            >
+              <ion-icon name="create-outline" slot="start"></ion-icon>
+              Update Snipe
+            </ion-button>
+
+            <!-- Remove from Snipes -->
+            <ion-button
+              expand="block"
+              color="danger"
+              fill="outline"
+              *ngIf="viewModel.itemHasActiveSnipe"
+              (click)="removeFromSnipes_click(viewModel.item.Id)"
+            >
+              <ion-icon name="close-outline" slot="start"></ion-icon>
+              Remove from Snipes
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Watch Actions -->
+      <ion-card class="actions-card" *ngIf="!viewModel.item.HasEnded">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="eye-outline"></ion-icon>
+            Watch Actions
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="action-buttons">
+            <!-- Add to Watches -->
+            <ion-button
+              expand="block"
+              fill="outline"
+              *ngIf="!viewModel.itemIsWatched"
+              (click)="addToWatches_click(viewModel.item.Id)"
+            >
+              <ion-icon name="eye-outline" slot="start"></ion-icon>
+              Add to Watches
+            </ion-button>
+
+            <!-- Remove from Watches -->
+            <ion-button
+              expand="block"
+              color="danger"
+              fill="outline"
+              *ngIf="viewModel.itemIsWatched"
+              (click)="removeFromWatches_click(viewModel.item.Id)"
+            >
+              <ion-icon name="eye-off-outline" slot="start"></ion-icon>
+              Remove from Watches
+            </ion-button>
+
+            <!-- Edit Watch -->
+            <ion-button
+              expand="block"
+              fill="outline"
+              *ngIf="viewModel.itemIsWatched"
+              (click)="editWatch_click(viewModel.item.Id)"
+            >
+              <ion-icon name="create-outline" slot="start"></ion-icon>
+              Edit Watch
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- External Actions -->
+      <ion-card class="actions-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="link-outline"></ion-icon>
+            External Actions
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="action-buttons">
+            <!-- View on E-Bay -->
+            <ion-button
+              expand="block"
+              fill="outline"
+              (click)="viewOnEbay_click()"
+            >
+              <ion-icon name="globe-outline" slot="start"></ion-icon>
+              View on eBay
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,81 @@
+<div class="search-advanced-menu">
+  <div class="advanced-header">
+    <h5>{{ Localization.Search.Advanced.LocationTag }}</h5>
+    <ion-button size="small" color="primary" fill="outline" (click)="advancedPopover_hide()">
+      {{ Localization.Search.Advanced.Done }}
+    </ion-button>
+  </div>
+  
+  <div class="advanced-content">
+    <!-- Located In options -->
+    <div class="radio-group">
+      <ion-radio-group [(ngModel)]="viewModel.isLocatedIn" (ionChange)="locationClick()">
+        <ion-item>
+          <ion-radio slot="start" [value]="false" [checked]="viewModel.isLocatedIn === false"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.Available }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="true" [checked]="viewModel.isLocatedIn === true"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.Located }}</ion-label>
+        </ion-item>
+      </ion-radio-group>
+    </div>
+    
+    <div class="section-title">{{ Localization.Search.Advanced.CountryTag }}</div>
+    
+    <!-- Country options -->
+    <div class="radio-group">
+      <ion-radio-group [(ngModel)]="viewModel.country" (ionChange)="countryClick()">
+        <ion-item>
+          <ion-radio slot="start" [value]="1" [checked]="viewModel.country === 1"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.USA }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="3" [checked]="viewModel.country === 3"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.UK }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="2" [checked]="viewModel.country === 2"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.CAN }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="15" [checked]="viewModel.country === 15"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.AUS }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="31" [checked]="viewModel.country === 31"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.BRA }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="71" [checked]="viewModel.country === 71"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.FRA }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="77" [checked]="viewModel.country === 77"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.GER }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="101" [checked]="viewModel.country === 101"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.ITA }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="146" [checked]="viewModel.country === 146"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.NET }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="164" [checked]="viewModel.country === 164"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.POR }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="186" [checked]="viewModel.country === 186"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.SPA }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="192" [checked]="viewModel.country === 192"></ion-radio>
+          <ion-label>{{ Localization.Search.Advanced.SWE }}</ion-label>
+        </ion-item>
+      </ion-radio-group>
+    </div>
+  </div>
+</div>
+  

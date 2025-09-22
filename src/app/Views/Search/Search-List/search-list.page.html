@@ -1,24 +1,31 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+  <ion-toolbar class="custom-header">
     <ion-title>My Searches</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="savedSearchItem_click_new()" class="add-btn" fill="solid">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="safe-area-content">
-
   <ion-refresher slot="fixed" (ionRefresh)="refresher_refresh($event)">
     <ion-refresher-content
       pullingText="Pull to refresh..."
-      refreshingText="Refreshing...">
+      refreshingText="Refreshing..."
+    >
     </ion-refresher-content>
   </ion-refresher>
 
   <ion-list>
-    <ion-item *ngFor="let search of viewModel.searches"
+    <ion-item
+      *ngFor="let search of viewModel.searches"
       (click)="savedSearchItem_click(search)"
-      detail>
+      detail
+    >
       {{ search.Title }}
     </ion-item>
   </ion-list>
-
 </ion-content>

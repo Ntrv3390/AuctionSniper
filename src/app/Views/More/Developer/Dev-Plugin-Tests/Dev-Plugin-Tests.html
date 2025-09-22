@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+    <ion-toolbar class="custom-header">
+      <ion-title>Plugin Tests</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="safe-area-content">
+  
+    <!-- Exception Handling Card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Exception Handling
+        <ion-icon slot="end" name="help-outline" (click)="help_click('Used to simulate different exception types to test logging.')"></ion-icon>
+      </ion-item-divider>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4">
+            <ion-button expand="block" color="danger" (click)="testNativeException_click()">Native</ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button expand="block" color="danger" (click)="testJsException_click()">JS</ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button expand="block" color="danger" (click)="testAngularException_click()">Angular</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  
+    <!-- HTTP Progress Bar Card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        HTTP Progress Bar
+        <ion-icon slot="end" name="help-outline" (click)="help_click('Used to test the progress indicator functionality that is utilized during HTTP requests.')"></ion-icon>
+      </ion-item-divider>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-button expand="block" color="success" (click)="showFullScreenBlock_click()">Block</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  
+    <!-- Modals Card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Modals
+        <ion-icon slot="end" name="help-outline" (click)="help_click('Used to test the modals.')"></ion-icon>
+      </ion-item-divider>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4">
+            <ion-button expand="block" color="primary" (click)="modalsAlert_click()">Alert</ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button expand="block" color="primary" (click)="modalsConfirm_click()">Confirm</ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button expand="block" color="primary" (click)="modalsPrompt_click()">Prompt</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-button expand="block" color="primary" (click)="modalsActionSheet_click()">Action Sheet</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  
+    <!-- Snackbar UI Card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Snackbar UI
+        <ion-icon slot="end" name="help-outline" (click)="help_click('Used to test the snackbar user interface.')"></ion-icon>
+      </ion-item-divider>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4">
+            <ion-button expand="block" color="tertiary" (click)="snackBar_top()">Top</ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button expand="block" color="tertiary" (click)="snackBar_action()">Action</ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button expand="block" color="tertiary" (click)="snackBar_bottom()">Bottom</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  
+  </ion-content>
+  

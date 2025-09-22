@@ -1,0 +1,95 @@
+<ion-header [translucent]="true">
+    <ion-toolbar class="custom-header">
+      <ion-title>Edit</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="safe-area-content">
+    <ion-form (ngSubmit)="save_click()" [formGroup]="searchForm">
+      <ion-list>
+  
+        <ion-item>
+          <ion-label position="floating">Search Name Description</ion-label>
+          <ion-input type="text" formControlName="Title" placeholder="Search Name Description"></ion-input>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label position="floating">Keywords to use for search</ion-label>
+          <ion-input type="text" formControlName="AllWords" placeholder="Keywords to use for search"></ion-input>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label position="floating">Keywords to omit for search</ion-label>
+          <ion-input type="text" formControlName="ExcludeWords" placeholder="Keywords to omit for search"></ion-input>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Category</ion-label>
+          <ion-select interface="popover" formControlName="Category" placeholder="All Categories">
+            <ion-select-option value="">All Categories</ion-select-option>
+            <ion-select-option value="20081">Antiques</ion-select-option>
+            <ion-select-option value="550">Art</ion-select-option>
+            <ion-select-option value="2984">Baby</ion-select-option>
+            <ion-select-option value="267">Books</ion-select-option>
+            <ion-select-option value="12576">Business, Office & Industrial</ion-select-option>
+            <ion-select-option value="625">Cameras & Photo</ion-select-option>
+            <ion-select-option value="6000">Cars, Parts & Vehicles</ion-select-option>
+            <ion-select-option value="15032">Cell Phones</ion-select-option>
+            <ion-select-option value="11450">Clothing, Shoes & Accessories</ion-select-option>
+            <ion-select-option value="11116">Coins</ion-select-option>
+            <ion-select-option value="1">Collectibles</ion-select-option>
+            <ion-select-option value="58058">Computers & Networking</ion-select-option>
+            <ion-select-option value="293">Consumer Electronics</ion-select-option>
+            <ion-select-option value="14339">Crafts</ion-select-option>
+            <ion-select-option value="237">Dolls & Bears</ion-select-option>
+            <ion-select-option value="11232">DVDs & Movies</ion-select-option>
+            <ion-select-option value="45100">Entertainment Momorabilia</ion-select-option>
+            <ion-select-option value="31411">Gift Certificates</ion-select-option>
+            <ion-select-option value="26395">Health & Beauty</ion-select-option>
+            <ion-select-option value="11700">Home & Garden</ion-select-option>
+            <ion-select-option value="281">Jewelry & Watches</ion-select-option>
+            <ion-select-option value="11233">Music</ion-select-option>
+            <ion-select-option value="619">Musical Instruments</ion-select-option>
+            <ion-select-option value="870">Pottery & Glass</ion-select-option>
+            <ion-select-option value="10542">Real Estate</ion-select-option>
+            <ion-select-option value="316">Speciality Services</ion-select-option>
+            <ion-select-option value="382">Sporting Goods</ion-select-option>
+            <ion-select-option value="64482">Sports Mem, Cards & Fan Shop</ion-select-option>
+            <ion-select-option value="260">Stamps</ion-select-option>
+            <ion-select-option value="1305">Tickets</ion-select-option>
+            <ion-select-option value="220">Toys & Hobbies</ion-select-option>
+            <ion-select-option value="3252">Travel</ion-select-option>
+            <ion-select-option value="1249">Video Games</ion-select-option>
+            <ion-select-option value="99">Everything Else</ion-select-option>
+          </ion-select>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label position="floating">Minimum Value</ion-label>
+          <ion-input type="number" formControlName="PriceMin" placeholder="Minimum Value"></ion-input>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label position="floating">Maximum Value</ion-label>
+          <ion-input type="number" formControlName="PriceMax" placeholder="Maximum Value"></ion-input>
+        </ion-item>
+  
+      </ion-list>
+  
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-button expand="block" color="primary" type="submit" icon-start="checkmark">
+              Save
+            </ion-button>
+          </ion-col>
+          <ion-col size="6" *ngIf="searchForm.value.Id">
+            <ion-button expand="block" color="danger" fill="outline" icon-start="trash" (click)="delete_click()">
+              Delete
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-form>
+  </ion-content>
+  

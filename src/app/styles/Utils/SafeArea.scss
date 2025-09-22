@@ -1,0 +1,118 @@
+/**
+ * Safe Area Utilities
+ * -----------------------------------------------------
+ * SCSS mixins and functions for handling safe areas consistently
+ */
+
+// Mixin for applying safe area padding to all sides
+@mixin safe-area-all($additional-padding: 0) {
+  padding-top: calc(#{$additional-padding} + var(--safe-area-inset-top, var(--safe-area-inset-top-fallback)));
+  padding-right: calc(#{$additional-padding} + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback)));
+  padding-bottom: calc(#{$additional-padding} + var(--safe-area-inset-bottom, var(--safe-area-inset-bottom-fallback)));
+  padding-left: calc(#{$additional-padding} + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback)));
+}
+
+// Mixin for applying safe area padding to top
+@mixin safe-area-top($additional-padding: 0) {
+  padding-top: calc(#{$additional-padding} + var(--safe-area-inset-top, var(--safe-area-inset-top-fallback)));
+}
+
+// Mixin for applying safe area padding to right
+@mixin safe-area-right($additional-padding: 0) {
+  padding-right: calc(#{$additional-padding} + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback)));
+}
+
+// Mixin for applying safe area padding to bottom
+@mixin safe-area-bottom($additional-padding: 0) {
+  padding-bottom: calc(#{$additional-padding} + var(--safe-area-inset-bottom, var(--safe-area-inset-bottom-fallback)));
+}
+
+// Mixin for applying safe area padding to left
+@mixin safe-area-left($additional-padding: 0) {
+  padding-left: calc(#{$additional-padding} + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback)));
+}
+
+// Mixin for applying safe area margin to all sides
+@mixin safe-area-margin-all($additional-margin: 0) {
+  margin-top: calc(#{$additional-margin} + var(--safe-area-inset-top, var(--safe-area-inset-top-fallback)));
+  margin-right: calc(#{$additional-margin} + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback)));
+  margin-bottom: calc(#{$additional-margin} + var(--safe-area-inset-bottom, var(--safe-area-inset-bottom-fallback)));
+  margin-left: calc(#{$additional-margin} + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback)));
+}
+
+// Mixin for applying safe area margin to top
+@mixin safe-area-margin-top($additional-margin: 0) {
+  margin-top: calc(#{$additional-margin} + var(--safe-area-inset-top, var(--safe-area-inset-top-fallback)));
+}
+
+// Mixin for applying safe area margin to right
+@mixin safe-area-margin-right($additional-margin: 0) {
+  margin-right: calc(#{$additional-margin} + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback)));
+}
+
+// Mixin for applying safe area margin to bottom
+@mixin safe-area-margin-bottom($additional-margin: 0) {
+  margin-bottom: calc(#{$additional-margin} + var(--safe-area-inset-bottom, var(--safe-area-inset-bottom-fallback)));
+}
+
+// Mixin for applying safe area margin to left
+@mixin safe-area-margin-left($additional-margin: 0) {
+  margin-left: calc(#{$additional-margin} + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback)));
+}
+
+// Mixin for filling safe area (negative margins + padding)
+@mixin safe-area-fill() {
+  margin-top: calc(-1 * var(--safe-area-inset-top, var(--safe-area-inset-top-fallback)));
+  margin-bottom: calc(-1 * var(--safe-area-inset-bottom, var(--safe-area-inset-bottom-fallback)));
+  margin-left: calc(-1 * var(--safe-area-inset-left, var(--safe-area-inset-left-fallback)));
+  margin-right: calc(-1 * var(--safe-area-inset-right, var(--safe-area-inset-right-fallback)));
+  padding-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
+  padding-bottom: var(--safe-area-inset-bottom, var(--safe-area-inset-bottom-fallback));
+  padding-left: var(--safe-area-inset-left, var(--safe-area-inset-left-fallback));
+  padding-right: var(--safe-area-inset-right, var(--safe-area-inset-right-fallback));
+}
+
+// Class-based utilities (for direct use in templates)
+.safe-area-all {
+  @include safe-area-all();
+}
+
+.safe-area-top {
+  @include safe-area-top();
+}
+
+.safe-area-right {
+  @include safe-area-right();
+}
+
+.safe-area-bottom {
+  @include safe-area-bottom();
+}
+
+.safe-area-left {
+  @include safe-area-left();
+}
+
+.safe-area-margin-all {
+  @include safe-area-margin-all();
+}
+
+.safe-area-margin-top {
+  @include safe-area-margin-top();
+}
+
+.safe-area-margin-right {
+  @include safe-area-margin-right();
+}
+
+.safe-area-margin-bottom {
+  @include safe-area-margin-bottom();
+}
+
+.safe-area-margin-left {
+  @include safe-area-margin-left();
+}
+
+.safe-area-fill {
+  @include safe-area-fill();
+}

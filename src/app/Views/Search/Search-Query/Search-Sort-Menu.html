@@ -1,0 +1,24 @@
+<ion-popover class="tabPop" style="height: 225px; width: 260px;">
+    <ion-content [fullscreen]="true" class="safe-area-content">
+      <ion-list>
+  
+        <ion-item button (click)="sortSearch_click('MetaEndSort')">
+          {{ Localization.Search.Sort.MetaEndSort }}
+        </ion-item>
+  
+        <ion-item button (click)="sortSearch_click('MetaNewSort')">
+          {{ Localization.Search.Sort.MetaNewSort }}
+        </ion-item>
+  
+        <ion-item button (click)="sortSearch_click('PriceAndShippingLowestFirst')">
+          {{ Localization.Search.Sort.PriceAndShippingLowestFirst }}
+        </ion-item>
+  
+        <ion-item button (click)="sortSearch_click('PriceAndShippingHighestFirst')">
+          {{ Localization.Search.Sort.PriceAndShippingHighestFirst }}
+        </ion-item>
+  
+      </ion-list>
+    </ion-content>
+  </ion-popover>
+  

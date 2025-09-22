@@ -1,0 +1,197 @@
+<ion-header [translucent]="true">
+    <ion-toolbar class="custom-header">
+      <ion-title>Configuration</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="ion-padding">
+  
+    <!-- App Build card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        App Build
+        <ion-icon
+          name="help-outline"
+          class="ion-margin-start"
+          slot="end"
+          (click)="help_click('Information about the current build.')">
+        </ion-icon>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>Debug</ion-label>
+        <ion-note slot="end">{{ viewModel.isDebug }}</ion-note>
+      </ion-item>
+      <ion-item (click)="copyValue_click(viewModel.buildTimestamp, 'Build Timestamp')">
+        <ion-label>Timestamp</ion-label>
+        <ion-note slot="end">{{ viewModel.buildTimestamp }}</ion-note>
+      </ion-item>
+      <ion-item (click)="copyValue_click(viewModel.buildCommit, 'Commit')">
+        <ion-label>Commit</ion-label>
+        <ion-note slot="end">{{ viewModel.buildCommit }}</ion-note>
+      </ion-item>
+    </ion-card>
+  
+    <!-- Overrides card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Overrides
+        <ion-icon
+          name="help-outline"
+          class="ion-margin-start"
+          slot="end"
+          (click)="help_click('Used to reset any configuration overrides. Overrides will have a red label below. If button is disabled, no overrides are currently set.')">
+        </ion-icon>
+      </ion-item-divider>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button
+              expand="block"
+              color="primary"
+              [disabled]="!viewModel.enableResetButton"
+              (click)="resetAll_click()">
+              Reset All Custom Values
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  
+    <!-- Sniper API card -->
+    <ion-card>
+      <ion-item-divider color="dark">Sniper API</ion-item-divider>
+      <ion-item
+        [style.color]="viewModel.overriddenKeys['API_URL'] ? 'red' : ''"
+        (click)="apiUrl_click()">
+        <ion-label>
+          API URL <br />
+          {{ viewModel.apiUrl }}
+        </ion-label>
+      </ion-item>
+      <ion-item
+        [style.color]="viewModel.overriddenKeys['WEB_SITE_URL'] ? 'red' : ''"
+        (click)="webSiteUrl_click()">
+        <ion-label>
+          Website URL <br />
+          {{ viewModel.webSiteUrl }}
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  
+    <!-- External Logging Service card -->
+    <ion-card>
+      <ion-item-divider color="dark">External Logging Service</ion-item-divider>
+      <ion-item
+        [style.color]="viewModel.overriddenKeys['DEBUG_LOGGING_URL'] ? 'red' : ''"
+        (click)="debugLoggingUrl_click()">
+        <ion-label>
+          URL <br />
+          {{ viewModel.debugLoggingUrl }}
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  
+    <!-- Console Logging in Distribution iOS Builds card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Console Logging in Distribution iOS Builds
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>
+          <span [style.color]="viewModel.overriddenKeys['ENABLE_IOS_LOGGING_IN_DISTRIBUTION_BUILDS'] ? 'red' : ''">
+            Enabled
+          </span>
+        </ion-label>
+        <ion-toggle
+          slot="end"
+          color="success"
+          [(ngModel)]="viewModel.enableIosLoggingInDistributionBuilds"
+          (ionChange)="enableIosLoggingInDistributionBuilds_change()">
+        </ion-toggle>
+      </ion-item>
+    </ion-card>
+  
+    <!-- PayPal card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        PayPal
+        <ion-icon
+          name="help-outline"
+          class="ion-margin-start"
+          slot="end"
+          (click)="help_click('Controls the environment the native PayPal SDK uses.')">
+        </ion-icon>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>
+          <span [style.color]="viewModel.overriddenKeys['USE_PAYPAL_SANDBOX'] ? 'red' : ''">
+            Use Sandbox Environment
+          </span>
+        </ion-label>
+        <ion-toggle
+          slot="end"
+          color="success"
+          [(ngModel)]="viewModel.usePaypalSandbox"
+          (ionChange)="usePaypalSandbox_change()">
+        </ion-toggle>
+      </ion-item>
+    </ion-card>
+  
+    <!-- Google AdMob Ads card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Google AdMob Ads
+        <ion-icon
+          name="help-outline"
+          class="ion-margin-start"
+          slot="end"
+          (click)="help_click('Overrides if Google AdMob is enabled; by default this is controlled by the server.')">
+        </ion-icon>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>
+          <span [style.color]="viewModel.overriddenKeys['ADS_ENABLED'] ? 'red' : ''">
+            Enabled
+          </span>
+        </ion-label>
+        <ion-toggle
+          slot="end"
+          color="success"
+          [(ngModel)]="viewModel.enableAds"
+          (ionChange)="enableAds_change()">
+        </ion-toggle>
+      </ion-item>
+    </ion-card>
+  
+    <!-- Raw App Config card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Raw App Config
+        <ion-icon
+          name="help-outline"
+          class="ion-margin-start"
+          slot="end"
+          (click)="help_click('Raw configuration file baked into this build.')">
+        </ion-icon>
+      </ion-item-divider>
+      <ion-item
+        (click)="toggleShowAppConfig_click()"
+        button="true"
+        detail="true">
+        <ion-label>
+          Configuration
+        </ion-label>
+        <ion-icon
+          [name]="viewModel.showAppConfig ? 'chevron-up-outline' : 'chevron-down-outline'"
+          slot="end">
+        </ion-icon>
+      </ion-item>
+      <ion-item *ngIf="viewModel.showAppConfig" (click)="copyValue_click(viewModel.rawAppConfig, 'Raw App Config')">
+        <ion-label>
+          <pre>{{ viewModel.rawAppConfig }}</pre>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  
+  </ion-content>
+  

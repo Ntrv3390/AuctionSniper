@@ -1,0 +1,424 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-title>
+      <div class="title-content">
+        <!-- Left side -->
+        <div class="left">
+          <svg
+            class="custom-svg search-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            width="20"
+            height="20"
+            fill="currentColor"
+          >
+            <path
+              d="M221 64a157 157 0 1 0 99 277l70 70a24 24 0 0 0 34-34l-70-70a157 157 0 0 0-133-243Zm0 48a109 109 0 1 1 0 218 109 109 0 0 1 0-218Z"
+            />
+          </svg>
+          <span>Search eBay</span>
+        </div>
+
+        <!-- Right side -->
+        <div class="right">
+          <svg
+            class="custom-svg bookmark-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            width="22"
+            height="22"
+            fill="currentColor"
+            (click)="onBookmarkClick()"
+          >
+            <path
+              d="M400 480a16 16 0 0 1-9.39-3.09L256 370.69 121.39 476.91A16 16 0 0 1 96 463.94V64a48 48 0 0 1 48-48h224a48 48 0 0 1 48 48v399.94a16 16 0 0 1-16 16zM144 80v323.88l96-76.8a16 16 0 0 1 19.94 0l96 76.8V80z"
+            />
+          </svg>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="search-content">
+  <ion-refresher
+    slot="fixed"
+    (ionRefresh)="refresher_refresh($event)"
+    *ngIf="!isLoading"
+  >
+    <ion-refresher-content
+      [pullingText]="Localization.Views.PullToRefreshTag"
+      [refreshingText]="Localization.Views.RefreshingTag"
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Modern Search Header -->
+  <div class="search-header" *ngIf="!(viewModel.searchId > 0)">
+    <div class="search-container">
+      <form
+        (ngSubmit)="search_click()"
+        class="search-form"
+        #searchForm="ngForm"
+      >
+        <div class="search-input-wrapper">
+          <ion-icon name="search-outline" class="search-icon"></ion-icon>
+          <ion-input
+            type="search"
+            placeholder="Search for items on eBay..."
+            [(ngModel)]="viewModel.searchTerms"
+            name="searchTerms"
+            class="search-input"
+          >
+          </ion-input>
+          <ion-button
+            type="submit"
+            fill="solid"
+            class="search-button"
+            [disabled]="!viewModel.searchTerms || viewModel.searchTerms.trim().length === 0 || isLoading"
+          >
+            <span *ngIf="!isLoading">Search</span>
+            <ion-spinner
+              name="crescent"
+              *ngIf="isLoading"
+              style="width: 16px; height: 16px"
+            ></ion-spinner>
+          </ion-button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Saved Search Header -->
+  <div class="saved-search-header" *ngIf="viewModel.searchId > 0">
+    <ion-card class="saved-search-card">
+      <ion-card-content>
+        <div class="saved-search-info">
+          <ion-icon name="bookmark" color="primary"></ion-icon>
+          <div class="saved-search-text">
+            <h3>{{ Localization.Search.SavedSearchTag }}</h3>
+            <p>{{ viewModel.searchTitle }}</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Welcome State -->
+  <div
+    class="welcome-state"
+    *ngIf="!viewModel.searchResults && !viewModel.searchTerms"
+  >
+    <ion-card class="welcome-card">
+      <ion-card-content class="welcome-content">
+        <h2>Find Your Perfect Item</h2>
+        <p>
+          Search millions of items on eBay and set up automatic bidding to win
+          at the best price.
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Daily Deals Section -->
+  <div
+    class="deals-section"
+    *ngIf="viewModel.deals && viewModel.deals.length > 0"
+  >
+    <div class="section-header">
+      <h3>
+        <ion-icon name="flash-outline" color="warning"></ion-icon>
+        {{ Localization.Search.DailyDealsTag }}
+      </h3>
+      <p>Hot deals ending soon</p>
+    </div>
+
+    <div class="deals-grid">
+      <ion-card
+        *ngFor="let deal of viewModel.deals"
+        class="deal-card"
+        (click)="dailyDealItem_click(deal)"
+        [routerLink]="'/root/search/detail/' + deal.ItemId"
+        button
+      >
+        <div class="deal-image-container">
+          <img
+            [src]="deal.SmallPictureUrl"
+            [alt]="deal.Title"
+            class="deal-image"
+          />
+          <div class="deal-badge">
+            <ion-icon name="flash" color="warning"></ion-icon>
+          </div>
+        </div>
+        <ion-card-content class="deal-content">
+          <h4 class="deal-title">{{ deal.Title }}</h4>
+          <div class="deal-price">
+            <span class="currency">{{ deal.Currency }}</span>
+            <span class="price"
+              >{{ deal.ConvertedCurrentPrice | number:'1.2-2' }}</span
+            >
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Search Results Section -->
+  <div class="search-results-section" *ngIf="viewModel.searchResults">
+    <!-- Search Controls -->
+    <div class="search-controls">
+      <div class="controls-row">
+        <ion-button
+          fill="outline"
+          size="small"
+          color="medium"
+          (click)="clearSearch_click()"
+          [disabled]="isLoading"
+        >
+          Clear
+        </ion-button>
+
+        <ion-button
+          fill="outline"
+          size="small"
+          color="primary"
+          *ngIf="viewModel.searchId > 0"
+          [routerLink]="'/root/search/edit/' + viewModel.searchId"
+          (click)="saveSearch_click()"
+          [disabled]="isLoading"
+        >
+          Edit
+        </ion-button>
+
+        <ion-button
+          fill="outline"
+          size="small"
+          color="success"
+          *ngIf="!(viewModel.searchId > 0)"
+          [routerLink]="'/root/search/create/' + viewModel.searchTerms"
+          (click)="saveSearch_click()"
+          [disabled]="isLoading"
+        >
+          Save
+        </ion-button>
+
+        <ion-button
+          fill="outline"
+          size="small"
+          color="tertiary"
+          *ngIf="!viewModel.isSingleItem"
+          (click)="advancedOpen_click($event)"
+          [disabled]="isLoading"
+        >
+          Advanced
+        </ion-button>
+      </div>
+
+      <div class="sort-row" *ngIf="!viewModel.isSingleItem">
+        <ion-button
+          fill="outline"
+          size="small"
+          color="dark"
+          (click)="sortOpen_click($event)"
+          [disabled]="isLoading"
+        >
+          <ion-icon name="funnel-outline" slot="start"></ion-icon>
+          Sort: {{ Localization.Search.Sort[viewModel.sort] }}
+          <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Search Results List -->
+    <div class="results-list">
+      <ion-card
+        *ngFor="let searchResult of viewModel.searchResults"
+        class="result-card"
+        [routerLink]="'/search/detail/' + searchResult.Id"
+        button
+      >
+        <div class="result-content">
+          <div class="result-image-container">
+            <img
+              [src]="searchResult.ThumbnailUrl"
+              [alt]="searchResult.Title"
+              class="result-image"
+            />
+          </div>
+
+          <div class="result-details">
+            <h3 class="result-title">{{ searchResult.Title }}</h3>
+
+            <div class="result-price">
+              <span class="price-label"
+                >{{ Localization.AuctionDetail.CurrentPriceTag }}</span
+              >
+              <span class="price-value">
+                {{ searchResult.Currency }}{{ searchResult.CurrentPrice |
+                number:'1.2-2' }}
+              </span>
+            </div>
+
+            <div class="result-meta">
+              <div class="meta-item">
+                <span
+                  >{{ searchResult.Bids }} {{ Localization.AuctionDetail.BidsTag
+                  }}</span
+                >
+              </div>
+
+              <div class="meta-item" *ngIf="searchResult.FreeShipping">
+                <span class="free-shipping">Free Shipping</span>
+              </div>
+            </div>
+
+            <div class="result-time">
+              <span class="time-label">
+                {{ viewModel.sort === 'MetaNewSort' ?
+                Localization.AuctionDetail.ListedTag :
+                Localization.AuctionDetail.TimeLeftTag }}:
+              </span>
+              <span
+                class="time-value"
+                [ngClass]="{ 'urgent': searchResult.CountDownTime === 'Ended' || (searchResult.CountDownTime?.length <= 3) }"
+              >
+                {{ searchResult.CountDownTime }}
+              </span>
+            </div>
+          </div>
+
+          <div class="result-arrow">
+            <ion-icon name="chevron-forward-outline" color="medium"></ion-icon>
+          </div>
+        </div>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- No Search Results -->
+  <div
+    class="no-results-state"
+    *ngIf="viewModel.searchResults && viewModel.searchResults.length === 0"
+  >
+    <ion-card class="no-results-card">
+      <ion-card-content class="no-results-content">
+        <div class="no-results-icon">
+          <ion-icon name="search-outline" color="medium"></ion-icon>
+        </div>
+        <h3>No Items Found</h3>
+        <p>
+          Try a different search term or adjust your filters to find more items.
+        </p>
+        <ion-button
+          fill="outline"
+          color="primary"
+          (click)="clearSearch_click()"
+        >
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Try New Search
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Saved Searches Section -->
+  <div
+    class="saved-searches-section"
+    *ngIf="!viewModel.searchResults && !viewModel.searchTerms && viewModel.searches && viewModel.searches.length > 0"
+  >
+    <div class="section-header">
+      <h3>{{ Localization.Search.SavedSearchesTag }}</h3>
+      <p>Your favorite searches for quick access</p>
+    </div>
+
+    <div class="saved-searches-grid">
+      <ion-card
+        *ngFor="let savedSearch of viewModel.searches"
+        class="saved-search-card"
+        (click)="savedSearchItem_click(savedSearch)"
+        button
+        [disabled]="isLoading"
+      >
+        <ion-card-content>
+          <div class="saved-search-content">
+            <div class="saved-search-icon">
+              <ion-icon name="bookmark" color="primary"></ion-icon>
+            </div>
+            <div class="saved-search-info">
+              <h4 class="saved-search-title">{{ savedSearch.Title }}</h4>
+              <p class="saved-search-keywords" *ngIf="savedSearch.AllWords">
+                <ion-icon name="search-outline" size="small"></ion-icon>
+                {{ savedSearch.AllWords }}
+              </p>
+            </div>
+            <div class="saved-search-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="manage-searches-card" routerLink="/search/list" button>
+        <ion-card-content>
+          <div class="manage-searches-content">
+            <div class="manage-searches-icon">
+              <ion-icon name="settings-outline" color="tertiary"></ion-icon>
+            </div>
+            <div class="manage-searches-info">
+              <h4>{{ Localization.Search.EditSavedSearchesTag }}</h4>
+              <p>View, edit, or delete your saved searches</p>
+            </div>
+            <div class="manage-searches-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Infinite Scroll -->
+  <ion-infinite-scroll
+    *ngIf="infiniteScroll_canLoadMore()"
+    (ionInfinite)="infiniteScroll_loadSearchPage($event)"
+    threshold="5%"
+  >
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- Load More Button -->
+  <div class="load-more-container" *ngIf="showLoadMoreResultsButton">
+    <ion-button
+      expand="block"
+      fill="outline"
+      color="primary"
+      (click)="loadMoreResults_click()"
+      [disabled]="isLoading"
+    >
+      <span *ngIf="!isLoading">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        {{ Localization.Search.LoadMoreResultsTag }}
+      </span>
+      <ion-spinner
+        name="crescent"
+        *ngIf="isLoading"
+        style="width: 16px; height: 16px"
+      ></ion-spinner>
+    </ion-button>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-content">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading...</p>
+    </div>
+  </div>
+</ion-content>

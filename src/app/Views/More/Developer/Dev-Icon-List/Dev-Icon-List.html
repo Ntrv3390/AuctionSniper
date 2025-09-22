@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>Icon List</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="dev-icon-list ion-padding">
+  
+    <!-- Searchbar shown when searchId <= 0 -->
+    <form>
+      <ion-searchbar
+        *ngIf="!(viewModel.searchId > 0)"
+        [(ngModel)]="viewModel.searchTerm"
+        name="searchTerm"
+        placeholder="Search..."
+        showCancelButton="never"
+        debounce="150">
+      </ion-searchbar>
+    </form>
+  
+    <!-- Icon grid -->
+    <ion-grid class="icon-grid">
+      <ion-row>
+        <ion-col
+          size="3"
+          class="icon-col"
+          *ngFor="let iconName of iconNamesFiltered"
+          (click)="copyValue_click(iconName, 'Icon Name')">
+          <!-- Ionicon by default -->
+          <ion-icon [name]="iconName"></ion-icon>
+          <div>{{ iconName }}</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+  

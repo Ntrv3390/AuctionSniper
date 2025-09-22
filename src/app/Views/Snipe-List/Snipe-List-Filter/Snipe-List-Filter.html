@@ -1,0 +1,24 @@
+<ion-popover style="height: 125px; width: 180px;">
+    <ion-content [fullscreen]="true" class="safe-area-content">
+      <ion-list>
+  
+        <ion-item button (click)="sortByEndingSoonest_click()">
+          <ion-label>Ending Soonest</ion-label>
+          <ion-icon 
+            slot="end" 
+            name="checkmark-circle" 
+            *ngIf="viewModel.sortByEndingSoonest"></ion-icon>
+        </ion-item>
+  
+        <ion-item button (click)="sortByEndingLater_click()">
+          <ion-label>Ending Later</ion-label>
+          <ion-icon 
+            slot="end" 
+            name="checkmark-circle" 
+            *ngIf="!viewModel.sortByEndingSoonest"></ion-icon>
+        </ion-item>
+  
+      </ion-list>
+    </ion-content>
+  </ion-popover>
+  

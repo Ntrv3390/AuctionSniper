@@ -1,0 +1,45 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeDialog()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="error-content">
+    <div class="error-message">
+      {{ message }}
+    </div>
+    
+    @if (errorDetails) {
+      <div class="error-details">
+        <h3>Technical Details:</h3>
+        <pre>{{ errorDetails }}</pre>
+      </div>
+    }
+    
+    <div class="error-actions">
+      @if (isRetryable) {
+        <ion-button 
+          (click)="retry()" 
+          expand="block" 
+          fill="solid"
+          color="primary">
+          Retry
+        </ion-button>
+      }
+      
+      <ion-button 
+        (click)="closeDialog()" 
+        expand="block" 
+        fill="outline"
+        color="medium">
+        Close
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

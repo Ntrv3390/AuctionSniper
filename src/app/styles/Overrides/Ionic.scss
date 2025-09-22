@@ -1,0 +1,47 @@
+
+/* Make the corners of the modal dialogs rounded on tablets. */
+/* Corners don't need to be rounded on phones because the modal dialog fills the entire screen. */
+@media only screen and (min-width: 768px) {
+
+    .modal-wrapper .modal {
+        border-radius: 10px;
+    }
+
+    .modal-wrapper .modal .bar-header {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+}
+
+.button.button-positive {
+    background-color: #156DAB;
+    border-color: #156DAB;
+}
+
+.button.button-positive.active,
+.button.button-positive.activated {
+    background-color: #1E9FFF;
+}
+
+.button.button-positive.button-outline {
+    border-color: #156DAB;
+    color: #156DAB;
+}
+
+i.positive,
+ion-tabs.tabs-color-active-positive .tab-item.tab-item-active {
+    color: #156DAB;
+}
+
+// Fix brief flash of black background on view transitions on iPad.
+// https://forum.ionicframework.com/t/solved-nav-direction-forward-bug-on-ion-nav-view-tabs/42523/3
+[nav-view-transition="ios"][nav-view-direction="forward"],
+[nav-view-transition="ios"][nav-view-direction="back"] {
+    background-color: transparent;
+}
+
+.bar-dark {
+    .button.button-light.button-outline.active {
+        color: $bar-dark-bg;
+    }
+}

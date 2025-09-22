@@ -1,0 +1,41 @@
+<ion-popover style="height: 310px; width: 270px;">
+    <ion-content [fullscreen]="true" class="safe-area-content">
+      <ion-list>
+  
+        <ion-item button (click)="debug_click()">
+          <ion-icon slot="start" [name]="viewModel.debugIcon" [style.color]="viewModel.debugColor"></ion-icon>
+          <ion-label>Debug</ion-label>
+          <ion-icon slot="end" name="checkmark-circle" *ngIf="viewModel.showDebug"></ion-icon>
+        </ion-item>
+  
+        <ion-item button (click)="debugOnlyHTTP_click()">
+          <ion-icon slot="start" [name]="viewModel.httpIcon" [style.color]="viewModel.httpColor"></ion-icon>
+          <ion-label>
+            Debug
+            <p style="margin: 0;">(Just HTTP Activity)</p>
+          </ion-label>
+          <ion-icon slot="end" name="checkmark-circle" *ngIf="viewModel.showDebugOnlyHTTP"></ion-icon>
+        </ion-item>
+  
+        <ion-item button (click)="info_click()">
+          <ion-icon slot="start" [name]="viewModel.infoIcon" [style.color]="viewModel.infoColor"></ion-icon>
+          <ion-label>Info</ion-label>
+          <ion-icon slot="end" name="checkmark-circle" *ngIf="viewModel.showInfo"></ion-icon>
+        </ion-item>
+  
+        <ion-item button (click)="warn_click()">
+          <ion-icon slot="start" [name]="viewModel.warnIcon" [style.color]="viewModel.warnColor"></ion-icon>
+          <ion-label>Warning</ion-label>
+          <ion-icon slot="end" name="checkmark-circle" *ngIf="viewModel.showWarn"></ion-icon>
+        </ion-item>
+  
+        <ion-item button (click)="error_click()">
+          <ion-icon slot="start" [name]="viewModel.errorIcon" [style.color]="viewModel.errorColor"></ion-icon>
+          <ion-label>Error</ion-label>
+          <ion-icon slot="end" name="checkmark-circle" *ngIf="viewModel.showError"></ion-icon>
+        </ion-item>
+  
+      </ion-list>
+    </ion-content>
+  </ion-popover>
+  

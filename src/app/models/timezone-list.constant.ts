@@ -1,0 +1,31 @@
+import { DropDownItem } from 'src/app/Interfaces/dropdown-item.model';
+
+export const TimeZoneList: DropDownItem<number>[] = [
+  { value: 0, text: 'UTC -12:00 (Eniwetok, Kwajalein)' },
+  { value: 1, text: 'UTC -11:00 (Midway Island, Samoa)' },
+  { value: 3, text: 'UTC -10:00 (Hawaii)' },
+  { value: 4, text: 'UTC -09:00 (Alaska)' },
+  { value: 5, text: 'UTC -08:00 (Pacific Time - US & Canada; Tijuana)' },
+  { value: 7, text: 'UTC -07:00 (Mountain Time - US & Canada)' },
+  { value: 10, text: 'UTC -06:00 (Central Time; Central America; Mexico City)' },
+  { value: 15, text: 'UTC -05:00 (Eastern Time - US & Canada; Bogota, Lima)' },
+  { value: 21, text: 'UTC -04:00 (Atlantic Time - Canada; Caracas, Santiago)' },
+  { value: 25, text: 'UTC -03:00 (Greenland, Buenos Aires, Brasilia)' },
+  { value: 29, text: 'UTC -02:00 (Mid-Atlantic)' },
+  { value: 32, text: 'UTC -01:00 (Azores, Cape Verde Is.)' },
+  { value: 34, text: 'UTC ±00:00 (GMT, London, Dublin, Casablanca, Edinburgh)' },
+  { value: 37, text: 'UTC +01:00 (Rome, Berlin, Paris, Amsterdam, Stockholm)' },
+  { value: 51, text: 'UTC +02:00 (Athens, Helsinki, Cairo)' },
+  { value: 54, text: 'UTC +03:00 (Moscow, Nairobi, Kuwait)' },
+  { value: 58, text: 'UTC +04:00 (Baku, Abu Dhabi, Tbilisi)' },
+  { value: 64, text: 'UTC +05:00 (Karachi, Islamabad)' },
+  { value: 70, text: 'UTC +06:00 (Astana, Sri Jayawardenepura)' },
+  { value: 74, text: 'UTC +07:00 (Bangkok, Hanoi, Jakarta, Krasnoyarsk)' },
+  { value: 78, text: 'UTC +08:00 (Hong Kong, Beijing, Singapore, Taipei)' },
+  { value: 83, text: 'UTC +09:00 (Tokyo, Osaka, Seoul, Yakutsk)' },
+  { value: 84, text: 'UTC +09:30 (Alice Springs)' },
+  { value: 89, text: 'UTC +10:00 (Sydney, Guam, Melbourne, Brisbane, Hobart)' },
+  { value: 91, text: 'UTC +11:00 (Solomon Is., New Caledonia, Magadan)' },
+  { value: 95, text: 'UTC +12:00 (Fiji, Marshall Is., Kamchatka)' },
+  { value: 97, text: "UTC +13:00 (Nuku'alofa)" }
+];

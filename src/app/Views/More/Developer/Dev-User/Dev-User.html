@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+    <ion-toolbar class="custom-header">
+      <ion-title>User</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="safe-area-content">
+  
+    <ion-card>
+      <ion-item-divider color="dark">Current User</ion-item-divider>
+  
+      <ion-item lines="none">
+        <ion-label>
+          <span>User UID</span>
+          <span>{{ viewModel.userUid }}</span>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item lines="none">
+        <ion-label>
+          <span>User ID</span>
+          <span>{{ viewModel.userId }}</span>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item lines="none">
+        <ion-label>
+          <span>User Email</span>
+          <span>{{ viewModel.userEmail }}</span>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item lines="none" button (click)="copyValue_click(viewModel.authToken, 'Copy Auth Token')">
+        <ion-label>
+          <span>Auth Token</span>
+          <div>{{ viewModel.authToken }}</div>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item lines="none">
+        <ion-label>
+          <span>User Wins</span>
+          <span>{{ viewModel.winsCount }}</span>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item lines="none">
+        <ion-label>
+          <span>Has Prompted For Review</span>
+          <span>{{ viewModel.hasPromptedForReview }}</span>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  
+  </ion-content>
+  

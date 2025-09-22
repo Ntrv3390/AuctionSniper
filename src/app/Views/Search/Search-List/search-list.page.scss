@@ -1,0 +1,36 @@
+ion-list {
+  padding-top: 10px;
+}
+
+.custom-header {
+  --background: linear-gradient(to right, #145583, #6cb1df);
+  --color: #fff;
+}
+
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}
+
+ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 16px;
+}
+
+.add-btn {
+  --background: transparent; // toolbar background white
+}
+
+.add-icon {
+  --background: #fff; // button background white
+  --color: #145583; // icon color black
+  border-radius: 8px; // square with slight rounding
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); // subtle shadow
+  width: 40px;
+  height: 40px;
+  padding: 0; // keep it tight
+}

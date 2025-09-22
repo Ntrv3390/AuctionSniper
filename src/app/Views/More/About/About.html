@@ -1,0 +1,94 @@
+﻿<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/root/more"></ion-back-button>
+    </ion-buttons>
+    <ion-title>About Auction Sniper</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="about-content">
+  <!-- Hero Section -->
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="app-logo" (click)="logoClick()">
+      <img src="assets/images/about-icon.png" alt="Auction Sniper Logo" />
+    </div>
+    <h1 class="app-name">{{ viewModel.applicationName }}</h1>
+    <p class="app-version">Version {{ viewModel.versionString }}</p>
+
+    <div class="build-info">
+      <p><span>Build:</span> <span>{{ viewModel.commitShortSha }}</span></p>
+      <p>
+        <span>Date:</span> <span>{{ viewModel.timestamp | date:'short' }}</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Links Section -->
+  <div class="links-section">
+    <div class="links-container">
+      <!-- External Links -->
+      <div class="external-link">
+        <ion-card (click)="visitWebsite()">
+          <ion-item button detail="false">
+            <ion-label>
+              <h2>Visit Website</h2>
+              <p>Go to AuctionSniper.com</p>
+            </ion-label>
+          </ion-item>
+        </ion-card>
+      </div>
+
+      <!-- Legal Links -->
+      <div class="legal-links">
+        <ion-card (click)="viewTermsOfUse()">
+          <ion-item button detail="false">
+            <ion-label>
+              <h2>Terms of Use</h2>
+              <p>Read our terms and conditions</p>
+            </ion-label>
+          </ion-item>
+        </ion-card>
+
+        <ion-card (click)="viewPrivacyPolicy()">
+          <ion-item button detail="false">
+            <ion-label>
+              <h2>Privacy Policy</h2>
+              <p>How we protect your data</p>
+            </ion-label>
+          </ion-item>
+        </ion-card>
+      </div>
+
+      <!-- Open Source -->
+      <!-- <div class="open-source-link">
+        <ion-card (click)="openSource()">
+          <ion-item button detail="false">
+            
+            <ion-label>
+              <h2>Open Source</h2>
+              <p>View our open source projects</p>
+            </ion-label>
+            
+          </ion-item>
+        </ion-card>
+      </div> -->
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <div class="footer-section">
+    <div class="disclaimer">
+      <p>
+        This application is not affiliated with, endorsed by, or connected to
+        eBay Inc. eBay is a trademark of eBay Inc.
+      </p>
+    </div>
+
+    <div class="copyright">
+      <p>Copyright &copy; 2001-2015 AuctionSniper.com</p>
+      <p>All rights reserved.</p>
+    </div>
+  </div>
+</ion-content>

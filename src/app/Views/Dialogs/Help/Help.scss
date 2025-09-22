@@ -1,0 +1,23 @@
+.help {
+  .item {
+    p {
+      margin-bottom: 10px;
+      font-size: 1em;
+    }
+
+    a:after {
+      font-family: FontAwesome;
+      content: "\f08e"; //$fa-var-external-link
+      display: inline-block;
+      padding-left: 5px;
+    }
+  }
+}
+
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}

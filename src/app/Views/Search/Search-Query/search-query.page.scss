@@ -1,0 +1,734 @@
+// Modern Search UI - Minimal
+
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}
+
+.search-content {
+  --background: #f8f9fa;
+
+  // Dark mode support
+  @media (prefers-color-scheme: dark) {
+    --background: #121212;
+
+    .search-header {
+      background: linear-gradient(
+        135deg,
+        var(--ion-color-primary),
+        var(--ion-color-primary-shade)
+      );
+    }
+
+    .search-input-wrapper {
+      background: #1e1e1e;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .welcome-card,
+    .deal-card,
+    .result-card {
+      --background: #1e1e1e;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .search-controls {
+      background: #1e1e1e;
+      border-bottom: 1px solid #333;
+    }
+
+    .result-title {
+      color: #fff;
+    }
+
+    .price-value {
+      color: var(--ion-color-primary);
+    }
+
+    .result-time {
+      color: #b0b0b0;
+    }
+
+    .controls-row ion-button[color="medium"] {
+      --background: #2d2d2d;
+      --color: #b0b0b0;
+      --border-color: #2d2d2d;
+    }
+
+    .sort-row ion-button {
+      --background: #2d2d2d;
+      --color: #fff;
+      --border-color: #2d2d2d;
+    }
+
+    ion-popover {
+      --background: #1e1e1e;
+      --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .advanced-header {
+      border-bottom: 1px solid #333;
+    }
+
+    ion-popover ion-content {
+      --background: #1e1e1e;
+    }
+
+    ion-popover ion-item {
+      --border-color: #333;
+    }
+  }
+
+  padding-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
+  padding-bottom: var(
+    --safe-area-inset-bottom,
+    var(--safe-area-inset-bottom-fallback)
+  );
+}
+
+.custom-header {
+  --background: linear-gradient(to right, #145583, #6cb1df);
+  --color: #fff;
+}
+
+.search-header {
+  background: linear-gradient(135deg, #145583, #6cb1df);
+  padding: 48px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* needed for the curved bottom */
+
+  .search-container {
+    width: 100%;
+    max-width: 700px;
+  }
+
+  .search-form {
+    width: 100%;
+  }
+
+  .search-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    padding: 8px 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .search-input-wrapper:focus-within {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .search-icon {
+    font-size: 20px;
+    color: #666;
+    margin-right: 10px;
+  }
+
+  .search-input {
+    flex: 1;
+    font-size: 16px;
+    padding: 10px 6px;
+    --padding-start: 0;
+    --placeholder-color: #999;
+    color: #333;
+  }
+
+  .search-button {
+    --background: #145583;
+    --border-radius: 8px;
+    font-weight: 600;
+    text-transform: none;
+    padding: 0 20px;
+    margin-left: 8px;
+    height: 40px;
+  }
+
+  /* Rounded bottom effect */
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -30px;
+    height: 60px;
+    background: #fff;
+    border-top-left-radius: 50% 30px;
+    border-top-right-radius: 50% 30px;
+  }
+}
+
+.welcome-card,
+.deal-card,
+.result-card {
+  margin: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  // Safe area margin
+  margin-inline-start: var(
+    --safe-area-inset-left,
+    var(--safe-area-inset-left-fallback)
+  );
+  margin-right: var(
+    --safe-area-inset-right,
+    var(--safe-area-inset-right-fallback)
+  );
+}
+
+.welcome-content {
+  text-align: center;
+  padding: 32px 24px;
+  padding-inline: calc(
+      24px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+    )
+    calc(
+      24px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+    );
+  padding-bottom: var(
+    --safe-area-inset-bottom,
+    var(--safe-area-inset-bottom-fallback)
+  );
+}
+
+.welcome-icon ion-icon {
+  font-size: 64px;
+}
+
+.deals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  padding-inline: var(
+      --safe-area-inset-left,
+      var(--safe-area-inset-left-fallback)
+    )
+    var(--safe-area-inset-right, var(--safe-area-inset-right-fallback));
+  padding-bottom: var(
+    --safe-area-inset-bottom,
+    var(--safe-area-inset-bottom-fallback)
+  );
+}
+
+.deal-image-container {
+  height: 120px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+.deal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.result-content {
+  display: flex;
+  padding: 16px;
+  gap: 16px;
+  padding-inline: calc(
+      16px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+    )
+    calc(
+      16px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+    );
+}
+
+.title-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.welcome-state {
+  margin-top: -20px;
+  padding: 0 16px;
+
+  .welcome-card {
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+    z-index: 2;
+  }
+
+  .welcome-content {
+    text-align: center;
+    padding: 24px 20px;
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #145583;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.5;
+    }
+  }
+}
+
+.result-image-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.result-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.result-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.result-title {
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.result-price,
+.result-meta,
+.result-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result-price {
+  margin-top: 8px;
+}
+
+.price-label,
+.price-value {
+  font-weight: 500;
+}
+
+.price-value {
+  color: var(--ion-color-primary);
+}
+
+.result-meta {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.free-shipping {
+  color: var(--ion-color-success);
+  font-weight: 500;
+}
+
+.result-time {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+}
+
+.time-label,
+.time-value {
+  font-weight: 500;
+}
+
+.time-value.urgent {
+  color: var(--ion-color-danger);
+}
+
+.result-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Improved search controls styling
+.search-controls {
+  padding: 16px;
+  background: white;
+  border-bottom: 1px solid var(--ion-color-light);
+
+  padding-left: calc(
+    16px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+  );
+  padding-right: calc(
+    16px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+  );
+}
+
+.controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+  justify-content: center;
+  padding-inline: var(
+      --safe-area-inset-left,
+      var(--safe-area-inset-left-fallback)
+    )
+    var(--safe-area-inset-right, var(--safe-area-inset-right-fallback));
+}
+
+.controls-row ion-button {
+  --border-radius: 24px;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: none;
+  --padding-start: 20px;
+  --padding-end: 20px;
+}
+
+// Specific button styles for better visibility
+.controls-row ion-button[color="medium"] {
+  --background: var(--ion-color-light);
+  --color: var(--ion-color-medium);
+  --border-color: var(--ion-color-light);
+}
+
+.controls-row ion-button[color="primary"] {
+  --background: var(--ion-color-primary);
+  --color: white;
+  --border-color: var(--ion-color-primary);
+}
+
+.controls-row ion-button[color="success"] {
+  --background: var(--ion-color-success);
+  --color: white;
+  --border-color: var(--ion-color-success);
+}
+
+.controls-row ion-button[color="tertiary"] {
+  --background: var(--ion-color-tertiary);
+  --color: white;
+  --border-color: var(--ion-color-tertiary);
+}
+
+// Sort row styling
+.sort-row {
+  display: flex;
+  justify-content: center;
+  padding-inline: var(
+      --safe-area-inset-left,
+      var(--safe-area-inset-left-fallback)
+    )
+    var(--safe-area-inset-right, var(--safe-area-inset-right-fallback));
+}
+
+.sort-row ion-button {
+  --border-radius: 20px;
+  height: 36px;
+  font-size: 13px;
+  --background: var(--ion-color-light);
+  --color: var(--ion-color-dark);
+  --border-color: var(--ion-color-light);
+}
+
+// Advanced popover styling
+ion-popover {
+  --width: 280px;
+  --max-height: 90%;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --background: var(--ion-background-color, #fff);
+  --backdrop-opacity: 0.32;
+  z-index: 10000;
+
+  // Safe area support
+  margin-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
+  margin-bottom: var(
+    --safe-area-inset-bottom,
+    var(--safe-area-inset-bottom-fallback)
+  );
+}
+
+.advanced-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--ion-color-light);
+  padding-top: calc(
+    16px + var(--safe-area-inset-top, var(--safe-area-inset-top-fallback))
+  );
+  padding-inline: calc(
+      16px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+    )
+    calc(
+      16px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+    );
+}
+
+.advanced-header h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.text-center {
+  text-align: center;
+}
+
+// Ensure popover content is scrollable and visible
+ion-popover ion-content {
+  --background: var(--ion-background-color, #fff);
+  --offset-bottom: 0px;
+  --offset-top: 0px;
+}
+
+ion-popover ion-content ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 16px;
+  padding-inline: calc(
+      16px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+    )
+    calc(
+      16px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+    );
+}
+
+// Ensure radio items are properly displayed
+ion-popover ion-radio-group {
+  padding: 8px 0;
+  padding-inline: var(
+      --safe-area-inset-left,
+      var(--safe-area-inset-left-fallback)
+    )
+    var(--safe-area-inset-right, var(--safe-area-inset-right-fallback));
+  padding-bottom: var(
+    --safe-area-inset-bottom,
+    var(--safe-area-inset-bottom-fallback)
+  );
+}
+
+ion-popover ion-item {
+  --background: transparent;
+  --border-style: solid;
+  --border-width: 0 0 1px 0;
+  --border-color: var(--ion-color-light);
+}
+
+// Saved Searches Section
+.saved-searches-section {
+  padding: 16px;
+  padding-top: 0;
+  padding-left: calc(
+    16px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+  );
+  padding-right: calc(
+    16px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+  );
+  padding-bottom: var(
+    --safe-area-inset-bottom,
+    var(--safe-area-inset-bottom-fallback)
+  );
+}
+
+.saved-searches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.saved-search-card,
+.manage-searches-card {
+  margin: 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.saved-search-content,
+.manage-searches-content {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+}
+
+.saved-search-icon,
+.manage-searches-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(var(--ion-color-primary-rgb), 0.1);
+  margin-right: 16px;
+
+  ion-icon {
+    font-size: 24px;
+  }
+}
+
+.manage-searches-icon {
+  background: rgba(var(--ion-color-tertiary-rgb), 0.1);
+}
+
+.saved-search-info,
+.manage-searches-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.saved-search-title,
+.manage-searches-info h4 {
+  margin: 0 0 4px 0;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ion-color-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.saved-search-keywords {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  ion-icon {
+    font-size: 12px;
+  }
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.manage-searches-info p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+}
+
+.saved-search-arrow,
+.manage-searches-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(var(--ion-color-light-rgb), 0.5);
+  margin-left: 12px;
+}
+
+// Dark mode support for saved searches
+@media (prefers-color-scheme: dark) {
+  .saved-search-card,
+  .manage-searches-card {
+    --background: #1e1e1e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .saved-search-icon,
+  .manage-searches-icon {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .saved-search-title,
+  .manage-searches-info h4 {
+    color: #fff;
+  }
+
+  .saved-search-arrow,
+  .manage-searches-arrow {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+// Loading overlay
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .loading-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+    ion-spinner {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 16px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--ion-color-dark);
+      font-weight: 500;
+    }
+  }
+}
+
+// Dark mode support for loading overlay
+@media (prefers-color-scheme: dark) {
+  .loading-overlay {
+    .loading-content {
+      background: #1e1e1e;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+      p {
+        color: #fff;
+      }
+    }
+  }
+}

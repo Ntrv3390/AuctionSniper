@@ -1,0 +1,20 @@
+.custom-header {
+  --background: linear-gradient(to right, #145583, #6cb1df);
+  --color: #fff;
+}
+
+ion-button {
+  --background: #145583;
+  --color: #fff;
+}
+
+.pin-entry-page {
+}
+
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}

@@ -1,0 +1,334 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-title>
+      <ion-icon
+        name="ellipsis-horizontal-outline"
+        style="margin-right: 8px"
+      ></ion-icon>
+      More Options
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="more-content-wrapper">
+    <!-- Activation Reminder -->
+    <ng-container *ngIf="viewModel.showRegisterReminder">
+      <ion-card class="activation-card">
+        <ion-card-content>
+          <div class="activation-content">
+            <ion-icon name="mail-outline" class="custom-icon"></ion-icon>
+            <h3>Complete Your Registration</h3>
+            <p>
+              Complete the activation of your account to get your 3 free snipes.
+              Please click the link in the email we sent to you.
+            </p>
+            <div class="activation-actions">
+              <ion-button
+                fill="solid"
+                class="verify-btn"
+                (click)="resendActivationEmail_click()"
+              >
+                <ion-icon name="refresh-outline" slot="start"></ion-icon>
+                Resend Email
+              </ion-button>
+
+              <ion-button
+                fill="outline"
+                color="medium"
+                (click)="dismissActivationEmailRemdiner_click()"
+              >
+                <ion-icon name="close-outline" slot="start"></ion-icon>
+                Dismiss
+              </ion-button>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+
+    <!-- Main Options List -->
+    <ion-list class="options-list">
+      <!-- Account Section -->
+      <ion-item-divider color="light">
+        <ion-label>Account</ion-label>
+      </ion-item-divider>
+
+      <ion-card class="option-card" (click)="navigateToAccountInformation()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="person-outline"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Account Information</h3>
+              <p>View and update your account details</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="option-card" (click)="navigateToPreferences()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="settings-outline"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Preferences</h3>
+              <p>Customize your app settings</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="option-card" (click)="navigateToNotifications()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Email Notifications</h3>
+              <p>Manage email notification settings</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="option-card" (click)="navigateToPushNotifications()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="notifications-outline"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Device Notifications</h3>
+              <p>Manage push notification settings</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="option-card" (click)="navigateToConfigurePin()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="lock-closed-outline"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Configure PIN</h3>
+              <p>Set up or change your security PIN</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="option-card" (click)="navigateToPayment()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="card-outline"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Payment</h3>
+              <p>View payment information</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="option-card" (click)="navigateToTransactions()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="receipt-outline"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Transaction History</h3>
+              <p>View your transaction history</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="option-card" (click)="yourEbayConnection_click()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="link-outline"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Your eBay Connection</h3>
+              <p>Manage your eBay account connection</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="option-card" (click)="navigateToDeleteAccount()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="trash-outline" color="danger"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Delete Account</h3>
+              <p>Permanently delete your account</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Support Section -->
+      <ion-item-divider color="light">
+        <ion-label>Support</ion-label>
+      </ion-item-divider>
+
+      <ion-card class="option-card" (click)="help_click()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="help-circle-outline"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Help & Support</h3>
+              <p>Get help with using the app</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="option-card" (click)="navigateToAbout()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="information-circle-outline"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>About</h3>
+              <p>Learn more about Auction Sniper</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Developer Section (Only in Debug Mode) -->
+      <div *ngIf="viewModel.isDeveloperMode || viewModel.isDebugMode">
+        <ion-item-divider color="light">
+          <ion-label>Developer</ion-label>
+        </ion-item-divider>
+        <ion-card class="option-card" (click)="navigateToDeveloper()">
+          <ion-card-content>
+            <div class="option-content">
+              <div class="option-icon">
+                <ion-icon name="code-working" color="primary"></ion-icon>
+              </div>
+              <div class="option-text">
+                <h3>Developer Tools</h3>
+                <p>Access developer options</p>
+              </div>
+              <div class="option-arrow">
+                <ion-icon
+                  name="chevron-forward-outline"
+                  color="medium"
+                ></ion-icon>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Logout -->
+      <ion-item-divider color="light">
+        <ion-label>Account</ion-label>
+      </ion-item-divider>
+
+      <ion-card class="option-card logout-card" (click)="logout_click()">
+        <ion-card-content>
+          <div class="option-content">
+            <div class="option-icon">
+              <ion-icon name="log-out-outline" color="danger"></ion-icon>
+            </div>
+            <div class="option-text">
+              <h3>Log Out</h3>
+              <p>Sign out of your account</p>
+            </div>
+            <div class="option-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+  </div>
+</ion-content>

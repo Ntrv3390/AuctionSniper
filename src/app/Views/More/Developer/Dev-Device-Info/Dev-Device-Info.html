@@ -1,0 +1,135 @@
+<ion-header [translucent]="true">
+    <ion-toolbar class="custom-header">
+      <ion-title>Device Info</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="ion-padding">
+  
+    <!-- Device Info Card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Device
+        <ion-icon
+          name="help-outline"
+          class="ion-margin-start"
+          slot="end"
+          (click)="help_click('Information about the device as provided by Capacitor.')">
+        </ion-icon>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>Native?</ion-label>
+        <ion-note slot="end">{{ viewModel.deviceNative }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Virtual?</ion-label>
+        <ion-note slot="end">{{ viewModel.deviceVirtual }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Manufacturer</ion-label>
+        <ion-note slot="end">{{ viewModel.deviceManufacturer }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Model</ion-label>
+        <ion-note slot="end">{{ viewModel.deviceModel }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Platform</ion-label>
+        <ion-note slot="end">{{ viewModel.devicePlatform }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>OS Version</ion-label>
+        <ion-note slot="end">{{ viewModel.deviceOsVersion }}</ion-note>
+      </ion-item>
+      <ion-item button detail="false" (click)="copyValue_click(viewModel.deviceUuid, 'Device UUID')">
+        <ion-label>UUID</ion-label>
+        <ion-note slot="end">{{ viewModel.deviceUuid }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Native App Version</ion-label>
+        <ion-note slot="end">{{ viewModel.deviceNativeAppVersion }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Native App Version (Build)</ion-label>
+        <ion-note slot="end">{{ viewModel.deviceNativeAppBuildVersion }}</ion-note>
+      </ion-item>
+    </ion-card>
+  
+    <!-- Navigator Card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Navigator
+        <ion-icon
+          name="help-outline"
+          class="ion-margin-start"
+          slot="end"
+          (click)="help_click('Information about the browser/navigator.')">
+        </ion-icon>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>Platform</ion-label>
+        <ion-note slot="end">{{ viewModel.navigatorPlatform }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Product</ion-label>
+        <ion-note slot="end">{{ viewModel.navigatorProduct }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Vendor</ion-label>
+        <ion-note slot="end">{{ viewModel.navigatorVendor }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Viewport</ion-label>
+        <ion-note slot="end">{{ viewModel.viewport.width }}x{{ viewModel.viewport.height }}</ion-note>
+      </ion-item>
+      <ion-item button detail="false" (click)="copyValue_click(viewModel.userAgent, 'User Agent')">
+        <ion-label>User Agent</ion-label>
+        <ion-text>
+          <pre>{{ viewModel.userAgent }}</pre>
+        </ion-text>
+      </ion-item>
+    </ion-card>
+  
+    <!-- Platform Service Card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Platform Service
+        <ion-icon
+          name="help-outline"
+          class="ion-margin-start"
+          slot="end"
+          (click)="help_click('Values as determined by our Platform service, derived from the device info.')">
+        </ion-icon>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>Tablet?</ion-label>
+        <ion-note slot="end">{{ viewModel.detectedAsTablet }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Android?</ion-label>
+        <ion-note slot="end">{{ viewModel.detectedAsAndroid }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Android Tablet?</ion-label>
+        <ion-note slot="end">{{ viewModel.detectedAsAndroidTablet }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>iOS?</ion-label>
+        <ion-note slot="end">{{ viewModel.detectedAsIOS }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>iPhone?</ion-label>
+        <ion-note slot="end">{{ viewModel.detectedAsIPhone }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>iPad?</ion-label>
+        <ion-note slot="end">{{ viewModel.detectedAsIPad }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>iPod?</ion-label>
+        <ion-note slot="end">{{ viewModel.detectedAsIPod }}</ion-note>
+      </ion-item>
+    </ion-card>
+  
+  </ion-content>
+  

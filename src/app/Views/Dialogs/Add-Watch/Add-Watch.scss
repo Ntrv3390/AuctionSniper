@@ -1,0 +1,24 @@
+/* Add Watch Component Styles */
+
+.button-container {
+  margin-top: 24px;
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+  ion-content {
+    --background: var(--ion-background-color, #000000);
+  }
+
+  ion-item {
+    --background: transparent;
+  }
+}
+
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}

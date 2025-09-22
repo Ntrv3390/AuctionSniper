@@ -1,0 +1,291 @@
+.account-delete-content {
+  --background: #f8f9fa;
+}
+
+.custom-header {
+  --background: linear-gradient(to right, #145583, #6cb1df);
+  --color: #fff;
+}
+
+.account-delete-container {
+  padding: 24px 16px;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}
+
+.warning-header {
+  text-align: center;
+  margin-bottom: 24px;
+
+  ion-icon {
+    font-size: 48px;
+    color: var(--ion-color-danger);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--ion-color-dark);
+  }
+
+  p {
+    font-size: 16px;
+    color: var(--ion-color-medium);
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.warning-card {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+
+  .warning-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+
+    ion-icon {
+      color: var(--ion-color-danger);
+      font-size: 24px;
+      margin-right: 8px;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--ion-color-danger);
+    }
+  }
+
+  ul {
+    padding-left: 20px;
+    margin: 0;
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.4;
+      color: var(--ion-color-dark);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.account-info-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  margin-bottom: 24px;
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--ion-color-light);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      font-weight: 500;
+      color: var(--ion-color-medium);
+    }
+
+    .value {
+      font-weight: 600;
+      color: var(--ion-color-dark);
+    }
+  }
+}
+
+.confirmation-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  margin-bottom: 24px;
+
+  ion-item {
+    --background: var(--ion-color-light);
+    --border-radius: 8px;
+    margin-bottom: 16px;
+    --padding-start: 12px;
+  }
+
+  ion-label {
+    font-weight: 500;
+    color: var(--ion-color-dark); // Ensure label text is visible
+  }
+
+  ion-input {
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    color: var(--ion-color-dark); // Ensure input text is visible
+  }
+
+  .confirmation-text {
+    margin: 0;
+    padding: 0 4px;
+    font-size: 14px;
+    color: var(--ion-color-medium);
+  }
+}
+
+.actions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  ion-button {
+    --border-radius: 12px;
+    height: 50px;
+    font-weight: 600;
+    text-transform: none;
+    font-size: 16px;
+
+    &:first-child {
+      --background: var(--ion-color-danger);
+      --color: white; // Ensure button text is visible
+      --background-activated: var(--ion-color-danger-shade);
+      --background-hover: var(--ion-color-danger-tint);
+    }
+
+    &:last-child {
+      --background: var(--ion-color-light);
+      --color: var(--ion-color-dark);
+      --background-activated: var(--ion-color-medium);
+      --background-hover: var(--ion-color-light-tint);
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 480px) {
+  .account-delete-container {
+    padding: 16px 12px;
+  }
+
+  .warning-header {
+    h1 {
+      font-size: 22px;
+    }
+
+    p {
+      font-size: 15px;
+    }
+  }
+
+  .warning-card,
+  .account-info-card,
+  .confirmation-card {
+    padding: 16px;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .account-delete-content {
+    --background: #1e1e1e;
+  }
+
+  .warning-header {
+    h1 {
+      color: #ffffff; // Pure white for better visibility
+    }
+
+    p {
+      color: #cccccc; // Light gray for better visibility
+    }
+  }
+
+  .warning-card {
+    background: #3c1f1f;
+    border: 1px solid #5a2d2d;
+
+    .warning-title {
+      h2 {
+        color: #ff6b6b; // Lighter red for better visibility in dark mode
+      }
+    }
+
+    ul {
+      li {
+        color: #ffffff; // Pure white for better visibility
+      }
+    }
+  }
+
+  .account-info-card {
+    background: #2d2d2d;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    .info-item {
+      border-bottom: 1px solid #444;
+
+      .label {
+        color: #cccccc; // Light gray for better visibility
+      }
+
+      .value {
+        color: #ffffff; // Pure white for better visibility
+      }
+    }
+  }
+
+  .confirmation-card {
+    background: #2d2d2d;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    ion-item {
+      --background: #3a3a3a;
+    }
+
+    ion-label {
+      color: #ffffff; // Pure white for better visibility
+    }
+
+    ion-input {
+      color: #ffffff; // Ensure input text is visible in dark mode
+      --placeholder-color: #aaaaaa; // Lighter placeholder color
+    }
+
+    .confirmation-text {
+      color: #cccccc; // Light gray for better visibility
+    }
+  }
+
+  .actions-grid {
+    ion-button {
+      &:first-child {
+        --color: #ffffff; // Ensure button text is visible in dark mode
+      }
+
+      &:last-child {
+        --background: #444;
+        --color: #ffffff; // Pure white for better visibility
+        --background-activated: #555;
+        --background-hover: #555;
+      }
+    }
+  }
+}

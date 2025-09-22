@@ -1,0 +1,222 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-title>
+      <div class="title-flex">
+        <ion-icon name="locate-outline"></ion-icon>
+        <span>My Snipes</span>
+      </div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button
+        *ngIf="(viewModel.status || 0) === 1"
+        fill="clear"
+        (click)="addToSnipes_click()"
+      >
+        <svg
+          class="custom-svg"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+          width="24"
+          height="24"
+          fill="currentColor"
+        >
+          <path
+            d="M256 48C141.125 48 48 141.125 48 256s93.125 208 208 208 208-93.125 208-208S370.875 48 256 48zm0 368c-88.225 0-160-71.775-160-160S167.775 96 256 96s160 71.775 160 160-71.775 160-160 160z"
+          />
+          <path
+            d="M256 144c-8.837 0-16 7.163-16 16v80h-80c-8.837 0-16 7.163-16 16s7.163 16 16 16h80v80c0 8.837 7.163 16 16 16s16-7.163 16-16v-80h80c8.837 0 16-7.163 16-16s-7.163-16-16-16h-80v-80c0-8.837-7.163-16-16-16z"
+          />
+        </svg>
+      </ion-button>
+      <ion-button
+        *ngIf="(viewModel.status || 0) === 1"
+        fill="clear"
+        (click)="openFilterSheet()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M3 5h18v2H3V5zm4 6h10v2H7v-2zm6 6h-6v2h6v-2z" />
+        </svg>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <!-- Filter Bar -->
+  <ion-toolbar class="filter-toolbar">
+    <ion-segment
+      [value]="(viewModel.status || 0).toString()"
+      (ionChange)="filterBar_click($event.detail.value)"
+    >
+      <ion-segment-button value="1" type="button">
+        <ion-label>Active</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="2" type="button">
+        <ion-label>Won</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="3" type="button">
+        <ion-label>Lost</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Main Content -->
+<ion-content
+  [fullscreen]="true"
+  class="snipe-content"
+  *ngIf="!viewModel.showError && !viewModel.showSpinner"
+  (ionScroll)="OnScroll($event)"
+>
+  <ion-refresher slot="fixed" (ionRefresh)="refresher_refresh($event)">
+    <ion-refresher-content
+      pullingText="Pull to refresh..."
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="viewModel.snipes.length === 0">
+    <ion-card class="empty-card">
+      <ion-card-content class="empty-content">
+        <div class="empty-icon">
+          <ion-icon name="locate-outline" color="medium"></ion-icon>
+        </div>
+        <h3>No Snipes Yet</h3>
+        <p>You do not have any snipes. Try searching for an item first.</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Snipe results -->
+  <div
+    class="snipes-section"
+    *ngIf="viewModel.snipes && viewModel.snipes.length"
+  >
+    <div class="section-header">
+      <h3>
+        <ion-icon name="locate-outline" color="secondary"></ion-icon>
+        {{ getSnipeStatusText(viewModel.status || 0) }} Snipes ({{
+        viewModel.snipes.length }})
+      </h3>
+      <p>Tap any item to view details and manage your snipe</p>
+    </div>
+
+    <div class="snipes-list">
+      <ion-card
+        *ngFor="let snipe of viewModel.snipes"
+        class="snipe-card modern-card"
+        [routerLink]="['/snipe/detail', snipe.Item]"
+        [queryParams]="{ snipeStatus: snipe.Status }"
+        button
+      >
+        <div class="snipe-content">
+          <!-- Snipe Image -->
+          <div class="snipe-image-container">
+            <div
+              class="auction-thumbnail"
+              [ngStyle]="{ 'background-image': 'url(' + snipe.Thumbnail + ')' }"
+            ></div>
+
+            <!-- Status Badge -->
+            <!-- <div class="snipe-badge" [ngClass]="getSnipeStatusClass(snipe.Status)">
+              <ion-icon [name]="getSnipeStatusIcon(snipe.Status)"></ion-icon>
+              <span>{{ getSnipeStatusText(snipe.Status) }}</span>
+            </div> -->
+
+            <!-- Time Badge -->
+            <!-- <div class="time-badge"
+              [ngClass]="{ 'urgent': snipe.CountDownTime === 'Ended' || (snipe.CountDownTime && snipe.CountDownTime.length <= 3) }">
+              <ion-icon name="time-outline"></ion-icon>
+              <span>{{ snipe.CountDownTime }}</span>
+            </div> -->
+          </div>
+
+          <!-- Snipe Details -->
+          <div class="snipe-details">
+            <h4 class="snipe-title">{{ snipe.Title }}</h4>
+
+            <div class="snipe-price">
+              <span class="price-label">Current Price</span>
+              <span class="price-value">
+                {{ snipe.Currency }}{{ snipe.CurrentPrice | number:'1.2-2' }}
+              </span>
+            </div>
+
+            <div class="snipe-meta">
+              <div class="meta-item">
+                <span>Ends: {{ snipe.EndTime | date:"MM/dd/yyyy h:mma" }}</span>
+              </div>
+
+              <div class="meta-item">
+                <span class="time-label">Time left:</span>
+                <span
+                  class="time-left"
+                  [ngClass]="{ 'urgent': snipe.CountDownTime === 'Ended' || (snipe.CountDownTime && snipe.CountDownTime.length <= 3) }"
+                >
+                  {{ snipe.CountDownTime }}
+                </span>
+              </div>
+            </div>
+
+            <div class="snipe-stats">
+              <div class="stat-item">
+                <span class="stat-label">Max Bid</span>
+                <span class="stat-value"
+                  >{{ snipe.Currency }}{{ snipe.MaxBid }}</span
+                >
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Bids</span>
+                <span class="stat-value">{{ snipe.NumBids }}</span>
+              </div>
+            </div>
+
+            <div class="snipe-actions" *ngIf="snipe.BidEnhancement">
+              <div class="second-shot">
+                <span
+                  >Second Shot: {{ snipe.BidEnhancement }} Bid Increments</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="snipe-arrow">
+            <ion-icon name="chevron-forward-outline" color="medium"></ion-icon>
+          </div>
+        </div>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>
+
+<!-- Error State -->
+<div class="error-state" *ngIf="viewModel.showError">
+  <ion-card class="error-card">
+    <ion-card-content class="error-content">
+      <div class="error-icon">
+        <ion-icon name="cloud-offline-outline" color="danger"></ion-icon>
+      </div>
+      <h3>Connection Error</h3>
+      <p>Unexpected error; please try again.</p>
+      <ion-button fill="solid" color="primary" (click)="retry_click()">
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Try Again
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</div>
+
+<!-- Loading State -->
+<div class="loading-state" *ngIf="viewModel.showSpinner">
+  <div class="loading-content">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p>Loading your snipes...</p>
+  </div>
+</div>

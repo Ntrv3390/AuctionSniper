@@ -1,0 +1,104 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/root/more"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Transaction History</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="transaction-history-content">
+  <div class="page-header">
+    <div class="header-icon">
+      <ion-icon name="receipt-outline"></ion-icon>
+    </div>
+    <h1>Transaction History</h1>
+    <p class="subtitle">View your payment records and billing information</p>
+  </div>
+
+  <ion-card class="info-card">
+    <ion-card-content>
+      <div class="info-icon">
+        <ion-icon name="information-circle-outline"></ion-icon>
+      </div>
+      <h2>Full Transaction History</h2>
+      <p>
+        Detailed transaction records are available on the AuctionSniper website.
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="actions-section">
+    <ion-button
+      expand="block"
+      fill="solid"
+      (click)="accountInformationClick()"
+    >
+      <ion-icon name="globe-outline" slot="start"></ion-icon>
+      Visit AuctionSniper.com
+    </ion-button>
+
+    <p class="helper-text">
+      <ion-icon name="help-circle-outline"></ion-icon>
+      Log in to your account on the website to view complete transaction
+      details, invoices, and billing history.
+    </p>
+  </div>
+
+  <ion-list class="features-list">
+    <ion-item-divider>
+      <ion-label>What You'll Find Online</ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-icon name="document-text-outline" slot="start"></ion-icon>
+      <ion-label>
+        <h3>Detailed Invoices</h3>
+        <p>Complete billing records with itemized charges</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="card-outline" slot="start"></ion-icon>
+      <ion-label>
+        <h3>Payment Methods</h3>
+        <p>View and manage your saved payment information</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="calendar-outline" slot="start"></ion-icon>
+      <ion-label>
+        <h3>Billing History</h3>
+        <p>Complete history of all payments and subscriptions</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="download-outline" slot="start"></ion-icon>
+      <ion-label>
+        <h3>Download Records</h3>
+        <p>Export transaction data in various formats</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div class="support-section">
+    <ion-card>
+      <ion-card-content>
+        <div class="support-icon">
+          <ion-icon name="help-buoy-outline"></ion-icon>
+        </div>
+        <h2>Need Assistance?</h2>
+        <p>
+          If you have questions about your transactions, our support team is
+          ready to help.
+        </p>
+        <ion-button fill="outline" (click)="contactSupport()">
+          <ion-icon name="chatbubble-ellipses-outline" slot="start"></ion-icon>
+          Contact Support
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

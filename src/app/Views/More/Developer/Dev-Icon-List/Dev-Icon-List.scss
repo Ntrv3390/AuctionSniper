@@ -1,0 +1,93 @@
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}
+.dev-icon-list {
+  .icon-grid {
+    margin: 0;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 0;
+
+    .icon-col {
+      margin-top: 0;
+      font-size: 14px;
+      text-align: center;
+
+      i {
+        font-size: 32px;
+      }
+    }
+
+    @media (max-width: 768px) and (orientation: portrait) {
+      .icon-col {
+        /* col-50 */
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 50%;
+        -moz-box-flex: 0;
+        -moz-flex: 0 0 50%;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-width: 50%;
+
+        .product-thumbnail {
+          height: 181px;
+        }
+      }
+    }
+
+    @media (max-width: 768px) and (orientation: landscape) {
+      .icon-col {
+        /* col-33 */
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 33%;
+        -moz-box-flex: 0;
+        -moz-flex: 0 0 33%;
+        -ms-flex: 0 0 33%;
+        flex: 0 0 33%;
+        max-width: 33%;
+
+        .product-thumbnail {
+          height: 230px;
+        }
+      }
+    }
+
+    @media (min-width: 768px) and (orientation: portrait) {
+      .icon-col {
+        /* col-25 */
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 25%;
+        -moz-box-flex: 0;
+        -moz-flex: 0 0 25%;
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 25%;
+
+        .product-thumbnail {
+          height: 180px;
+        }
+      }
+    }
+
+    @media (min-width: 768px) and (orientation: landscape) {
+      .icon-col {
+        /* col-20 */
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 20%;
+        -moz-box-flex: 0;
+        -moz-flex: 0 0 20%;
+        -ms-flex: 0 0 20%;
+        flex: 0 0 20%;
+        max-width: 20%;
+
+        .product-thumbnail {
+          height: 195px;
+        }
+      }
+    }
+  }
+}

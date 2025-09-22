@@ -1,0 +1,68 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/root/more"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Account Deletion</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="account-delete-content">
+  <div class="account-delete-container">
+    <div class="warning-header">
+      <ion-icon name="warning-outline"></ion-icon>
+      <h1>Delete Your Account</h1>
+      <p>This action cannot be undone. Please read carefully before proceeding.</p>
+    </div>
+
+    <div class="warning-card">
+      <div class="warning-title">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <h2>Important Information</h2>
+      </div>
+      <ul>
+        <li>All your data will be permanently deleted from our servers</li>
+        <li>Your active snipes will be cancelled immediately</li>
+        <li>Your subscription will be terminated</li>
+        <li>You will lose access to all app features</li>
+        <li>This action cannot be reversed</li>
+      </ul>
+    </div>
+
+    <div class="account-info-card">
+      <div class="info-item">
+        <span class="label">Username</span>
+        <span class="value">{{ userId }}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Email</span>
+        <span class="value">{{ email }}</span>
+      </div>
+    </div>
+
+    <div class="confirmation-card">
+      <ion-item>
+        <ion-label position="stacked">Confirm Username</ion-label>
+        <ion-input
+          type="text"
+          placeholder="Type your username to confirm"
+          [(ngModel)]="confirmUserId"
+          name="confirmUserId">
+        </ion-input>
+      </ion-item>
+      <p class="confirmation-text">
+        For security, please type your username exactly as shown above to confirm account deletion.
+      </p>
+    </div>
+
+    <div class="actions-grid">
+      <ion-button expand="block" (click)="deleteAccount()">
+        <ion-icon name="trash-outline" slot="start"></ion-icon>
+        Permanently Delete Account
+      </ion-button>
+      <ion-button expand="block" (click)="cancel()">
+        Cancel and Keep Account
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

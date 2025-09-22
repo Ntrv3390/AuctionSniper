@@ -1,0 +1,204 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Email Notifications</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        color="light"
+        *ngIf="!viewModel.showError && !viewModel.isLoading"
+        (click)="save_click()"
+      >
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Save
+      </ion-button>
+      <ion-button *ngIf="viewModel.isLoading" color="light" disabled>
+        <ion-spinner name="crescent" slot="start"></ion-spinner>
+        Saving
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="account-notifications-content">
+  <!-- Error State -->
+  <div class="error-container" *ngIf="viewModel.showError">
+    <div class="error-content">
+      <ion-icon name="cloud-offline-outline" class="error-icon"></ion-icon>
+      <h2>Connection Error</h2>
+      <p>
+        Unable to load your notification preferences. Please check your
+        connection and try again.
+      </p>
+      <ion-button
+        expand="block"
+        fill="solid"
+        color="primary"
+        (click)="retry_click()"
+      >
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Try Again
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div
+    class="loading-container"
+    *ngIf="!viewModel.showError && (!viewModel.preferences || viewModel.isLoading)"
+  >
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>
+      {{ viewModel.preferences ? 'Saving notification preferences...' : 'Loading
+      notification preferences...' }}
+    </p>
+  </div>
+
+  <!-- Main Content -->
+  <ng-container
+    *ngIf="!viewModel.showError && viewModel.preferences && !viewModel.isLoading"
+  >
+    <div class="page-header">
+      <div class="header-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+          />
+        </svg>
+      </div>
+      <h1>Email Notifications</h1>
+      <p class="subtitle">Choose which emails you'd like to receive</p>
+    </div>
+
+    <ion-list class="notifications-section">
+      <ion-item-divider>
+        <ion-label>Notification Types</ion-label>
+      </ion-item-divider>
+
+      <ion-item>
+        <ion-checkbox
+          slot="start"
+          [(ngModel)]="viewModel.preferences.EmailStatus"
+          name="EmailStatus"
+        >
+        </ion-checkbox>
+        <ion-label>
+          <h2>Snipe Status Reports</h2>
+          <p>Email me after every snipe with a status report</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-checkbox
+          slot="start"
+          [(ngModel)]="viewModel.preferences.EmailNews"
+          name="EmailNews"
+        >
+        </ion-checkbox>
+        <ion-label>
+          <h2>News & Updates</h2>
+          <p>Email me with Auction Sniper news and updates</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-checkbox
+          slot="start"
+          [(ngModel)]="viewModel.preferences.EmailPromo"
+          name="EmailPromo"
+        >
+        </ion-checkbox>
+        <ion-label>
+          <h2>Promotions</h2>
+          <p>Email me with Auction Sniper promotions</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-checkbox
+          slot="start"
+          [(ngModel)]="viewModel.preferences.EmailReminders"
+          name="EmailReminders"
+        >
+        </ion-checkbox>
+        <ion-label>
+          <h2>Reminders</h2>
+          <p>Email me Auction Sniper reminders</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-checkbox
+          slot="start"
+          [(ngModel)]="viewModel.preferences.EmailOutbid"
+          name="EmailOutbid"
+        >
+        </ion-checkbox>
+        <ion-label>
+          <h2>Outbid Alerts</h2>
+          <p>
+            Email me when my maximum bid is below the minimum price for an item
+            I am sniping on
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-list class="format-section">
+      <ion-item-divider>
+        <ion-label>Email Format</ion-label>
+      </ion-item-divider>
+
+      <ion-radio-group
+        [(ngModel)]="viewModel.preferences.EmailStyle"
+        name="EmailStyle"
+      >
+        <ion-item>
+          <ion-label>
+            <h2>HTML</h2>
+            <p>Rich formatting with images and styling</p>
+          </ion-label>
+          <ion-radio value="html" slot="start"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h2>Plain Text</h2>
+            <p>Simple text-only format</p>
+          </ion-label>
+          <ion-radio value="text" slot="start"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+
+    <div class="actions-footer">
+      <ion-button
+        expand="block"
+        fill="solid"
+        (click)="save_click()"
+        [disabled]="viewModel.isLoading"
+      >
+        <ion-icon name="save-outline" slot="start"></ion-icon>
+        Save Preferences
+      </ion-button>
+    </div>
+  </ng-container>
+
+  <!-- Saving Overlay -->
+  <div
+    class="saving-overlay"
+    *ngIf="viewModel.isLoading && viewModel.preferences"
+  >
+    <div class="saving-content">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Saving your notification preferences...</p>
+    </div>
+  </div>
+</ion-content>

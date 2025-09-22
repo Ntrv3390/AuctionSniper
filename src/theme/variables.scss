@@ -1,2 +1,25 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+// Custom color variables
+:root {
+  --message-info: #11c1f3;
+  --message-success: #33cd5f;
+  --message-warning: #f8b108;
+  --message-error: #ef473a;
+}
+
+// Dark mode overrides
+@media (prefers-color-scheme: dark) {
+  :root {
+    --message-info: #11c1f3;
+    --message-success: #33cd5f;
+    --message-warning: #f8b108;
+    --message-error: #ef473a;
+  }
+  
+  // Additional dark mode customizations can be added here
+  body {
+    // Any additional body-level dark mode styles
+  }
+}

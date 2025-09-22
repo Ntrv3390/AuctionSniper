@@ -1,0 +1,196 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-title>
+      <div class="title-content">
+        <ion-icon name="eye-outline"></ion-icon>
+        <span>My Watches</span>
+      </div>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="openFilterSheet()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M3 5h18v2H3V5zm4 6h10v2H7v-2zm6 6h-6v2h6v-2z" />
+        </svg>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="watchlist-content">
+  <!-- Error State -->
+  <div class="error-state" *ngIf="viewModel.showError">
+    <ion-card class="error-card">
+      <ion-card-content class="error-content">
+        <div class="error-icon">
+          <ion-icon name="cloud-offline-outline" color="danger"></ion-icon>
+        </div>
+        <h3>Connection Error</h3>
+        <p>
+          Unable to load your watches. Please check your connection and try
+          again.
+        </p>
+        <ion-button fill="solid" color="primary" (click)="retry_click()">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Try Again
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="viewModel.showSpinner">
+    <div class="loading-content">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Loading your watches...</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div
+    class="main-content"
+    *ngIf="!viewModel.showSpinner && !viewModel.showError"
+  >
+    <!-- Pull-to-refresh -->
+    <ion-refresher slot="fixed" (ionRefresh)="refresher_refresh($event)">
+      <ion-refresher-content
+        [pullingText]="'Pull to refresh...'"
+        [refreshingText]="'Refreshing...'"
+      >
+      </ion-refresher-content>
+    </ion-refresher>
+
+    <!-- Info Notice -->
+    <div class="info-notice" *ngIf="!viewModel.hideWatchesFirstTimeInfo">
+      <ion-card class="info-card">
+        <ion-card-content>
+          <div class="info-header">
+            <h4>Important Notice</h4>
+          </div>
+          <p>
+            Only auction format watches are imported. Fixed price listings like
+            "Buy It Now" won't be displayed.
+          </p>
+          <p>Pull down to refresh your watch list.</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="viewModel.watches.length === 0">
+      <ion-card class="empty-card">
+        <ion-card-content class="empty-content">
+          <h3>No Watches Yet</h3>
+          <p>
+            Start watching items you're interested in. Search for products and
+            add them to your watch list.
+          </p>
+          <ion-button fill="solid" routerLink="/root/search">
+            <ion-icon name="search-outline" slot="start"></ion-icon>
+            Search Items
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Watches List -->
+    <div
+      class="watches-section"
+      *ngIf="viewModel.watches && viewModel.watches.length"
+    >
+      <!-- Section Header -->
+      <div class="section-header">
+        <h3>
+          <ion-icon name="eye-outline"></ion-icon>
+          Your Watches ({{ viewModel.watches.length }})
+        </h3>
+        <p>Tap any item to view details and manage your watch</p>
+      </div>
+
+      <!-- Watches Grid -->
+      <div class="watches-list">
+        <ion-card
+          *ngFor="let watch of viewModel.watches; trackBy: trackByItemNumber"
+          class="watch-card modern-card"
+          [routerLink]="['/watch/detail', watch.itemnumber]"
+          button
+        >
+          <div class="watch-content">
+            <!-- Watch Image -->
+            <div class="watch-image-container">
+              <img
+                [src]="watch.thumbnail"
+                [alt]="watch.title"
+                class="watch-image"
+                (error)="watch.thumbnail='assets/images/placeholder.jpg'"
+              />
+
+              <!-- Status Badges -->
+              <!-- <div class="watch-badges">
+                <div class="snipe-badge" *ngIf="viewModel.snipeItemIds[watch.itemnumber]">
+                  <ion-icon name="locate-outline"></ion-icon>
+                  <span>Snipe Active</span>
+                </div>
+                <div class="time-badge" [ngClass]="{ 'urgent': watch.countdowntime === 'Ended' || (watch.countdowntime?.length <= 3) }">
+                  <ion-icon name="time-outline"></ion-icon>
+                  <span>{{ watch.countdowntime }}</span>
+                </div>
+              </div> -->
+            </div>
+
+            <!-- Watch Details -->
+            <div class="watch-details">
+              <h4 class="watch-title">{{ watch.title }}</h4>
+
+              <div class="watch-price">
+                <span class="price-label">Current Price</span>
+                <span class="price-value">
+                  {{ watch.currency }}{{ watch.CurrentPrice | number:'1.2-2' }}
+                </span>
+              </div>
+
+              <div class="watch-meta">
+                <div class="meta-item">
+                  <span class="time-label">Time left:</span>
+                  <span
+                    class="time-left"
+                    [ngClass]="{ 'urgent': watch.countdowntime === 'Ended' || (watch.countdowntime?.length <= 3) }"
+                  >
+                    {{ watch.countdowntime }}
+                  </span>
+                </div>
+
+                <div class="meta-item" *ngIf="watch.comment">
+                  <span class="comment">{{ watch.comment }}</span>
+                </div>
+              </div>
+
+              <div class="watch-actions">
+                <div
+                  class="snipe-status"
+                  *ngIf="viewModel.snipeItemIds[watch.itemnumber]"
+                >
+                  <ion-icon name="locate-outline" color="warning"></ion-icon>
+                  <span>Snipe Active</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Arrow -->
+            <div class="watch-arrow">
+              <ion-icon
+                name="chevron-forward-outline"
+                color="medium"
+              ></ion-icon>
+            </div>
+          </div>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+</ion-content>

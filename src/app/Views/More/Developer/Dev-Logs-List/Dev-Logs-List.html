@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+    <ion-toolbar class="custom-header">
+      <ion-title>Logs</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="filter_click($event)">
+          <ion-icon slot="icon-only" name="filter-outline"></ion-icon>
+        </ion-button>
+        <ion-button (click)="clear_click()">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="safe-area-content">
+    <ion-list>
+      <ng-container *ngFor="let logGroup of logs | keyvalue">
+        <ion-item-divider>
+          {{logGroup.key}} - {{logGroup.value.length}} Logs
+        </ion-item-divider>
+        <ng-container *ngFor="let logEntryViewModel of logGroup.value">
+          <ion-item button (click)="goToLogDetail(logEntryViewModel.logEntry.id)">
+            <ion-icon slot="start" [name]="logEntryViewModel.icon" [style.color]="logEntryViewModel.color"></ion-icon>
+            <ion-label>
+              <h3>{{logEntryViewModel.time}} - {{logEntryViewModel.levelDisplay}}</h3>
+              <p>{{logEntryViewModel.logEntry.tag}}</p>
+              <p>{{logEntryViewModel.logEntry.message}}</p>
+              <p *ngIf="logEntryViewModel.httpVerb || logEntryViewModel.httpCode">
+                {{logEntryViewModel.httpVerb}} {{logEntryViewModel.httpCode}}
+              </p>
+              <p *ngIf="logEntryViewModel.httpUrl">
+                {{logEntryViewModel.httpUrl}}
+              </p>
+            </ion-label>
+            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+          </ion-item>
+        </ng-container>
+      </ng-container>
+    </ion-list>
+  </ion-content>
+  

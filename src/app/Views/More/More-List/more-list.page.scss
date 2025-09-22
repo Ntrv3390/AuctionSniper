@@ -1,0 +1,311 @@
+.custom-header {
+  --background: linear-gradient(to right, #145583, #6cb1df);
+  --color: #fff;
+}
+
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}
+
+.custom-icon {
+  color: #145583;
+}
+
+.verify-btn {
+  --background: #145583;
+  --color: #fff;
+}
+
+.more-content-wrapper {
+  padding-top: 0; /* remove the extra safe-area padding at top */
+  padding-bottom: var(--safe-area-inset-bottom, 0); /* keep bottom safe-area */
+
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  // Dark mode
+  @media (prefers-color-scheme: dark) {
+    background: #121212;
+
+    .activation-card {
+      --background: #1e1e1e;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .option-card {
+      --background: #1e1e1e;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .option-text h3 {
+        color: #fff;
+      }
+      .option-text p {
+        color: #b0b0b0;
+      }
+    }
+
+    ion-item-divider {
+      --background: #2d2d2d;
+      --color: #fff;
+    }
+  }
+}
+
+// Activation Card
+.activation-card {
+  margin: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+  // Safe area margins
+  margin-left: calc(
+    16px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+  );
+  margin-right: calc(
+    16px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+  );
+}
+
+.activation-content {
+  text-align: center;
+
+  ion-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0 0 24px;
+    font-size: 14px;
+    color: var(--ion-color-medium);
+    line-height: 1.5;
+  }
+}
+
+.activation-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+
+  ion-button {
+    --border-radius: 12px;
+  }
+
+  // Safe area padding
+  padding-left: var(
+    --safe-area-inset-left,
+    var(--safe-area-inset-left-fallback)
+  );
+  padding-right: var(
+    --safe-area-inset-right,
+    var(--safe-area-inset-right-fallback)
+  );
+  padding-bottom: var(
+    --safe-area-inset-bottom,
+    var(--safe-area-inset-bottom-fallback)
+  );
+}
+
+// Options Section
+.options-list {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+
+  // Safe area padding
+  padding-left: var(
+    --safe-area-inset-left,
+    var(--safe-area-inset-left-fallback)
+  );
+  padding-right: var(
+    --safe-area-inset-right,
+    var(--safe-area-inset-right-fallback)
+  );
+  padding-bottom: var(
+    --safe-area-inset-bottom,
+    var(--safe-area-inset-bottom-fallback)
+  );
+}
+
+ion-item-divider {
+  --background: var(--ion-color-light);
+  --color: var(--ion-color-dark);
+  font-weight: 600;
+  padding-inline-start: 16px;
+  padding-inline-end: 16px;
+  min-height: 40px;
+
+  // Safe area padding
+  padding-left: calc(
+    16px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+  );
+  padding-right: calc(
+    16px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+  );
+}
+
+// Option Cards
+.option-card {
+  margin: 8px 16px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+
+  // Safe area margins
+  margin-left: calc(
+    16px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+  );
+  margin-right: calc(
+    16px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+  );
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .option-content {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+
+    // Safe area padding
+    padding-left: calc(
+      16px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+    );
+    padding-right: calc(
+      16px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+    );
+  }
+
+  .option-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: #aad4ef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+
+    ion-icon {
+      font-size: 20px;
+      color: #145583;
+    }
+  }
+
+  .option-text {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--ion-color-medium);
+    }
+  }
+
+  .option-arrow {
+    ion-icon {
+      font-size: 18px;
+    }
+  }
+}
+
+.logout-card {
+  .option-icon {
+    background: rgba(var(--ion-color-danger-rgb), 0.1);
+  }
+}
+
+// Responsive
+@media (max-width: 480px) {
+  .activation-card {
+    margin: 12px;
+
+    // Safe area margins
+    margin-left: calc(
+      12px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+    );
+    margin-right: calc(
+      12px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+    );
+  }
+
+  .option-card {
+    margin: 6px 12px;
+
+    // Safe area margins
+    margin-left: calc(
+      12px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+    );
+    margin-right: calc(
+      12px + var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+    );
+
+    .option-content {
+      padding: 12px;
+
+      // Safe area padding
+      padding-left: calc(
+        12px + var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+      );
+      padding-right: calc(
+        12px +
+          var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+      );
+    }
+
+    .option-icon {
+      width: 36px;
+      height: 36px;
+      margin-right: 12px;
+    }
+
+    .option-text h3 {
+      font-size: 15px;
+    }
+  }
+
+  .activation-actions {
+    flex-direction: column;
+
+    ion-button {
+      width: 100%;
+    }
+
+    // Safe area padding
+    padding-left: var(
+      --safe-area-inset-left,
+      var(--safe-area-inset-left-fallback)
+    );
+    padding-right: var(
+      --safe-area-inset-right,
+      var(--safe-area-inset-right-fallback)
+    );
+    padding-bottom: var(
+      --safe-area-inset-bottom,
+      var(--safe-area-inset-bottom-fallback)
+    );
+  }
+}

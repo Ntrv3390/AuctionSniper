@@ -1,0 +1,94 @@
+<ion-header [translucent]="true">
+    <ion-toolbar class="custom-header">
+      <ion-title>Push Notifications</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="safe-area-content">
+  
+    <!-- Registration Info Card -->
+    <ion-card>
+      <ion-item-divider color="dark">
+        Registration Info
+        <ion-icon slot="end" name="help-outline"
+                  (click)="help_click('These values can be used in the Firebase console to target this device.')"></ion-icon>
+      </ion-item-divider>
+  
+      <ion-item lines="none" button
+                (click)="copyValue_click(viewModel.apnsToken, 'APNS Token')">
+        <ion-label>
+          <strong>APNS Token</strong>
+          <div>{{ viewModel.apnsToken }}</div>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item lines="none" button
+                (click)="copyValue_click(viewModel.fcmToken, 'FCM Token')">
+        <ion-label>
+          <strong>FCM Token</strong>
+          <div>{{ viewModel.fcmToken }}</div>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  
+    <!-- Tools Card -->
+    <ion-card>
+      <ion-item-divider color="dark">Tools</ion-item-divider>
+      <ion-item lines="none">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <ion-button expand="block" color="primary"
+                          (click)="register_click()">Register</ion-button>
+            </ion-col>
+            <ion-col size="12">
+              <ion-button expand="block" color="primary"
+                          (click)="simulatePushNotification_click()">Simulate push notification</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-card>
+  
+    <!-- Registration and Notification Results Card -->
+    <ion-card>
+      <ion-item-divider color="dark">Last Registration Result</ion-item-divider>
+      <ion-item lines="none" button
+                (click)="copyValue_click(viewModel.lastRegistrationResultJson, 'Last Registration Result')">
+        <ion-label>
+          <pre>{{ viewModel.lastRegistrationResultJson }}</pre>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item-divider color="dark">Last Registration Error Result</ion-item-divider>
+      <ion-item lines="none" button
+                (click)="copyValue_click(viewModel.lastRegistrationErrorResultJson, 'Last Registration Error Result')">
+        <ion-label>
+          <pre>{{ viewModel.lastRegistrationErrorResultJson }}</pre>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item-divider color="dark">Last Notification Received</ion-item-divider>
+      <ion-item lines="none" button
+                (click)="copyValue_click(viewModel.lastNotificationReceivedResultJson, 'Last Notification Received')">
+        <ion-label>
+          <pre>{{ viewModel.lastNotificationReceivedResultJson }}</pre>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item-divider color="dark">Last Action Performed</ion-item-divider>
+      <ion-item lines="none" button
+                (click)="copyValue_click(viewModel.lastActionPerformedResultJson, 'Last Action Performed')">
+        <ion-label>
+          <pre>{{ viewModel.lastActionPerformedResultJson }}</pre>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item lines="none">
+        <ion-button expand="block" color="primary"
+                    (click)="clearRecents_click()">Clear Recent Data</ion-button>
+      </ion-item>
+    </ion-card>
+  
+  </ion-content>
+  

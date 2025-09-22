@@ -1,0 +1,237 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="title-content">
+        <ion-icon name="link-outline"></ion-icon>
+        <span>eBay Connection</span>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ebay-token-content">
+  <!-- Error State -->
+  <div class="error-state" *ngIf="viewModel.showError">
+    <ion-card class="error-card">
+      <ion-card-content class="error-content">
+        <div class="error-icon">
+          <ion-icon name="cloud-offline-outline" color="danger"></ion-icon>
+        </div>
+        <h3>Connection Error</h3>
+        <p>Unexpected error; please try again.</p>
+        <ion-button fill="solid" color="primary" (click)="retry_click()">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Try Again
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="viewModel.showSpinner">
+    <div class="loading-content">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Checking your eBay connection...</p>
+    </div>
+  </div>
+
+  <!-- Manual Refresh View -->
+  <div
+    class="manual-refresh-section"
+    *ngIf="!viewModel.showSpinner && !viewModel.showError && viewModel.showManualRefresh"
+  >
+    <ion-card class="status-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="refresh-outline" color="primary"></ion-icon>
+          Check Connection Status
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p class="status-description">
+          Please tap the refresh button below to check your eBay account linking
+          status.
+        </p>
+        <div class="action-buttons">
+          <ion-button expand="block" color="primary" (click)="refresh_click()">
+            <ion-icon name="refresh-outline" slot="start"></ion-icon>
+            Refresh Connection
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Onboarding View -->
+  <div
+    class="onboarding-section"
+    *ngIf="!viewModel.showSpinner && !viewModel.showError && !viewModel.showManualRefresh && viewModel.isOnboarding"
+  >
+    <ion-card class="welcome-card">
+      <ion-card-header>
+        <ion-card-title *ngIf="!viewModel.tokenIsValid">
+          <ion-icon name="hand-left-outline" color="primary"></ion-icon>
+          Welcome!
+        </ion-card-title>
+        <ion-card-title *ngIf="viewModel.tokenIsValid">
+          <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+          Congratulations!
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="welcome-content">
+          <p *ngIf="!viewModel.tokenIsValid" class="welcome-text">
+            To get started sniping, simply link your eBay account to Auction
+            Sniper so that we can place bids on your behalf and import your
+            "watched" auctions.
+          </p>
+          <p *ngIf="viewModel.tokenIsValid" class="success-text">
+            You successfully linked your eBay account. Tap "Continue" to start
+            sniping!
+          </p>
+
+          <div class="action-buttons">
+            <ion-button
+              expand="block"
+              color="primary"
+              *ngIf="!viewModel.tokenIsValid"
+              (click)="linkEbayAccount_click()"
+            >
+              <ion-icon name="link-outline" slot="start"></ion-icon>
+              Link My eBay Account
+            </ion-button>
+
+            <ion-button
+              expand="block"
+              color="primary"
+              fill="outline"
+              *ngIf="viewModel.tokenIsValid"
+              (click)="continue_click()"
+            >
+              <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+              Continue to Sniping
+            </ion-button>
+
+            <ion-button
+              expand="block"
+              color="medium"
+              fill="outline"
+              (click)="logout_click()"
+            >
+              <ion-icon name="log-out-outline" slot="start"></ion-icon>
+              Logout
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Regular View (Not Onboarding) -->
+  <div
+    class="connection-section"
+    *ngIf="!viewModel.showSpinner && !viewModel.showError && !viewModel.showManualRefresh && !viewModel.isOnboarding"
+  >
+    <ion-card class="connection-card">
+      <ion-card-header>
+        <ion-card-title>
+          <div class="card-title-content">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <span>Connection Status</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <!-- Connection Warning -->
+        <div
+          class="status-warning"
+          *ngIf="viewModel.tokenIsValid && viewModel.showWarning"
+        >
+          <ion-card class="warning-card">
+            <ion-card-content>
+              <div class="warning-content">
+                <ion-icon name="warning-outline" color="warning"></ion-icon>
+                <h3>Connection Expiring Soon</h3>
+                <p>
+                  Your eBay connection is going to expire on
+                  <strong>{{ viewModel.expireDate }}</strong>.<br /><br />
+                  We suggest you relink your eBay account now to ensure all
+                  future snipes are placed successfully.
+                </p>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <!-- Connection Valid -->
+        <div
+          class="status-valid"
+          *ngIf="viewModel.tokenIsValid && !viewModel.showWarning"
+        >
+          <ion-card class="success-card">
+            <ion-card-content>
+              <div class="success-content">
+                <ion-icon
+                  name="checkmark-circle-outline"
+                  color="success"
+                ></ion-icon>
+                <h3>Connection Active</h3>
+                <p>
+                  Your eBay connection is valid and ready for sniping.<br /><br />
+                  <strong>Expires:</strong> {{ viewModel.expireDate }}<br /><br />
+                  Your eBay connection automatically expires every 18 months and
+                  when you change your eBay password, as a security feature.
+                </p>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <!-- Connection Invalid -->
+        <div class="status-invalid" *ngIf="!viewModel.tokenIsValid">
+          <ion-card class="error-card">
+            <ion-card-content>
+              <div class="error-content">
+                <ion-icon name="close-circle-outline" color="danger"></ion-icon>
+                <h3>Connection Required</h3>
+                <p>
+                  Your eBay connection is invalid. To continue sniping, you need
+                  to first relink your eBay account.
+                </p>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <ion-button
+            expand="block"
+            color="primary"
+            *ngIf="!viewModel.tokenIsValid || viewModel.showWarning"
+            (click)="linkEbayAccount_click()"
+          >
+            <ion-icon name="link-outline" slot="start"></ion-icon>
+            {{ viewModel.showWarning ? 'Relink Account' : 'Link My eBay Account'
+            }}
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            color="medium"
+            fill="outline"
+            *ngIf="!viewModel.tokenIsValid"
+            (click)="logout_click()"
+          >
+            <ion-icon name="log-out-outline" slot="start"></ion-icon>
+            Logout
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

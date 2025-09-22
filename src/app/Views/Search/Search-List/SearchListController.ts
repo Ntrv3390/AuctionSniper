@@ -91,13 +91,12 @@ export class SearchListController implements OnInit {
    * Execute a saved search when clicked
    */
   protected savedSearchItem_click(savedSearch: AuctionSniperApiTypes.SparseSavedSearch): void {
-    // Navigate to the search query page with the saved search parameters
-    this.router.navigate(['/root/search'], {
-      queryParams: {
-        searchId: savedSearch.Id,
-        searchTerms: savedSearch.AllWords,
-        searchTitle: savedSearch.Title
-      }
-    });
+    // Navigate to the search edit page with the saved search parameters
+    this.router.navigate(['/search/edit', savedSearch.Id]);
+  }
+
+  protected savedSearchItem_click_new(): void {
+    // Navigate to the search create page with the saved search parameters
+    this.router.navigate(['/search/create']);
   }
 }

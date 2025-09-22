@@ -1,0 +1,157 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="custom-header">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()" color="dark">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <!-- Use local title -->
+    <ion-title>{{ viewModel.search?.Id ? 'Edit Search' : 'Create Search' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="search-edit-content">
+  <form *ngIf="viewModel.search" (ngSubmit)="save_click()" class="search-edit-form">
+    
+    <!-- Search Info Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <ion-icon name="information-circle-outline" color="primary"></ion-icon>
+        <h2>Search Information</h2>
+      </div>
+      
+      <ion-list class="form-list">
+        <ion-item class="form-item">
+          <ion-label position="stacked">Search Name <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input 
+            type="text" 
+            [(ngModel)]="viewModel.search.Title" 
+            name="Title" 
+            placeholder="e.g., Vintage Cameras"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="form-item">
+          <ion-label position="stacked">Keywords to Include</ion-label>
+          <ion-input 
+            type="text" 
+            [(ngModel)]="viewModel.search.AllWords" 
+            name="AllWords" 
+            placeholder="e.g., vintage camera">
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="form-item">
+          <ion-label position="stacked">Keywords to Exclude</ion-label>
+          <ion-input 
+            type="text" 
+            [(ngModel)]="viewModel.search.ExcludeWords" 
+            name="ExcludeWords" 
+            placeholder="e.g., broken, damaged">
+          </ion-input>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <ion-icon name="filter-outline" color="primary"></ion-icon>
+        <h2>Filters</h2>
+      </div>
+      
+      <ion-list class="form-list">
+        <ion-item class="form-item">
+          <ion-label position="stacked">Category</ion-label>
+          <ion-select 
+            interface="popover" 
+            [(ngModel)]="viewModel.search.Category" 
+            name="Category" 
+            placeholder="All Categories">
+            <ion-select-option value="">All Categories</ion-select-option>
+            <ion-select-option value="20081">Antiques</ion-select-option>
+            <ion-select-option value="550">Art</ion-select-option>
+            <ion-select-option value="2984">Baby</ion-select-option>
+            <ion-select-option value="267">Books</ion-select-option>
+            <ion-select-option value="12576">Business, Office & Industrial</ion-select-option>
+            <ion-select-option value="625">Cameras & Photo</ion-select-option>
+            <ion-select-option value="6000">Cars, Parts & Vehicles</ion-select-option>
+            <ion-select-option value="15032">Cell Phones</ion-select-option>
+            <ion-select-option value="11450">Clothing, Shoes & Accessories</ion-select-option>
+            <ion-select-option value="11116">Coins</ion-select-option>
+            <ion-select-option value="1">Collectibles</ion-select-option>
+            <ion-select-option value="58058">Computers & Networking</ion-select-option>
+            <ion-select-option value="293">Consumer Electronics</ion-select-option>
+            <ion-select-option value="14339">Crafts</ion-select-option>
+            <ion-select-option value="237">Dolls & Bears</ion-select-option>
+            <ion-select-option value="11232">DVDs & Movies</ion-select-option>
+            <ion-select-option value="45100">Entertainment Memorabilia</ion-select-option>
+            <ion-select-option value="31411">Gift Certificates</ion-select-option>
+            <ion-select-option value="26395">Health & Beauty</ion-select-option>
+            <ion-select-option value="11700">Home & Garden</ion-select-option>
+            <ion-select-option value="281">Jewelry & Watches</ion-select-option>
+            <ion-select-option value="11233">Music</ion-select-option>
+            <ion-select-option value="619">Musical Instruments</ion-select-option>
+            <ion-select-option value="870">Pottery & Glass</ion-select-option>
+            <ion-select-option value="10542">Real Estate</ion-select-option>
+            <ion-select-option value="316">Speciality Services</ion-select-option>
+            <ion-select-option value="382">Sporting Goods</ion-select-option>
+            <ion-select-option value="64482">Sports Mem, Cards & Fan Shop</ion-select-option>
+            <ion-select-option value="260">Stamps</ion-select-option>
+            <ion-select-option value="1305">Tickets</ion-select-option>
+            <ion-select-option value="220">Toys & Hobbies</ion-select-option>
+            <ion-select-option value="3252">Travel</ion-select-option>
+            <ion-select-option value="1249">Video Games</ion-select-option>
+            <ion-select-option value="99">Everything Else</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <div class="price-range-container">
+          <ion-item class="form-item price-item">
+            <ion-label position="stacked">Minimum Price</ion-label>
+            <ion-input 
+              type="number" 
+              [(ngModel)]="viewModel.search.PriceMin" 
+              name="PriceMin" 
+              placeholder="0.00">
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="form-item price-item">
+            <ion-label position="stacked">Maximum Price</ion-label>
+            <ion-input 
+              type="number" 
+              [(ngModel)]="viewModel.search.PriceMax" 
+              name="PriceMax" 
+              placeholder="No limit">
+            </ion-input>
+          </ion-item>
+        </div>
+      </ion-list>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <ion-button 
+        expand="block"  
+        type="submit" 
+        class="save-button"
+        [disabled]="!viewModel.search.Title || viewModel.search.Title.trim().length === 0">
+        <ion-icon name="checkmark" slot="start"></ion-icon>
+        Save Search
+      </ion-button>
+      
+      <ion-button 
+        *ngIf="viewModel.search.Id" 
+        expand="block" 
+        color="danger" 
+        fill="outline" 
+        (click)="delete_click()" 
+        class="delete-button">
+        <ion-icon name="trash" slot="start"></ion-icon>
+        Delete Search
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

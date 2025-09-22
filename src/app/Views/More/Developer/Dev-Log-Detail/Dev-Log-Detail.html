@@ -1,0 +1,51 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>Log Details</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="safe-area-content">
+    <ion-card>
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <ion-icon [name]="viewModel.icon" [style.color]="viewModel.color"></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h2 [style.color]="viewModel.color">{{ viewModel.levelDisplay }}</h2>
+          <p>{{ viewModel.date }}&nbsp;&nbsp;&nbsp;{{ viewModel.time }}</p>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>
+          <p>{{ viewModel.logEntry.tag }}</p>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>
+          <p>{{ viewModel.logEntry.message }}</p>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>
+          <pre>{{ viewModel.formattedMetadata }}</pre>
+        </ion-label>
+      </ion-item>
+  
+      <ion-tabs>
+        <ion-tab-bar slot="bottom">
+          <ion-tab-button (click)="copy_click()">
+            <ion-icon name="copy-outline"></ion-icon>
+            <ion-label>Copy</ion-label>
+          </ion-tab-button>
+          <ion-tab-button (click)="email_click()">
+            <ion-icon name="mail-outline"></ion-icon>
+            <ion-label>E-mail</ion-label>
+          </ion-tab-button>
+        </ion-tab-bar>
+      </ion-tabs>
+    </ion-card>
+  </ion-content>
+  

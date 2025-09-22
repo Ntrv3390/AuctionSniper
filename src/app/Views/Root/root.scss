@@ -1,0 +1,12 @@
+ion-tab-bar {
+  ion-tab-button {
+    &.tab-selected {
+      ion-icon {
+        color: #145583;
+      }
+      ion-label {
+        color: #145583;
+      }
+    }
+  }
+}

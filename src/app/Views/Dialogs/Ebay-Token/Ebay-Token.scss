@@ -1,0 +1,102 @@
+/* Ebay Token Component Styles */
+.custom-header {
+  --background: linear-gradient(to right, #145583, #6cb1df);
+  --color: #fff;
+}
+
+.card-title-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  ion-icon {
+    font-size: 20px;
+    color: #145583;
+  }
+
+  span {
+    font-weight: 600;
+  }
+}
+
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}
+
+.title-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  ion-icon {
+    font-size: 20px;
+    color: var(--ion-color-light);
+  }
+
+  span {
+    color: var(--ion-color-light);
+    font-weight: 500;
+  }
+}
+
+ion-icon {
+  color: #145583;
+}
+
+.ebay-token-content {
+  --background: var(--ion-color-light);
+
+  .loading-state,
+  .error-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .status-card,
+  .welcome-card,
+  .connection-card {
+    margin: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .warning-card,
+  .success-card,
+  .error-card {
+    margin-bottom: 24px;
+    border-radius: 8px;
+  }
+
+  .warning-card {
+    background: rgba(var(--ion-color-warning-rgb), 0.1);
+    border: 1px solid var(--ion-color-warning);
+  }
+
+  .success-card {
+    background: rgba(var(--ion-color-success-rgb), 0.1);
+    border: 1px solid var(--ion-color-success);
+  }
+
+  .error-card {
+    background: rgba(var(--ion-color-danger-rgb), 0.1);
+    border: 1px solid var(--ion-color-danger);
+  }
+
+  .info-section {
+    margin-top: 24px;
+  }
+
+  .info-card {
+    border-radius: 8px;
+    background: rgba(var(--ion-color-primary-rgb), 0.05);
+    border: 1px solid var(--ion-color-primary);
+  }
+}

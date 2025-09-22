@@ -1,0 +1,427 @@
+// Modern Snipe List UI
+.snipe-content {
+  --background: #f8f9fa;
+  --transition: all 0.3s ease;
+}
+.custom-header {
+  --background: linear-gradient(to right, #145583, #6cb1df);
+  --color: #fff;
+}
+
+ion-header ion-toolbar {
+  --padding-bottom: 0;
+  --min-height: 56px;
+}
+
+.filter-toolbar {
+  --background: var(--ion-color-light);
+  padding: 0 16px;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  min-height: 48px;
+}
+
+.title-flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+ion-header {
+  padding-top: 0 !important;
+}
+ion-toolbar {
+  --padding-top: 0 !important;
+  --min-height: 56px;
+}
+
+.custom-svg {
+  color: #fff;
+  width: 24px;
+  height: 24px;
+}
+
+ion-segment-button {
+  --color: #121212;
+  --color-checked: #145583;
+  --indicator-color: #145583;
+}
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .snipe-content {
+    --background: #121212;
+  }
+
+  .error-card,
+  .empty-card {
+    --background: #1e1e1e;
+    --color: #ffffff;
+  }
+
+  .error-content h3,
+  .empty-content h3 {
+    color: #ffffff;
+  }
+
+  .error-content p,
+  .empty-content p {
+    color: #b0b0b0;
+  }
+
+  .section-header p {
+    color: #b0b0b0;
+  }
+
+  .price-label,
+  .time-label,
+  .stat-label {
+    color: #b0b0b0;
+  }
+
+  .time-left.urgent {
+    color: #ff5252;
+  }
+
+  .snipe-title {
+    color: #ffffff;
+  }
+
+  .price-value {
+    color: #145583;
+  }
+
+  .modern-card {
+    --background: #1e1e1e;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  .snipe-badge {
+    color: #ffffff;
+  }
+
+  .snipe-badge.active {
+    background: rgba(40, 167, 69, 0.9);
+  }
+
+  .snipe-badge.won {
+    background: rgba(0, 123, 255, 0.9);
+  }
+
+  .snipe-badge.lost {
+    background: rgba(220, 53, 69, 0.9);
+  }
+
+  .time-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+
+  .time-badge.urgent {
+    background: rgba(220, 53, 69, 0.9);
+    color: #ffffff;
+  }
+
+  .second-shot {
+    color: #ffc107;
+  }
+}
+
+// Error & Loading States
+.error-state,
+.loading-state,
+.empty-state {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.error-card,
+.empty-card {
+  margin: 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+  width: 100%;
+  max-width: 500px;
+}
+
+.error-content,
+.empty-content {
+  text-align: center;
+  padding: 32px 24px;
+}
+
+.error-icon ion-icon,
+.empty-icon ion-icon {
+  font-size: 64px;
+}
+
+.error-content h3,
+.empty-content h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.error-content p,
+.empty-content p {
+  margin: 0 0 24px;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.loading-content p {
+  margin-top: 16px;
+  color: var(--ion-color-medium);
+}
+
+// Snipes Section
+.snipes-section {
+  padding: 16px;
+}
+
+.section-header {
+  margin-bottom: 16px;
+}
+
+.section-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.section-header p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+}
+
+// Snipe Cards
+.snipes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modern-card {
+  margin: 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+.modern-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.snipe-content {
+  display: flex;
+  padding: 16px;
+  gap: 16px;
+}
+
+.snipe-image-container {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.auction-thumbnail {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.snipe-badge,
+.time-badge {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.snipe-badge {
+  top: 6px;
+  left: 6px;
+  background: rgba(108, 117, 125, 0.9);
+  color: white;
+}
+
+.snipe-badge.active {
+  background: rgba(40, 167, 69, 0.9);
+}
+
+.snipe-badge.won {
+  background: rgba(0, 123, 255, 0.9);
+  color: white;
+}
+
+.snipe-badge.lost {
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+}
+
+.time-badge {
+  top: 6px;
+  right: 6px;
+  background: rgba(248, 249, 250, 0.9);
+  color: #212529;
+}
+
+.time-badge.urgent {
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+}
+
+.snipe-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.snipe-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.snipe-price {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price-label {
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+.price-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #145583;
+}
+
+.snipe-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex: 1;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.time-label {
+  color: var(--ion-color-medium);
+  margin-right: 4px;
+}
+
+.time-left {
+  // Base styles for time-left
+}
+
+.time-left.urgent {
+  color: var(--ion-color-danger);
+  font-weight: 700;
+}
+
+.snipe-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ion-color-light);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.snipe-actions .second-shot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ion-color-warning);
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.snipe-arrow {
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+
+// Responsive improvements
+@media (max-width: 480px) {
+  .snipe-content {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .snipe-image-container {
+    width: 70px;
+    height: 70px;
+  }
+
+  .snipe-title {
+    font-size: 15px;
+  }
+
+  .price-value {
+    font-size: 16px;
+  }
+
+  .snipe-stats {
+    gap: 12px;
+  }
+}

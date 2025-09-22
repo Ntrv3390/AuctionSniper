@@ -1,0 +1,192 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="statusbar">
+    <ion-title>
+      <ion-icon name="log-in-outline" style="margin-right: 8px"></ion-icon>
+      Auction Sniper
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content
+  class="login-content"
+  [fullscreen]="true"
+  [forceOverscroll]="false"
+>
+  <div class="login-container">
+    <!-- Logo Section -->
+    <div class="logo-section">
+      <div class="logo-circle">
+        <img src="assets/images/about-icon.png" alt="Auction Sniper Logo" />
+      </div>
+      <h1 class="app-title">Auction Sniper</h1>
+      <p class="app-subtitle">Never miss an auction again</p>
+    </div>
+
+    <!-- Auth Toggle -->
+    <div class="auth-toggle">
+      <ion-segment
+        [value]="isSignIn ? 'signin' : 'signup'"
+        (ionChange)="toggleAuthMode($event.detail.value === 'signin')"
+      >
+        <ion-segment-button class="system-btn" value="signin">
+          <ion-label class="label-dark">Sign In</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="system-btn" value="signup">
+          <ion-label class="label-dark">Sign Up</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <!-- Auth Form -->
+    <div class="auth-form">
+      <form [formGroup]="form" novalidate>
+        <!-- User ID -->
+        <ion-card class="input-card">
+          <ion-card-content>
+            <ion-item lines="none" class="auth-input-item">
+              <ion-icon name="person-outline" slot="start"></ion-icon>
+              <ion-input
+                type="text"
+                placeholder="Username"
+                formControlName="userId"
+                autocapitalize="none"
+                autocomplete="off"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Password -->
+        <ion-card class="input-card">
+          <ion-card-content>
+            <ion-item lines="none" class="auth-input-item">
+              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+              <ion-input
+                type="password"
+                placeholder="Password"
+                formControlName="password"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Confirm Password (SignUp only) -->
+        <ion-card class="input-card" *ngIf="!isSignIn">
+          <ion-card-content>
+            <ion-item lines="none" class="auth-input-item">
+              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+              <ion-input
+                type="password"
+                placeholder="Confirm Password"
+                formControlName="confirmPassword"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Email (SignUp only) -->
+        <ion-card class="input-card" *ngIf="!isSignIn">
+          <ion-card-content>
+            <ion-item lines="none" class="auth-input-item">
+              <ion-icon name="mail-outline" slot="start"></ion-icon>
+              <ion-input
+                type="email"
+                placeholder="Email Address"
+                formControlName="email"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Timezone (SignUp only) -->
+        <ion-card class="input-card" *ngIf="!isSignIn">
+          <ion-card-content>
+            <ion-item lines="none" class="auth-input-item">
+              <ion-icon name="time-outline" slot="start"></ion-icon>
+              <ion-select
+                placeholder="Select Timezone"
+                formControlName="timeZone"
+              >
+                <ion-select-option
+                  *ngFor="let tz of timeZoneList"
+                  [value]="tz.value"
+                >
+                  {{ tz.text }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Sign-in view -->
+        <div *ngIf="isSignIn" class="auth-actions">
+          <ion-button
+            expand="block"
+            class="auth-button"
+            (click)="onSignIn()"
+            [disabled]="isLoading || form.invalid"
+          >
+            <ion-spinner
+              *ngIf="isLoading"
+              name="crescent"
+              slot="start"
+              size="small"
+            ></ion-spinner>
+            <span *ngIf="!isLoading">Sign In</span>
+            <span *ngIf="isLoading">Signing In...</span>
+          </ion-button>
+
+          <div class="forgot-password">
+            <ion-text color="secondary" (click)="onForgotPassword()">
+              <ion-icon name="help-circle-outline"></ion-icon>
+              Forgot password?
+            </ion-text>
+          </div>
+        </div>
+
+        <!-- Sign-up view -->
+        <div *ngIf="!isSignIn" class="auth-actions">
+          <ion-button
+            expand="block"
+            class="auth-button"
+            (click)="onCreateAccount()"
+            [disabled]="isLoading"
+          >
+            <ion-spinner
+              *ngIf="isLoading"
+              name="crescent"
+              slot="start"
+              size="small"
+            ></ion-spinner>
+            <span *ngIf="!isLoading">Create Account</span>
+            <span *ngIf="isLoading">Creating Account...</span>
+          </ion-button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Toggle Auth Mode Button -->
+    <div class="auth-toggle-button" *ngIf="isSignIn">
+      <p>Don't have an account?</p>
+      <ion-button fill="clear" (click)="toggleAuthMode(false)">
+        <ion-text>Create One</ion-text>
+      </ion-button>
+    </div>
+
+    <div class="auth-toggle-button" *ngIf="!isSignIn">
+      <p>Already have an account?</p>
+      <ion-button fill="clear" (click)="toggleAuthMode(true)">
+        <ion-text>Sign In</ion-text>
+      </ion-button>
+    </div>
+
+    <!-- Version Info -->
+    <div class="version-info" (click)="onVersionClick()">
+      <ion-text color="medium">{{ versionDisplay }}</ion-text>
+    </div>
+  </div>
+</ion-content>

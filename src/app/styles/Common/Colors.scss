@@ -1,0 +1,12 @@
+
+:root {
+  --message-info: #11c1f3;
+  --message-success: #33cd5f;
+  --message-warning: #f8b108;
+  --message-error: #ef473a;
+}
+
+$message-info: var(--message-info);
+$message-success: var(--message-success);
+$message-warning: var(--message-warning);
+$message-error: var(--message-error);

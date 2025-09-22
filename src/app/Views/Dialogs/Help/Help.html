@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+    <ion-toolbar color="dark">
+      <ion-title>Help</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="close_click()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="help ion-padding">
+  
+    <ion-list *ngIf="viewModel.topic === Enums.HelpTopic.SecondShot">
+      <ion-item class="item-text-wrap">
+        <p>
+          Second Shot is an optional feature that can help protect you from losing an auction by just a few dollars. Here's how it works: If eBay reports your initial snipe is too low when it's placed, Second Shot will attempt to place a second snipe a few eBay <a href="https://www.ebay.com/help/buying/bidding/automatic-bidding?id=4014" target="_blank">bid increments</a> above your first.
+        </p>
+        <p>
+          To use this feature, set your snipe amount like normal and select how many bid increments Auction Sniper should add to your initial snipe amount to take your Second Shot. Then if eBay responds to the first snipe attempt with a proxy outbid or bid too low status, Second Shot will place a second snipe to give you another chance of winning the item.
+        </p>
+        <p>
+          <strong>Important note:</strong> Second Shot is optional and free to use, but you may pay more for an item than your specified snipe amount if Second Shot places a second bid and wins that item.
+        </p>
+      </ion-item>
+    </ion-list>
+  
+  </ion-content>
+  

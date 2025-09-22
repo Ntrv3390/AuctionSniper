@@ -1,0 +1,64 @@
+<ion-header [translucent]="true">
+    <ion-toolbar color="dark">
+      <ion-title>Add Watch</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" class="ion-padding">
+    <form novalidate>
+      <ion-list>
+        <!-- Item Number -->
+        <ion-item>
+          <ion-label position="stacked">Item Number</ion-label>
+          <ion-input
+            type="text"
+            placeholder="Item Number"
+            [(ngModel)]="viewModel.itemnumber"
+            name="itemnumber">
+          </ion-input>
+        </ion-item>
+        <!-- Qty -->
+        <ion-item>
+          <ion-label position="stacked">Qty</ion-label>
+          <ion-input
+            type="number"
+            placeholder="Qty"
+            [(ngModel)]="viewModel.watchQuantity"
+            name="watchQuantity">
+          </ion-input>
+        </ion-item>
+        <!-- Max Offer -->
+        <ion-item>
+          <ion-label position="stacked">Max Offer</ion-label>
+          <ion-input
+            type="number"
+            placeholder="Max Offer"
+            [(ngModel)]="viewModel.watchPrice"
+            name="watchPrice">
+          </ion-input>
+        </ion-item>
+        <!-- Comment -->
+        <ion-item>
+          <ion-label position="stacked">Comment</ion-label>
+          <ion-input
+            type="text"
+            placeholder="Comment"
+            [(ngModel)]="viewModel.comment"
+            name="comment">
+          </ion-input>
+        </ion-item>
+      </ion-list>
+  
+      <ion-grid class="button-container">
+        <ion-row>
+          <ion-col size="6">
+            <ion-button expand="block" color="primary" (click)="addWatch_click()">Add Watch</ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" color="light" fill="outline" (click)="cancel_click()">Cancel</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </ion-content>
+  

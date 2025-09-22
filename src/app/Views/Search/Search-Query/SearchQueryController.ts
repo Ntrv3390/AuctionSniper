@@ -1,7 +1,17 @@
-import { Component, OnInit, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  CUSTOM_ELEMENTS_SCHEMA,
+} from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import {
+  RouterModule,
+  Router,
+  NavigationEnd,
+  ActivatedRoute,
+} from '@angular/router';
 import { PopoverController } from '@ionic/angular/standalone';
 import { filter } from 'rxjs/operators';
 import {
@@ -23,7 +33,7 @@ import {
   IonInfiniteScrollContent,
   IonIcon,
   IonButtons,
-  IonBackButton
+  IonBackButton,
 } from '@ionic/angular/standalone';
 import { DataSourceService } from 'src/app/services/DataSource';
 import { UIService } from 'src/app/services/UI';
@@ -68,8 +78,8 @@ import { SearchAdvancedMenu } from './Search-Advanced-Menu.component';
     IonButtons,
     IonBackButton,
     SearchAdvancedMenu,
-    SortPopover
-  ]
+    SortPopover,
+  ],
 })
 export class SearchQueryController implements OnInit {
   @ViewChild(IonContent) content!: IonContent;
@@ -88,11 +98,12 @@ export class SearchQueryController implements OnInit {
     isLocatedIn: false,
     searchTitle: '',
     searches: [] as AuctionSniperApiTypes.SparseSavedSearch[],
-    deals: [] as AuctionSniperApiTypes.Deal[]
+    deals: [] as AuctionSniperApiTypes.Deal[],
   };
 
   // Loading state for API calls
   isLoading = false;
+  private alreadyRefreshed = false;
 
   // Public fields from controller
   public OnScroll: any; // kept for parity; not used with modern APIs
@@ -111,22 +122,22 @@ export class SearchQueryController implements OnInit {
       AdvancedTag: 'Advanced',
       SortTag: 'Sort',
       Sort: {
-        MetaEndSort: "Ending Soonest",
-        MetaNewSort: "Newly Listed",
-        MetaHighestPriceSort: "Price: highest first",
-        PriceAndShippingLowestFirst: "Price + Shipping: lowest first",
-        PriceAndShippingHighestFirst: "Price + Shipping: highest first",
+        MetaEndSort: 'Ending Soonest',
+        MetaNewSort: 'Newly Listed',
+        MetaHighestPriceSort: 'Price: highest first',
+        PriceAndShippingLowestFirst: 'Price + Shipping: lowest first',
+        PriceAndShippingHighestFirst: 'Price + Shipping: highest first',
       },
       DailyDealsTag: 'Daily Deals',
       SavedSearchesTag: 'Saved Searches',
       EditSavedSearchesTag: 'Edit Saved Searches',
       LoadMoreResultsTag: 'Load More Results',
       Advanced: {
-        LocationTag: 'Location',
-        Done: 'Done',
-        Available: 'Available worldwide',
-        Located: 'Located in selected country',
+        LocationTag: 'Item Location',
         CountryTag: 'Country',
+        Available: 'Available to Country',
+        Located: 'Located in Country',
+        Done: 'Done',
         USA: 'United States',
         UK: 'United Kingdom',
         CAN: 'Canada',
@@ -138,19 +149,19 @@ export class SearchQueryController implements OnInit {
         NET: 'Netherlands',
         POR: 'Portugal',
         SPA: 'Spain',
-        SWE: 'Sweden'
-      }
+        SWE: 'Sweden',
+      },
     },
     AuctionDetail: {
       CurrentPriceTag: 'Current Price',
       BidsTag: 'Bids',
       ListedTag: 'Listed',
-      TimeLeftTag: 'Time Left'
+      TimeLeftTag: 'Time Left',
     },
     Views: {
       PullToRefreshTag: 'Pull to refresh',
-      RefreshingTag: 'Refreshing...'
-    }
+      RefreshingTag: 'Refreshing...',
+    },
   };
 
   constructor(
@@ -165,20 +176,32 @@ export class SearchQueryController implements OnInit {
     private route: ActivatedRoute
   ) {
     // Subscribe to router events to detect when we navigate back to this page
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      // Check if we're navigating to the search query page
-      if (event.url.startsWith('/search/query') || event.url === '/root/search') {
-        // Re-initialize countdown when returning to the search page
-        this.reinitializeCountdown();
-      }
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        // Check if we're navigating to the search query page
+        if (
+          event.url.startsWith('/search/query') ||
+          event.url === '/root/search'
+        ) {
+          // Re-initialize countdown when returning to the search page
+          this.reinitializeCountdown();
+        }
+      });
+
+    // Subscribe to ended items to remove them from the list
+    this.countdown.itemsEnded$.subscribe((endedItems: any[]) => {
+      this.removeEndedItems(endedItems);
     });
   }
 
   // ===== BaseController Events (migrated) =====
   ngOnInit(): void {
     this.view_loaded();
+  }
+
+  protected onBookmarkClick(): void {
+    this.router.navigate(['/search/list']);
   }
 
   ionViewWillEnter(): void {
@@ -204,7 +227,7 @@ export class SearchQueryController implements OnInit {
 
   protected view_beforeEnter(): void {
     // Check for query parameters when navigating to this page
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (params['searchId']) {
         this.viewModel.searchId = parseInt(params['searchId'], 10);
       }
@@ -217,33 +240,38 @@ export class SearchQueryController implements OnInit {
       }
     });
 
-    this.viewModel.searchId = this.viewModel.searchId || this.dataSource.searchId || 0;
+    this.viewModel.searchId =
+      this.viewModel.searchId || this.dataSource.searchId || 0;
 
-    if (!this.dataSource.searchResults || this.dataSource.searchResults.length === 0) {
+    if (
+      !this.dataSource.searchResults ||
+      this.dataSource.searchResults.length === 0
+    ) {
       this.viewModel.pageNumber = 1;
     }
 
-    this.viewModel.searchTitle = this.viewModel.searchTitle || this.dataSource.searchTitle;
-    
+    this.viewModel.searchTitle =
+      this.viewModel.searchTitle || this.dataSource.searchTitle;
+
     // Only refresh data if we don't already have search results
     if (!this.viewModel.searchResults) {
       this.refresh(false);
     } else {
-      // Re-initialize countdown for existing search results
-      this.OnScroll = this.countdown.initializeCountDown(
-        // kept signature parity; modern code wouldn't need these
-        undefined as any,
-        this.dataSource,
-        'searchResults',
-        'EndTime',
-        'CountDownTime',
-        this.viewModel
-      );
+      // Set up a delayed re-initialization to ensure DOM is ready
+      setTimeout(() => {
+        this.reinitializeCountdown();
+      }, 100);
     }
   }
 
   protected view_afterEnter(): void {
-    // no-op (kept for parity)
+    // Re-initialize countdown after view has entered to ensure DOM is ready
+    if (
+      this.viewModel.searchResults &&
+      this.viewModel.searchResults.length > 0
+    ) {
+      this.reinitializeCountdown();
+    }
   }
 
   protected view_beforeLeave(): void {
@@ -295,15 +323,21 @@ export class SearchQueryController implements OnInit {
     this.isLoading = true;
 
     Promise.all([
-      (refreshFromServer || !this.dataSource.savedSearches)
-        ? this.dataSource.retrieveSavedSearches().then(r => (this.showSingleItem(false), r)).catch(() => [])
+      refreshFromServer || !this.dataSource.savedSearches
+        ? this.dataSource
+            .retrieveSavedSearches()
+            .then((r) => (this.showSingleItem(false), r))
+            .catch(() => [])
         : Promise.resolve(this.dataSource.savedSearches ?? []),
 
       this.loadSearchData(refreshFromServer),
 
-      (!this.dataSource.searchResults && !this.dataSource.detail)
-        ? this.dataSource.retrieveDeals().then(r => (this.showSingleItem(false), r)).catch(() => [])
-        : Promise.resolve(this.dataSource.deals ?? [])
+      !this.dataSource.searchResults && !this.dataSource.detail
+        ? this.dataSource
+            .retrieveDeals()
+            .then((r) => (this.showSingleItem(false), r))
+            .catch(() => [])
+        : Promise.resolve(this.dataSource.deals ?? []),
     ])
       .then(([savedSearchItems, searchResults, dealsResults]) => {
         this.viewModel.searches = savedSearchItems;
@@ -313,7 +347,7 @@ export class SearchQueryController implements OnInit {
         // Re-initialize countdown after data is loaded
         if (searchResults && searchResults.length > 0) {
           const searchResultsData = {
-            searchResults: searchResults
+            searchResults: searchResults,
           };
 
           this.countdown.initializeCountDown(
@@ -327,30 +361,44 @@ export class SearchQueryController implements OnInit {
         }
       })
       .catch(() => {
-        this.ui.showErrorSnackbar('An error occurred while retrieving results; please try again later.');
+        this.ui.showErrorSnackbar(
+          'An error occurred while retrieving results; please try again later.'
+        );
       })
       .finally(() => {
         this.isLoading = false;
       });
   }
 
-  private async loadSearchData(forceReload: boolean): Promise<AuctionSniperApiTypes.SearchResult[] | null> {
+  private async loadSearchData(
+    forceReload: boolean
+  ): Promise<AuctionSniperApiTypes.SearchResult[] | null> {
     console.log('ENTERING loadSearchData method, forceReload:', forceReload);
-    console.log('Load search data called with parameters:', JSON.stringify({
-      searchTerms: this.viewModel.searchTerms,
-      sort: this.viewModel.sort,
-      pageNumber: this.viewModel.pageNumber,
-      searchId: this.viewModel.searchId,
-      country: this.viewModel.country,
-      isLocatedIn: this.viewModel.isLocatedIn
-    }, null, 2));
+    console.log(
+      'Load search data called with parameters:',
+      JSON.stringify(
+        {
+          searchTerms: this.viewModel.searchTerms,
+          sort: this.viewModel.sort,
+          pageNumber: this.viewModel.pageNumber,
+          searchId: this.viewModel.searchId,
+          country: this.viewModel.country,
+          isLocatedIn: this.viewModel.isLocatedIn,
+        },
+        null,
+        2
+      )
+    );
 
     this.plugins.keyboard.hide();
 
     console.log('Checking if search terms are empty...');
 
     // Check if search terms are empty
-    if (!this.viewModel.searchTerms || this.viewModel.searchTerms.trim().length === 0) {
+    if (
+      !this.viewModel.searchTerms ||
+      this.viewModel.searchTerms.trim().length === 0
+    ) {
       console.log('Search terms are empty, returning null');
       if (this.viewModel.searchId === 0) {
         // No search terms and no saved search ID, return null
@@ -368,18 +416,25 @@ export class SearchQueryController implements OnInit {
     // Item-number search
     if (this.viewModel.searchTerms && regEx.test(this.viewModel.searchTerms)) {
       console.log('This is an item number search');
-      this.tracker.track(TrackerConstants.Search.IdSearch, this.viewModel.searchTerms);
+      this.tracker.track(
+        TrackerConstants.Search.IdSearch,
+        this.viewModel.searchTerms
+      );
 
       if (this.dataSource.detail && !forceReload) {
         console.log('Using cached detail data');
-        const results: AuctionSniperApiTypes.SearchResult[] = [this.dataSource.detail];
+        const results: AuctionSniperApiTypes.SearchResult[] = [
+          this.dataSource.detail,
+        ];
         this.showSingleItem(true);
         return results;
       }
 
       try {
         console.log('Retrieving detail data from API');
-        const result = await this.dataSource.retrieveDetail(this.viewModel.searchTerms);
+        const result = await this.dataSource.retrieveDetail(
+          this.viewModel.searchTerms
+        );
         const results: AuctionSniperApiTypes.SearchResult[] = [result];
         this.showSingleItem(true);
         return results;
@@ -391,12 +446,17 @@ export class SearchQueryController implements OnInit {
       }
     }
 
-    console.log('This is not an item number search, continuing with keyword search...');
+    console.log(
+      'This is not an item number search, continuing with keyword search...'
+    );
 
     // Keyword search
     if (this.viewModel.searchTerms) {
       console.log('Tracking keyword search');
-      this.tracker.track(TrackerConstants.Search.KeywordSearch, this.viewModel.searchTerms);
+      this.tracker.track(
+        TrackerConstants.Search.KeywordSearch,
+        this.viewModel.searchTerms
+      );
     }
 
     console.log('Checking if we have cached search results...');
@@ -408,9 +468,22 @@ export class SearchQueryController implements OnInit {
         // Check if filter parameters have changed
         const cachedCountry = this.dataSource.searchCountry;
         const cachedLocatedIn = this.dataSource.searchLocatedIn;
-        console.log('Cached filters - Country:', cachedCountry, 'LocatedIn:', cachedLocatedIn);
-        console.log('Current filters - Country:', this.viewModel.country, 'LocatedIn:', this.viewModel.isLocatedIn);
-        if (cachedCountry === this.viewModel.country && cachedLocatedIn === this.viewModel.isLocatedIn) {
+        console.log(
+          'Cached filters - Country:',
+          cachedCountry,
+          'LocatedIn:',
+          cachedLocatedIn
+        );
+        console.log(
+          'Current filters - Country:',
+          this.viewModel.country,
+          'LocatedIn:',
+          this.viewModel.isLocatedIn
+        );
+        if (
+          cachedCountry === this.viewModel.country &&
+          cachedLocatedIn === this.viewModel.isLocatedIn
+        ) {
           console.log('Filter parameters unchanged, using cached results');
           this.showSingleItem(false);
           return this.dataSource.searchResults;
@@ -423,18 +496,27 @@ export class SearchQueryController implements OnInit {
       // If sort or filters changed, we need to reload
     }
 
-    console.log('Proceeding with search if we have search terms or a saved search ID...');
+    console.log(
+      'Proceeding with search if we have search terms or a saved search ID...'
+    );
     // Proceed with search if we have search terms or a saved search ID
     if (this.viewModel.searchTerms || this.viewModel.searchId !== 0) {
       try {
-        console.log('Calling dataSource.retrieveSearchResults with parameters:', JSON.stringify({
-          searchTerms: this.viewModel.searchTerms || '',
-          sort: this.viewModel.sort,
-          pageNumber: this.viewModel.pageNumber,
-          searchId: this.viewModel.searchId,
-          country: this.viewModel.country,
-          isLocatedIn: this.viewModel.isLocatedIn
-        }, null, 2));
+        console.log(
+          'Calling dataSource.retrieveSearchResults with parameters:',
+          JSON.stringify(
+            {
+              searchTerms: this.viewModel.searchTerms || '',
+              sort: this.viewModel.sort,
+              pageNumber: this.viewModel.pageNumber,
+              searchId: this.viewModel.searchId,
+              country: this.viewModel.country,
+              isLocatedIn: this.viewModel.isLocatedIn,
+            },
+            null,
+            2
+          )
+        );
 
         const results = await this.dataSource.retrieveSearchResults(
           this.viewModel.searchTerms || '',
@@ -445,7 +527,10 @@ export class SearchQueryController implements OnInit {
           this.viewModel.isLocatedIn
         );
 
-        console.log('dataSource.retrieveSearchResults completed, results length:', results?.length || 0);
+        console.log(
+          'dataSource.retrieveSearchResults completed, results length:',
+          results?.length || 0
+        );
 
         this.dataSource.clearDetail();
         this.showSingleItem(false);
@@ -453,7 +538,7 @@ export class SearchQueryController implements OnInit {
         // Re-initialize countdown after search results are loaded
         if (results && results.length > 0) {
           const searchResultsData = {
-            searchResults: results
+            searchResults: results,
           };
 
           this.countdown.initializeCountDown(
@@ -468,7 +553,9 @@ export class SearchQueryController implements OnInit {
 
         return results;
       } catch (e) {
-        console.log('Error in search, setting searchTotal to 0 and showing no results');
+        console.log(
+          'Error in search, setting searchTotal to 0 and showing no results'
+        );
         this.dataSource.searchTotal = 0;
         this.ui.showInfoSnackbar('No results found.');
         return [];
@@ -492,7 +579,8 @@ export class SearchQueryController implements OnInit {
       this.viewModel.searchResults == null ||
       this.viewModel.searchResults.length <= 1 ||
       (this.dataSource.searchTotal ?? 0) <= 1 ||
-      this.viewModel.searchResults.length >= (this.dataSource.searchTotal ?? 0) ||
+      this.viewModel.searchResults.length >=
+        (this.dataSource.searchTotal ?? 0) ||
       this.viewModel.searchResults.length >= 100
     ) {
       return false;
@@ -537,8 +625,6 @@ export class SearchQueryController implements OnInit {
   // ===== Controller Methods (names preserved) =====
   protected dailyDealItem_click(deal?: any): void {
     this.tracker.track(TrackerConstants.Item.ViewDailyDeal);
-
-
   }
 
   protected sortSearch_click(sort: string): void {
@@ -558,14 +644,17 @@ export class SearchQueryController implements OnInit {
   }
 
   async advancedOpen_click(ev: any): Promise<void> {
-    console.log('Advanced button clicked, initial PerformSearch:', this.PerformSearch);
+    console.log(
+      'Advanced button clicked, initial PerformSearch:',
+      this.PerformSearch
+    );
     const popover = await this.popoverCtrl.create({
       component: SearchAdvancedMenu,
       componentProps: {
         viewModel: this.viewModel,
         Localization: this.Localization,
         locationClick: () => this.location_click(),
-        countryClick: () => this.country_click()
+        countryClick: () => this.country_click(),
       },
       showBackdrop: true,
       backdropDismiss: true,
@@ -573,7 +662,7 @@ export class SearchQueryController implements OnInit {
       side: 'bottom',
       alignment: 'center',
       size: 'auto',
-      translucent: true
+      translucent: true,
     });
 
     popover.onDidDismiss().then(() => {
@@ -600,26 +689,42 @@ export class SearchQueryController implements OnInit {
   }
 
   location_click(): void {
-    console.log('Location clicked, old value:', this.preferences.searchLocatedInCountry, 'new value:', this.viewModel.isLocatedIn);
+    console.log(
+      'Location clicked, old value:',
+      this.preferences.searchLocatedInCountry,
+      'new value:',
+      this.viewModel.isLocatedIn
+    );
     const oldIsLocatedIn = this.preferences.searchLocatedInCountry;
     if (this.viewModel.isLocatedIn !== oldIsLocatedIn) {
       console.log('Location changed, setting PerformSearch = true');
       this.PerformSearch = true;
       this.preferences.searchLocatedInCountry = this.viewModel.isLocatedIn;
-      console.log('Updated preferences, searchLocatedInCountry:', this.preferences.searchLocatedInCountry);
+      console.log(
+        'Updated preferences, searchLocatedInCountry:',
+        this.preferences.searchLocatedInCountry
+      );
     } else {
       console.log('Location unchanged');
     }
   }
 
   country_click(): void {
-    console.log('Country clicked, old value:', this.preferences.searchCountry, 'new value:', this.viewModel.country);
+    console.log(
+      'Country clicked, old value:',
+      this.preferences.searchCountry,
+      'new value:',
+      this.viewModel.country
+    );
     const oldCountry = this.preferences.searchCountry;
     if (this.viewModel.country !== oldCountry) {
       console.log('Country changed, setting PerformSearch = true');
       this.PerformSearch = true;
       this.preferences.searchCountry = this.viewModel.country;
-      console.log('Updated preferences, searchCountry:', this.preferences.searchCountry);
+      console.log(
+        'Updated preferences, searchCountry:',
+        this.preferences.searchCountry
+      );
     } else {
       console.log('Country unchanged');
     }
@@ -632,7 +737,7 @@ export class SearchQueryController implements OnInit {
       side: 'bottom',
       alignment: 'center',
       size: 'auto',
-      translucent: true
+      translucent: true,
     });
 
     // Handle the popover result
@@ -646,9 +751,15 @@ export class SearchQueryController implements OnInit {
   }
 
   async search_click(): Promise<void> {
-    console.log('Search click called, search terms:', this.viewModel.searchTerms);
+    console.log(
+      'Search click called, search terms:',
+      this.viewModel.searchTerms
+    );
     // Validate search terms
-    if (!this.viewModel.searchTerms || this.viewModel.searchTerms.trim().length === 0) {
+    if (
+      !this.viewModel.searchTerms ||
+      this.viewModel.searchTerms.trim().length === 0
+    ) {
       this.ui.showInfoSnackbar('Please enter search terms.');
       return;
     }
@@ -657,8 +768,10 @@ export class SearchQueryController implements OnInit {
     this.viewModel.pageNumber = 1;
     try {
       // Track search with sort parameter
-      this.tracker.track(TrackerConstants.Search.KeywordSearch,
-        `${this.viewModel.searchTerms} (sort: ${this.viewModel.sort}, page: ${this.viewModel.pageNumber})`);
+      this.tracker.track(
+        TrackerConstants.Search.KeywordSearch,
+        `${this.viewModel.searchTerms} (sort: ${this.viewModel.sort}, page: ${this.viewModel.pageNumber})`
+      );
 
       // Correct call:
       const results = await this.loadSearchData(false);
@@ -680,7 +793,6 @@ export class SearchQueryController implements OnInit {
       }
     }
   }
-
 
   clearSearch_click(): void {
     this.tracker.track(TrackerConstants.Search.Clear);
@@ -725,7 +837,9 @@ export class SearchQueryController implements OnInit {
       }
     } catch (err) {
       console.error(err);
-      this.ui.showErrorSnackbar('An error occurred while loading saved search.');
+      this.ui.showErrorSnackbar(
+        'An error occurred while loading saved search.'
+      );
     } finally {
       this.isLoading = false;
     }
@@ -755,7 +869,9 @@ export class SearchQueryController implements OnInit {
       this.viewModel.pageNumber = this.dataSource.searchPage;
     } catch (err) {
       console.error(err);
-      this.ui.showErrorSnackbar('An error occurred while loading more results.');
+      this.ui.showErrorSnackbar(
+        'An error occurred while loading more results.'
+      );
     } finally {
       this.isLoading = false;
     }
@@ -779,7 +895,10 @@ export class SearchQueryController implements OnInit {
    * Re-initialize countdown when returning to the search page
    */
   private reinitializeCountdown(): void {
-    if (this.viewModel.searchResults && this.viewModel.searchResults.length > 0) {
+    if (
+      this.viewModel.searchResults &&
+      this.viewModel.searchResults.length > 0
+    ) {
       // Re-initialize countdown for existing search results
       this.OnScroll = this.countdown.initializeCountDown(
         // kept signature parity; modern code wouldn't need these
@@ -793,4 +912,28 @@ export class SearchQueryController implements OnInit {
     }
   }
 
+  /**
+   * Remove ended items from the search results list
+   */
+  private removeEndedItems(endedItems: any[]): void {
+    if (this.viewModel.searchResults && endedItems.length > 0) {
+      // Create a set of ended item IDs for efficient lookup
+      const endedItemIds = new Set(endedItems.map((item) => item.Id));
+
+      // Filter out ended items from the search results
+      this.viewModel.searchResults = this.viewModel.searchResults.filter(
+        (item: any) => !endedItemIds.has(item.Id)
+      );
+
+      // Update the data source as well
+      this.dataSource.updateSearchResults(
+        (item: any) => !endedItemIds.has(item.Id)
+      );
+
+      // Update the total count
+      if (this.dataSource.searchTotal) {
+        this.dataSource.searchTotal -= endedItems.length;
+      }
+    }
+  }
 }
