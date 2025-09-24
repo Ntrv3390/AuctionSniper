@@ -1,4 +1,5 @@
 import type { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
@@ -26,8 +27,10 @@ const config: CapacitorConfig = {
     StatusBar: {
       style: "LIGHT",
       backgroundColor: "#156DAB",
-      hideOnMobile: false,
       overlaysWebView: true
+    },
+    Keyboard: {
+      resize: KeyboardResize.None
     }
   }
 };

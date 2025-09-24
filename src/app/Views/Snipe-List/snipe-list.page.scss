@@ -42,10 +42,12 @@ ion-toolbar {
 }
 
 ion-segment-button {
-  --color: #121212;
-  --color-checked: #145583;
+  --color: #145583;
+  --color-checked: #fff;
   --indicator-color: #145583;
+  background: transparent;
 }
+
 // Dark mode support
 @media (prefers-color-scheme: dark) {
   .snipe-content {
