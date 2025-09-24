@@ -1,15 +1,20 @@
 .splash-content {
-  --background: linear-gradient(135deg, #1a2a6c 0%, #2a5298 50%, #3a7bd5 100%);
+  --background: linear-gradient(to right, #145583, #6cb1df);
   display: flex;
   align-items: center;
   justify-content: center;
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
   color: white;
-  
+
   // Dark mode support
   @media (prefers-color-scheme: dark) {
-    --background: linear-gradient(135deg, #0d1536 0%, #15294d 50%, #1d3e6b 100%);
+    --background: linear-gradient(
+      135deg,
+      #0d1536 0%,
+      #15294d 50%,
+      #1d3e6b 100%
+    );
   }
 }
 
@@ -63,7 +68,7 @@
   letter-spacing: -0.5px;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   color: white;
-  
+
   // Dark mode support - ensure text is visible
   @media (prefers-color-scheme: dark) {
     color: #ffffff;
@@ -78,7 +83,7 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   color: white;
-  
+
   // Dark mode support - ensure text is visible
   @media (prefers-color-scheme: dark) {
     color: #f0f0f0;
@@ -109,7 +114,7 @@
   background: linear-gradient(to right, #ffffff, #f0f0f0);
   border-radius: 3px;
   animation: progress 2s ease-in-out infinite;
-  
+
   // Dark mode support
   @media (prefers-color-scheme: dark) {
     background: linear-gradient(to right, #ffffff, #e0e0e0);
@@ -123,7 +128,7 @@
   font-weight: 300;
   letter-spacing: 0.5px;
   color: white;
-  
+
   // Dark mode support - ensure text is visible
   @media (prefers-color-scheme: dark) {
     color: #f0f0f0;
@@ -141,7 +146,7 @@
   font-weight: 300;
   letter-spacing: 0.5px;
   color: white;
-  
+
   // Dark mode support - ensure text is visible
   @media (prefers-color-scheme: dark) {
     color: #e0e0e0;

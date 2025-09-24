@@ -1,10 +1,23 @@
 <ion-header [translucent]="true">
   <ion-toolbar class="custom-header">
-    <ion-title>My Searches</ion-title>
+    <ion-title mode="md">My Searches</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="savedSearchItem_click_new()" class="add-btn" fill="solid">
-        <ion-icon name="add-outline"></ion-icon>
+      <ion-button
+        (click)="savedSearchItem_click_new()"
+        class="add-btn"
+        fill="solid"
+        color="light"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          >
+          <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" />
+        </svg>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

@@ -66,25 +66,23 @@ ion-content {
 
 /* Apply safe area to header */
 ion-header {
+  /* ANDROID (Material Design) */
   &.md {
-    // Android style
     padding-top: 0 !important;
 
     ion-toolbar {
-      // Keep status bar safe area
       padding-top: var(--ion-safe-area-top, 0);
       min-height: calc(56px + var(--ion-safe-area-top, 0));
     }
   }
 
+  /* ANDROID (Material Design) */
   &.ios {
     padding-top: 0 !important;
 
     ion-toolbar {
-      padding-top: env(safe-area-inset-top, 0);
-      height: calc(56px + env(safe-area-inset-top, 0)) !important;
-      box-sizing: border-box;
-      transition: none !important;
+      padding-top: var(--ion-safe-area-top, 0);
+      min-height: calc(56px + var(--ion-safe-area-top, 0));
     }
   }
 }
@@ -262,4 +260,21 @@ ion-header[translucent="true"] {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.ios ion-tab-bar {
+  padding-bottom: 0 !important;   /* remove extra safe area padding */
+  height: 60px !important;        /* consistent tab bar height */
+  z-index: 9999 !important;       /* keep above all other content */
+  position: relative !important;  /* ensure stacking works */
+}
+
+
+.ios ion-tab-bar ion-tab-button {
+  padding-bottom: 6px !important;     /* add small breathing space above home indicator */
 }

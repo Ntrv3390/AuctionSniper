@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar class="custom-header">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/"></ion-back-button>
+      <ion-back-button color="light" defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>Device Notifications</ion-title>
+    <ion-title mode="md">Device Notifications</ion-title>
     <ion-buttons slot="end">
       <ion-button *ngIf="viewModel.isLoading" color="light" disabled>
         <ion-spinner name="crescent" slot="start"></ion-spinner>
