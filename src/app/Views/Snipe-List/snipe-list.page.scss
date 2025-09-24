@@ -42,10 +42,17 @@ ion-toolbar {
 }
 
 ion-segment-button {
-  --color: #145583;
-  --color-checked: #fff;
   --indicator-color: #145583;
-  background: transparent;
+
+  &.md {
+    --color: #145583;
+    --color-checked: #145583;
+  }
+  &.ios {
+    --color: #145583;
+    --color-checked: #fff;
+    background: transparent;
+  }
 }
 
 // Dark mode support

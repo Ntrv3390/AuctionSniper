@@ -54,7 +54,6 @@
   }
 }
 
-
 .statusbar {
   --background: linear-gradient(to right, #145583, #6cb1df);
   --color: #fff;
@@ -182,11 +181,16 @@ ion-segment-button {
 }
 
 ion-segment-button.system-btn {
-  --color: #145583;            
-  --color-checked: #fff;    
-  background: transparent;
+  &.md {
+    --color: #145583;
+    --color-checked: #145583;
+  }
+  &.ios {
+    --color: #145583;
+    --color-checked: #fff;
+    background: transparent;
+  }
 }
-
 
 ion-header {
   padding-top: 0 !important;
