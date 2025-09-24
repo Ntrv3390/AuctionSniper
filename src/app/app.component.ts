@@ -16,37 +16,37 @@ export class AppComponent implements OnInit {
     private pushNotifications: PushNotificationsService,
     private capacitorInit: CapacitorInitService
   ) {}
-  
+
   ngOnInit(): void {
     // Initialize Capacitor plugins
     this.capacitorInit.initialize();
-    
+
     // Initialize push notifications
     this.pushNotifications.initialize();
-    
+
     // Initialize status bar
     this.initializeStatusBar();
 
     // Set safe area insets
-    SafeArea.getSafeAreaInsets().then(({ insets }) => {
-      for (const [key, value] of Object.entries(insets)) {
-        document.documentElement.style.setProperty(
-          `--safe-area-inset-${key}`,
-          `${value}px`
-        );
-      }
-    });
+    // SafeArea.getSafeAreaInsets().then(({ insets }) => {
+    //   for (const [key, value] of Object.entries(insets)) {
+    //     document.documentElement.style.setProperty(
+    //       `--safe-area-inset-${key}`,
+    //       `${value}px`
+    //     );
+    //   }
+    // });
   }
-  
+
   private async initializeStatusBar(): Promise<void> {
     try {
       // Set the status bar style to light for white text
       await StatusBar.setStyle({ style: Style.Light });
-      
+
       // Set the status bar background color to match the primary color
       // Using the custom primary color #156DAB from Overrides/Ionic.scss
       await StatusBar.setBackgroundColor({ color: '#156DAB' });
-      
+
       // Show the status bar
       await StatusBar.show();
     } catch (error) {
