@@ -30,16 +30,9 @@
   <div class="pin-actions">
     <ion-card *ngIf="!viewModel.isPinSet">
       <ion-card-content>
-        <div class="action-icon">
-          <ion-icon name="key-outline"></ion-icon>
-        </div>
         <h2>No PIN Set</h2>
         <p>Protect your account with a 4-digit PIN</p>
-        <ion-button
-          expand="block"
-          fill="solid"
-          (click)="setPin_click()"
-        >
+        <ion-button expand="block" fill="solid" (click)="setPin_click()">
           <ion-icon name="add-circle-outline" slot="start"></ion-icon>
           Set PIN
         </ion-button>
@@ -56,11 +49,7 @@
           <p>Your account is protected with a PIN</p>
 
           <div class="button-group">
-            <ion-button
-              expand="block"
-              fill="solid"
-              (click)="changePin_click()"
-            >
+            <ion-button expand="block" fill="solid" (click)="changePin_click()">
               <ion-icon name="create-outline" slot="start"></ion-icon>
               Change PIN
             </ion-button>

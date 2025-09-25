@@ -6,7 +6,20 @@
         (click)="back_click()"
         *ngIf="viewModel.showBackButton"
       >
-        <ion-icon name="arrow-back-outline"></ion-icon>
+        <!-- Back Arrow (white) -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
       </ion-button>
     </ion-buttons>
     <ion-title mode="md">{{ viewModel.promptText }}</ion-title>
@@ -18,141 +31,50 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content
-  [fullscreen]="true"
-  class="pin-entry content-vertical-center ion-padding"
->
-  <!-- Portrait PIN display -->
-  <div class="pin-entry-portrait phone-portrait-tablet-both">
+<ion-content [fullscreen]="true" class="pin-entry-modern">
+  <!-- PIN Display -->
+  <div class="pin-display" [class.landscape]="isLandscape">
+    <div class="pin-dash-wrapper" *ngFor="let i of [0,1,2,3]">
+      <!-- Dot appears on top when user types -->
+      <div class="pin-dot" [class.filled]="viewModel.pin.length > i"></div>
+      <!-- Static dash below -->
+      <div class="pin-dash">-</div>
+    </div>
+  </div>
+
+  <!-- Numpad Drawer -->
+  <div class="pin-numpad" [class.landscape]="isLandscape">
     <ion-grid>
-      <ion-row class="pin-entry-input">
-        <ion-col size="3">
-          <ion-button expand="block" color="light" size="large">
-            <span *ngIf="viewModel.pin.length > 0">•</span>
-          </ion-button>
-        </ion-col>
-        <ion-col size="3">
-          <ion-button expand="block" color="light" size="large">
-            <span *ngIf="viewModel.pin.length > 1">•</span>
-          </ion-button>
-        </ion-col>
-        <ion-col size="3">
-          <ion-button expand="block" color="light" size="large">
-            <span *ngIf="viewModel.pin.length > 2">•</span>
-          </ion-button>
-        </ion-col>
-        <ion-col size="3">
-          <ion-button expand="block" color="light" size="large">
-            <span *ngIf="viewModel.pin.length > 3">•</span>
-          </ion-button>
-        </ion-col>
-      </ion-row>
-      <div class="pin-entry-numpad">
-        <!-- Numbers 1-9 -->
-        <ion-row>
-          <ion-col size="4" *ngFor="let num of [1,2,3]">
-            <ion-button expand="block" (click)="number_click(num)"
-              >{{ num }}</ion-button
-            >
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="4" *ngFor="let num of [4,5,6]">
-            <ion-button expand="block" (click)="number_click(num)"
-              >{{ num }}</ion-button
-            >
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="4" *ngFor="let num of [7,8,9]">
-            <ion-button expand="block" (click)="number_click(num)"
-              >{{ num }}</ion-button
-            >
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="4">
+      <ion-row *ngFor="let row of [[1,2,3],[4,5,6],[7,8,9],[null,0,'clear']]">
+        <ion-col size="4" *ngFor="let val of row">
+          <ng-container *ngIf="val !== null">
             <ion-button
               expand="block"
-              *ngIf="viewModel.showBackButton"
-              (click)="back_click()"
+              fill="clear"
+              class="pin-key"
+              (click)="val === 'clear' ? clear_click() : number_click(val)"
             >
-              <ion-icon name="arrow-back-outline"></ion-icon>
-            </ion-button>
-          </ion-col>
-          <ion-col size="4">
-            <ion-button expand="block" (click)="number_click(0)">0</ion-button>
-          </ion-col>
-          <ion-col size="4">
-            <ion-button expand="block" (click)="clear_click()">
-              <ion-icon name="close-circle-outline"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </div>
-    </ion-grid>
-  </div>
-  <!-- Landscape layout (repeat logic if needed for larger screens) -->
-  <div class="pin-entry-landscape phone-landscape" *ngIf="isLandscape">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6" class="content-vertical-center">
-          <ion-row class="pin-entry-input" style="float: left">
-            <ion-col size="3">
-              <ion-button expand="block" color="light" size="large">
-                <span *ngIf="viewModel.pin.length > 0">•</span>
-              </ion-button>
-            </ion-col>
-            <ion-col size="3">
-              <ion-button expand="block" color="light" size="large">
-                <span *ngIf="viewModel.pin.length > 1">•</span>
-              </ion-button>
-            </ion-col>
-            <ion-col size="3">
-              <ion-button expand="block" color="light" size="large">
-                <span *ngIf="viewModel.pin.length > 2">•</span>
-              </ion-button>
-            </ion-col>
-            <ion-col size="3">
-              <ion-button expand="block" color="light" size="large">
-                <span *ngIf="viewModel.pin.length > 3">•</span>
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-col>
-        <ion-col size="6">
-          <div class="pin-entry-numpad" style="float: right">
-            <ion-row
-              *ngFor="let row of [[1,2,3],[4,5,6],[7,8,9],[null,0,'clear']]"
-            >
-              <ion-col size="4" *ngFor="let val of row">
-                <ng-container *ngIf="val !== null">
-                  <ion-button
-                    expand="block"
-                    (click)="val === 'clear' ? clear_click() : number_click(val)"
-                  >
-                    <ng-container *ngIf="val === 'clear'"
-                      ><ion-icon name="close-circle-outline"></ion-icon
-                    ></ng-container>
-                    <ng-container *ngIf="val !== 'clear'"
-                      >{{ val }}</ng-container
-                    >
-                  </ion-button>
-                </ng-container>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col size="4">
-                <ion-button
-                  expand="block"
-                  *ngIf="viewModel.showBackButton"
-                  (click)="back_click()"
+              <ng-container *ngIf="val === 'clear'">
+                <!-- SVG Close Icon -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 >
-                  <ion-icon name="arrow-back-outline"></ion-icon>
-                </ion-button>
-              </ion-col>
-            </ion-row>
-          </div>
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="15" y1="9" x2="9" y2="15"></line>
+                  <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+              </ng-container>
+              <ng-container *ngIf="val !== 'clear'">{{ val }}</ng-container>
+            </ion-button>
+          </ng-container>
         </ion-col>
       </ion-row>
     </ion-grid>

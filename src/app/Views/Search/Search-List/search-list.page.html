@@ -6,17 +6,24 @@
       <ion-button
         (click)="savedSearchItem_click_new()"
         class="add-btn"
-        fill="solid"
-        color="light"
+        fill="clear"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          fill="currentColor"
-          >
-          <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" />
+          fill="none"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <!-- Hollow circle outline -->
+          <circle cx="12" cy="12" r="9"></circle>
+          <!-- Plus sign -->
+          <line x1="12" y1="8" x2="12" y2="16"></line>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
         </svg>
       </ion-button>
     </ion-buttons>

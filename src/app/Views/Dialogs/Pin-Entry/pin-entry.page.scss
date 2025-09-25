@@ -18,3 +18,106 @@ ion-toolbar {
   --padding-top: 0 !important;
   --min-height: 56px;
 }
+
+.pin-entry-modern {
+  --ion-background-color: #f2f3f7;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 15%;
+
+  .pin-display {
+    display: flex;
+    justify-content: center;
+    margin-top: 80px; /* Adjust this to move below ion-header */
+    margin-bottom: 40px;
+
+    &.landscape {
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .pin-dash-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 20px;
+
+      .pin-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #000;
+        margin-bottom: 8px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .pin-dot.filled {
+        opacity: 1; /* Shows dot when user enters PIN */
+      }
+
+      .pin-dash {
+        font-size: 2rem;
+        color: #bbb;
+      }
+    }
+  }
+
+  .pin-numpad {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 20px 0;
+    animation: slideUp 0.3s ease;
+
+    &.landscape {
+      width: 50%;
+      right: 0;
+      left: auto;
+      border-radius: 16px 0 0 16px;
+      height: 100%;
+      padding: 40px 20px;
+      top: 0;
+      bottom: 0;
+    }
+
+    ion-grid {
+      width: 90%;
+      margin: auto;
+
+      .pin-key {
+        font-size: 1.5rem;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+
+        svg {
+          width: 28px;
+          height: 28px;
+        }
+
+        &:active {
+          background: #e0e0e0;
+        }
+      }
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}

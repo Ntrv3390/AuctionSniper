@@ -16,7 +16,8 @@ import {
   IonIcon,
   IonGrid,
   IonRow,
-  IonCol
+  IonCol,
+  ToastController,
 } from '@ionic/angular/standalone';
 import { PinEntryViewModel } from './PinEntryViewModel';
 import { PinEntryDialogResultModel } from './PinEntryDialogResultModel';
@@ -43,15 +44,15 @@ import { UIService } from 'src/app/services/UI';
     IonIcon,
     IonGrid,
     IonRow,
-    IonCol
-  ]
+    IonCol,
+  ],
 })
 export class PinEntryPage implements OnInit {
   viewModel: PinEntryViewModel = {
     pin: '',
     pinToMatch: '',
     showBackButton: false,
-    promptText: ''
+    promptText: '',
   };
 
   private operation: string = '';
@@ -65,11 +66,12 @@ export class PinEntryPage implements OnInit {
     private router: Router,
     private location: Location,
     private preferences: PreferencesService,
-    private ui: UIService
+    private ui: UIService,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (params['promptText']) {
         this.viewModel.promptText = params['promptText'];
       }
@@ -83,7 +85,7 @@ export class PinEntryPage implements OnInit {
         this.newPin = params['newPin'];
       }
     });
-    
+
     this.viewModel.pin = '';
     this.viewModel.showBackButton = true;
   }
@@ -93,113 +95,113 @@ export class PinEntryPage implements OnInit {
     this.location.back();
   }
 
-  // Old number_click method
   number_click(value: number | string) {
     if (this.viewModel.pin.length < 4) {
-      this.viewModel.pin += value;
+      this.viewModel.pin += value.toString();
+
+      // When PIN reaches 4 digits, validate it
       if (this.viewModel.pin.length === 4) {
-        setTimeout(() => this.validatePin(), 700);
+        setTimeout(() => this.validatePin(), 300);
       }
     }
   }
 
-  // Old clear_click method
+  // Clear PIN
+  // Remove last entered digit
   clear_click() {
-    this.viewModel.pin = '';
+    if (this.viewModel.pin.length > 0) {
+      // Remove last character
+      this.viewModel.pin = this.viewModel.pin.slice(0, -1);
+    }
   }
 
-  // Old back_click method
+  // Go back
   back_click() {
     this.location.back();
+  }
+
+  private resetWithError(message: string) {
+    this.viewModel.pin = '';
+    this.showToast(message);
   }
 
   // Old validatePin method
   private validatePin() {
     switch (this.operation) {
       case 'set':
-        // For setting PIN, we need to confirm it
         this.router.navigate(['/pin-entry'], {
+          replaceUrl: true, // 👈 avoids stacking pages
           queryParams: {
             promptText: 'Confirm your new PIN',
             pinToMatch: this.viewModel.pin,
             operation: 'set-confirm',
-            newPin: this.viewModel.pin
-          }
+            newPin: this.viewModel.pin,
+          },
         });
         break;
-        
+
       case 'set-confirm':
-        // Confirm the PIN matches
         if (this.viewModel.pin === this.viewModel.pinToMatch) {
           this.preferences.pin = this.newPin;
           this.ui.showSuccessSnackbar('Your PIN has been configured.');
           this.location.back();
         } else {
-          this.viewModel.pin = '';
-          this.showToast('PINs do not match. Please try again.');
+          this.resetWithError('PINs do not match. Please try again.');
         }
         break;
-        
+
       case 'change-verify':
-        // Verify current PIN
         if (this.viewModel.pin === this.viewModel.pinToMatch) {
-          // Prompt for new PIN
           this.router.navigate(['/pin-entry'], {
+            replaceUrl: true,
             queryParams: {
               promptText: 'Enter your new PIN',
-              operation: 'change-new'
-            }
+              operation: 'change-new',
+            },
           });
         } else {
-          this.viewModel.pin = '';
-          this.showToast('Invalid PIN. Please try again.');
+          this.resetWithError('Invalid PIN. Please try again.');
         }
         break;
-        
+
       case 'change-new':
-        // Set new PIN, now confirm it
         this.router.navigate(['/pin-entry'], {
+          replaceUrl: true,
           queryParams: {
             promptText: 'Confirm your new PIN',
             pinToMatch: this.viewModel.pin,
             operation: 'change-confirm',
-            newPin: this.viewModel.pin
-          }
+            newPin: this.viewModel.pin,
+          },
         });
         break;
-        
+
       case 'change-confirm':
-        // Confirm new PIN matches
         if (this.viewModel.pin === this.viewModel.pinToMatch) {
           this.preferences.pin = this.newPin;
           this.ui.showSuccessSnackbar('Your PIN has been changed.');
           this.location.back();
         } else {
-          this.viewModel.pin = '';
-          this.showToast('PINs do not match. Please try again.');
+          this.resetWithError('PINs do not match. Please try again.');
         }
         break;
-        
+
       case 'remove':
-        // Verify PIN for removal
         if (this.viewModel.pin === this.viewModel.pinToMatch) {
           this.preferences.pin = '';
           this.ui.showSuccessSnackbar('The PIN has been removed.');
           this.location.back();
         } else {
-          this.viewModel.pin = '';
-          this.showToast('Invalid PIN. Please try again.');
+          this.resetWithError('Invalid PIN. Please try again.');
         }
         break;
-        
+
       default:
-        // For simple verification
         if (this.viewModel.pinToMatch) {
           if (this.viewModel.pin === this.viewModel.pinToMatch) {
             this.location.back();
           } else {
-            this.viewModel.pin = '';
-            this.showToast('Invalid pin; please try again.');
+            this.resetWithError('Invalid PIN. Please try again.');
           }
         } else {
           this.location.back();
@@ -207,13 +209,13 @@ export class PinEntryPage implements OnInit {
     }
   }
 
-  // Replacement for UI.showInfoSnackbar
   private async showToast(message: string) {
-    const toast = document.createElement('ion-toast');
-    toast.message = message;
-    toast.duration = 2000;
-    toast.position = 'bottom';
-    document.body.appendChild(toast);
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'bottom',
+      color: 'danger',
+    });
     await toast.present();
   }
 }
