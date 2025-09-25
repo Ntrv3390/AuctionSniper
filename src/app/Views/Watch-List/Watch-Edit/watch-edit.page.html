@@ -2,7 +2,19 @@
   <ion-toolbar class="custom-header">
     <ion-buttons slot="start">
       <ion-button (click)="cancel()">
-        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#fff"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
       </ion-button>
     </ion-buttons>
     <ion-title mode="md">
@@ -10,7 +22,21 @@
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="saveWatch()" [disabled]="viewModel.isLoading">
-        <ion-icon name="checkmark-outline" slot="icon-only"></ion-icon>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+          width="24"
+          height="24"
+        >
+          <path
+            fill="none"
+            stroke="#fff"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="48"
+            d="M416 128L192 384l-96-96"
+          />
+        </svg>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -134,7 +160,12 @@
           </ion-col>
 
           <ion-col size="12">
-            <ion-button class="cancel-btn" expand="block" fill="outline" (click)="cancel()">
+            <ion-button
+              class="cancel-btn"
+              expand="block"
+              fill="outline"
+              (click)="cancel()"
+            >
               Cancel
             </ion-button>
           </ion-col>
