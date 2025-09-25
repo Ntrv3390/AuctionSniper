@@ -157,8 +157,10 @@
       </ion-item-divider>
 
       <ion-radio-group
+        *ngIf="viewModel?.preferences?.EmailStyle"
         [(ngModel)]="viewModel.preferences.EmailStyle"
         name="EmailStyle"
+        [value]="viewModel.preferences.EmailStyle"
       >
         <ion-item>
           <ion-label>

@@ -34,7 +34,8 @@ import {
   IonNote,
   IonSelect,
   IonSelectOption,
-  IonCheckbox
+  IonCheckbox,
+  ToastController,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -65,8 +66,8 @@ import {
     IonNote,
     IonSelect,
     IonSelectOption,
-    IonCheckbox
-  ]
+    IonCheckbox,
+  ],
 })
 export class EditSnipeController implements OnInit {
   viewModel: EditSnipeViewModel = new EditSnipeViewModel();
@@ -79,19 +80,66 @@ export class EditSnipeController implements OnInit {
     private ui: UIService,
     private auctionSniperApi: AuctionSniperApiService,
     private dataSource: DataSourceService,
-    private tracker: TrackerService
+    private tracker: TrackerService,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
     this.dialog_shown();
   }
 
+  private async presentToast(message: string, color: string = 'primary') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      position: 'bottom',
+      color,
+    });
+    await toast.present();
+  }
+
   /** Load page state */
+  // private dialog_shown(): void {
+  //   this.viewModel.manualEntry = false;
+
+  //   // Get parameters from route
+  //   this.route.queryParams.subscribe((params) => {
+  //     if (params['itemNumber']) {
+  //       this.viewModel.itemNumber = params['itemNumber'];
+  //     }
+  //     if (params['title']) {
+  //       this.viewModel.title = params['title'];
+  //     }
+  //     if (params['currentPrice']) {
+  //       this.viewModel.currentPrice = params['currentPrice'];
+  //     }
+
+  //     // Set default values for new snipe
+  //     this.viewModel.bidEnhancement = '0';
+  //     this.viewModel.leadTime = this.preferences.defaultSnipeDelay.toString();
+  //     this.viewModel.addShippingInsurance =
+  //       this.preferences.defaultAddShippingInsurance;
+  //     this.viewModel.manualEntry = !this.viewModel.itemNumber;
+  //   });
+
+  //   this.viewModel.showAddShippingInsurance =
+  //     this.preferences.showAddShippingInsurance;
+  //   this.viewModel.showAddComment = this.preferences.showAddComment;
+  // }
+
   private dialog_shown(): void {
     this.viewModel.manualEntry = false;
 
-    // Get parameters from route
-    this.route.queryParams.subscribe(params => {
+    // First check path param ":id"
+    this.route.paramMap.subscribe((paramMap) => {
+      const id = paramMap.get('id');
+      if (id) {
+        this.loadSnipe(Number(id));
+      }
+    });
+
+    // Still handle query params for optional extras
+    this.route.queryParams.subscribe((params) => {
       if (params['itemNumber']) {
         this.viewModel.itemNumber = params['itemNumber'];
       }
@@ -101,21 +149,25 @@ export class EditSnipeController implements OnInit {
       if (params['currentPrice']) {
         this.viewModel.currentPrice = params['currentPrice'];
       }
-      
-      // Set default values for new snipe
+
+      // Defaults for new snipe
       this.viewModel.bidEnhancement = '0';
       this.viewModel.leadTime = this.preferences.defaultSnipeDelay.toString();
-      this.viewModel.addShippingInsurance = this.preferences.defaultAddShippingInsurance;
+      this.viewModel.addShippingInsurance =
+        this.preferences.defaultAddShippingInsurance;
       this.viewModel.manualEntry = !this.viewModel.itemNumber;
     });
 
-    this.viewModel.showAddShippingInsurance = this.preferences.showAddShippingInsurance;
+    this.viewModel.showAddShippingInsurance =
+      this.preferences.showAddShippingInsurance;
     this.viewModel.showAddComment = this.preferences.showAddComment;
   }
 
   private async loadSnipe(id: number) {
     try {
-      const result = await firstValueFrom(this.auctionSniperApi.getSnipeInfo(id));
+      const result = await firstValueFrom(
+        this.auctionSniperApi.getSnipeInfo(id)
+      );
       if (result.success) {
         this.viewModel.maximumBid = result.snipe.MaxBid
           ? Number(result.snipe.MaxBid).toFixed(2)
@@ -127,7 +179,8 @@ export class EditSnipeController implements OnInit {
         this.viewModel.comment = result.snipe.Comment;
         this.viewModel.currentPrice = result.snipe.CurrentPrice;
         this.viewModel.bidEnhancement = result.snipe.BidEnhancement.toString();
-        this.viewModel.addShippingInsurance = result.snipe.ShippingInsuranceID >= 0;
+        this.viewModel.addShippingInsurance =
+          result.snipe.ShippingInsuranceID >= 0;
       }
     } catch {
       this.ui.showErrorSnackbar('Failed to load snipe.');
@@ -140,14 +193,16 @@ export class EditSnipeController implements OnInit {
   }
 
   secondShotHelpIcon_click(): void {
-    this.ui.showInfoSnackbar('Second Shot retries bidding if the first attempt fails.');
+    this.ui.showInfoSnackbar(
+      'Second Shot retries bidding if the first attempt fails.'
+    );
   }
 
   async addSnipe_click(): Promise<void> {
     // Hide keyboard
     await Keyboard.hide();
 
-    if (!this.isValidSnipe()) return;
+    if (!(await this.isValidSnipe())) return;
 
     if (this.viewModel.id) {
       this.tracker.track(TrackerConstants.Snipe.Update);
@@ -160,7 +215,7 @@ export class EditSnipeController implements OnInit {
         Title: this.viewModel.title,
         BidEnhancement: parseInt(this.viewModel.bidEnhancement, 10),
         Comment: this.viewModel.comment,
-        ShipInsure: this.viewModel.addShippingInsurance
+        ShipInsure: this.viewModel.addShippingInsurance,
       };
       await this.updateSnipe(updateParams);
     } else {
@@ -173,12 +228,15 @@ export class EditSnipeController implements OnInit {
         Title: this.viewModel.title,
         BidEnhancement: parseInt(this.viewModel.bidEnhancement, 10),
         Comment: this.viewModel.comment,
-        ShipInsure: this.viewModel.addShippingInsurance
+        ShipInsure: this.viewModel.addShippingInsurance,
       };
 
-      const result = await firstValueFrom(this.auctionSniperApi.createSnipe(addParams));
+      const result = await firstValueFrom(
+        this.auctionSniperApi.createSnipe(addParams)
+      );
       if (result.success) {
-        this.ui.showSuccessSnackbar('Snipe added!');
+        await this.presentToast('Snipe updated!', 'success');
+
         this.dataSource.activeSnipes?.push(result.snipe);
         // Navigate back to snipe list after adding
         this.location.back();
@@ -186,18 +244,24 @@ export class EditSnipeController implements OnInit {
     }
   }
 
-  private async updateSnipe(updateParams: AuctionSniperApiTypes.CreateSnipeParameters) {
+  private async updateSnipe(
+    updateParams: AuctionSniperApiTypes.CreateSnipeParameters
+  ) {
     // Hide keyboard
     await Keyboard.hide();
-
-    const result = await firstValueFrom(this.auctionSniperApi.updateSnipe(updateParams));
+    if (!(await this.isValidSnipe())) return;
+    const result = await firstValueFrom(
+      this.auctionSniperApi.updateSnipe(updateParams)
+    );
     if (result.success) {
       if (result.message?.Level === 0) {
-        this.ui.showSuccessSnackbar('Snipe updated!');
+        await this.presentToast('Snipe updated!', 'success');
       }
 
       // Update activeSnipes cache
-      const snipe = this.dataSource.activeSnipes?.find(s => s.Item === result.snipe.Item);
+      const snipe = this.dataSource.activeSnipes?.find(
+        (s) => s.Item === result.snipe.Item
+      );
       if (snipe) {
         snipe.CurrentPrice = result.snipe.CurrentPrice;
         snipe.MaxBid = result.snipe.MaxBid;
@@ -209,9 +273,9 @@ export class EditSnipeController implements OnInit {
     }
   }
 
-  private isValidSnipe(): boolean {
+  private async isValidSnipe(): Promise<boolean> {
     if (!this.viewModel.itemNumber) {
-      this.ui.showInfoSnackbar('An eBay item number is required.');
+      await this.presentToast('An eBay item number is required.', 'warning');
       return false;
     }
 
@@ -219,18 +283,27 @@ export class EditSnipeController implements OnInit {
     const maximumBid = parseFloat(this.viewModel.maximumBid);
 
     if (isNaN(maximumBid) || maximumBid <= 0) {
-      this.ui.showInfoSnackbar('A valid maximum bid amount is required.');
+      await this.presentToast(
+        'A valid maximum bid amount is required.',
+        'warning'
+      );
       return false;
     }
 
     if (isNaN(leadTime) || leadTime < 2 || leadTime > 120) {
-      this.ui.showInfoSnackbar('Bid lead time must be between 2 and 120 seconds.');
+      await this.presentToast(
+        'Bid lead time must be between 2 and 120 seconds.',
+        'warning'
+      );
       return false;
     }
 
     const reg = /^[0-9]{0,9}\.?(?:[0-9]{1,2})?$/;
     if (!reg.test(this.viewModel.maximumBid.toString())) {
-      this.ui.showInfoSnackbar('Maximum bid must be a valid currency amount.');
+      await this.presentToast(
+        'Maximum bid must be a valid currency amount.',
+        'warning'
+      );
       return false;
     }
 

@@ -1,5 +1,17 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { IonRefresher, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon, IonList, IonItem } from '@ionic/angular/standalone';
+import {
+  IonRefresher,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonBackButton,
+  IonContent,
+  IonButtons,
+  IonButton,
+  IonIcon,
+  IonList,
+  IonItem,
+} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { NgFor } from '@angular/common';
 import { DataSourceService } from 'src/app/services/DataSource'; // migrated DataSource
@@ -21,20 +33,18 @@ import { AuctionSniperApiTypes } from 'src/app/Interfaces/auction-sniper-api-typ
     IonIcon,
     IonList,
     IonItem,
-    NgFor
+    NgFor,
+    IonBackButton,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SearchListController implements OnInit {
   viewModel = {
     isRefreshing: false,
-    searches: [] as AuctionSniperApiTypes.SparseSavedSearch[]
+    searches: [] as AuctionSniperApiTypes.SparseSavedSearch[],
   };
 
-  constructor(
-    private dataSource: DataSourceService,
-    private router: Router
-  ) {}
+  constructor(private dataSource: DataSourceService, private router: Router) {}
 
   ngOnInit() {
     // Replace view_beforeEnter
@@ -56,17 +66,20 @@ export class SearchListController implements OnInit {
     this.viewModel.isRefreshing = true;
 
     if (refreshFromServer || !this.dataSource.savedSearches) {
-      this.dataSource.retrieveSavedSearches().then((results: AuctionSniperApiTypes.SparseSavedSearch[]) => {
-        this.viewModel.searches = results;
-        this.viewModel.isRefreshing = false;
-      }).catch((error) => {
-        console.error('Error retrieving saved searches:', error);
-        this.viewModel.isRefreshing = false;
-        // Keep existing searches if available, or set to empty array
-        if (!this.viewModel.searches) {
-          this.viewModel.searches = [];
-        }
-      });
+      this.dataSource
+        .retrieveSavedSearches()
+        .then((results: AuctionSniperApiTypes.SparseSavedSearch[]) => {
+          this.viewModel.searches = results;
+          this.viewModel.isRefreshing = false;
+        })
+        .catch((error) => {
+          console.error('Error retrieving saved searches:', error);
+          this.viewModel.isRefreshing = false;
+          // Keep existing searches if available, or set to empty array
+          if (!this.viewModel.searches) {
+            this.viewModel.searches = [];
+          }
+        });
     } else {
       this.viewModel.searches = this.dataSource.savedSearches;
       this.viewModel.isRefreshing = false;
@@ -90,7 +103,9 @@ export class SearchListController implements OnInit {
   /**
    * Execute a saved search when clicked
    */
-  protected savedSearchItem_click(savedSearch: AuctionSniperApiTypes.SparseSavedSearch): void {
+  protected savedSearchItem_click(
+    savedSearch: AuctionSniperApiTypes.SparseSavedSearch
+  ): void {
     // Navigate to the search edit page with the saved search parameters
     this.router.navigate(['/search/edit', savedSearch.Id]);
   }

@@ -21,7 +21,8 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardSubtitle,
-  IonCardContent
+  IonCardContent,
+  IonBackButton
 } from '@ionic/angular/standalone';
 import { AccountPaymentViewModel } from './AccountPaymentViewModel';
 import { TrackerService } from 'src/app/services/Tracker';
@@ -73,7 +74,8 @@ import {
     IonCardTitle,
     IonCardSubtitle,
     IonCardContent,
-    IconPanelComponent
+    IconPanelComponent,
+    IonBackButton
   ]
 })
 export class AccountPaymentPage implements OnInit {

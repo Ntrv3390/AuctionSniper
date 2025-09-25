@@ -15,7 +15,8 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonCardContent
+  IonCardContent,
+  IonBackButton,
 } from '@ionic/angular/standalone';
 import { Logger } from 'src/app/services/Logger';
 import { TrackerService } from 'src/app/services/Tracker';
@@ -31,7 +32,7 @@ import { PluginsService } from 'src/app/services/Plugins';
 import { TrackerConstants } from 'src/app/constants/tracker.constants';
 import { AuctionSniperApiTypes } from 'src/app/Interfaces/auction-sniper-api-types.interface';
 import { DetailViewModel } from './DetailViewModel'; // adjust path
-import { EditSnipeModel } from 'src/app/Views/Dialogs/Edit-Snipe/EditSnipeModel';   // adjust path
+import { EditSnipeModel } from 'src/app/Views/Dialogs/Edit-Snipe/EditSnipeModel'; // adjust path
 import _ from 'lodash';
 import { AddWatchModel } from 'src/app/Views/Dialogs/Add-Watch/AddWatchModel';
 import { DialogOptions } from 'src/app/Framework/DialogOptions';
@@ -55,8 +56,9 @@ import { DialogOptions } from 'src/app/Framework/DialogOptions';
     IonCard,
     IonCardHeader,
     IonCardTitle,
-    IonCardContent
-  ]
+    IonCardContent,
+    IonBackButton,
+  ],
 })
 export class DetailController implements OnInit {
   viewModel = new DetailViewModel();
@@ -98,10 +100,16 @@ export class DetailController implements OnInit {
     try {
       // Retrieve updated watches from data source
       const watches = await this.dataSource.retrieveWatches();
-      const watch = watches?.find((w: AuctionSniperApiTypes.Watch) => w.itemnumber === itemNumber);
+      const watch = watches?.find(
+        (w: AuctionSniperApiTypes.Watch) => w.itemnumber === itemNumber
+      );
       this.viewModel.itemIsWatched = !!watch;
     } catch (err) {
-      this.logger.warn("DetailController", "refreshWatchStatus", "Failed to refresh watch status.");
+      this.logger.warn(
+        'DetailController',
+        'refreshWatchStatus',
+        'Failed to refresh watch status.'
+      );
     }
   }
 
@@ -112,11 +120,19 @@ export class DetailController implements OnInit {
 
     try {
       // Retrieve updated active snipes from data source
-      const activeSnipes = await this.dataSource.retrieveSnipes(AuctionSniperApiTypes.SnipeStatus.Active);
-      const snipe = activeSnipes?.find((s: AuctionSniperApiTypes.Snipe) => s.Item === itemNumber);
+      const activeSnipes = await this.dataSource.retrieveSnipes(
+        AuctionSniperApiTypes.SnipeStatus.Active
+      );
+      const snipe = activeSnipes?.find(
+        (s: AuctionSniperApiTypes.Snipe) => s.Item === itemNumber
+      );
       this.viewModel.itemHasActiveSnipe = !!snipe;
     } catch (err) {
-      this.logger.warn("DetailController", "refreshSnipeStatus", "Failed to refresh snipe status.");
+      this.logger.warn(
+        'DetailController',
+        'refreshSnipeStatus',
+        'Failed to refresh snipe status.'
+      );
     }
   }
 
@@ -132,53 +148,88 @@ export class DetailController implements OnInit {
     const fullscreen = this.platform.iPad; // Correct!
     this.plugins.browser.open({
       url,
-      presentationStyle: fullscreen ? "fullscreen" : "popover"
+      presentationStyle: fullscreen ? 'fullscreen' : 'popover',
     });
   }
 
   // Add item to watches
   protected async addToWatches_click(itemNumber: string): Promise<void> {
     // Navigate to the watch edit page with the item number as a query parameter
-    this.router.navigate(['/watch/add'], { queryParams: { itemNumber: itemNumber } });
+    this.router.navigate(['/watch/add'], {
+      queryParams: { itemNumber: itemNumber },
+    });
   }
-  
+
   // Remove item from watches
   async removeFromWatches_click(itemNumber: string): Promise<void> {
-    const dialogOk = await this.ui.confirm("Are you sure you want to remove this watch?");
+    const dialogOk = await this.ui.confirm(
+      'Are you sure you want to remove this watch?'
+    );
     if (!dialogOk) return;
 
     this.tracker.track(TrackerConstants.Watch.RemoveWatch);
 
-    const watch = this.dataSource.watches?.find(w => w.itemnumber === itemNumber);
+    const watch = this.dataSource.watches?.find(
+      (w) => w.itemnumber === itemNumber
+    );
 
     if (!watch) {
-      this.logger.warn("DetailController", "removeFromWatches_click", "Unable to delete watch (not found).");
-      this.errorHandler.handleError(new Error("Delete Failed: Could not delete this watch."), "Watch Delete", true, false, true);
+      this.logger.warn(
+        'DetailController',
+        'removeFromWatches_click',
+        'Unable to delete watch (not found).'
+      );
+      this.errorHandler.handleError(
+        new Error('Delete Failed: Could not delete this watch.'),
+        'Watch Delete',
+        true,
+        false,
+        true
+      );
       return;
     }
 
     try {
-      const result = await firstValueFrom(this.auctionSniperApi.deleteWatch(watch.WID));
+      const result = await firstValueFrom(
+        this.auctionSniperApi.deleteWatch(watch.WID)
+      );
       if (result?.success) {
-        this.ui.showSuccessSnackbar("Watch removed");
+        this.ui.showSuccessSnackbar('Watch removed');
         if (Array.isArray(this.dataSource.watches)) {
-          _.remove(this.dataSource.watches, (watchItem) => watchItem.itemnumber === itemNumber);
+          _.remove(
+            this.dataSource.watches,
+            (watchItem) => watchItem.itemnumber === itemNumber
+          );
         }
         this.viewModel.itemIsWatched = false;
       }
     } catch {
-      this.errorHandler.handleError(new Error("Delete Failed."), "Watch Delete", true, false, true);
+      this.errorHandler.handleError(
+        new Error('Delete Failed.'),
+        'Watch Delete',
+        true,
+        false,
+        true
+      );
     }
   }
 
   // Edit watch
   editWatch_click(itemNumber: string): void {
     // Find the watch ID and navigate to edit page
-    const watch = this.dataSource.watches?.find(w => w.itemnumber === itemNumber);
+    const watch = this.dataSource.watches?.find(
+      (w) => w.itemnumber === itemNumber
+    );
     if (watch) {
       this.router.navigate(['/watch/edit', watch.WID]);
     } else {
-      this.errorHandler.handleError(new Error("Could not find watch to edit."), "Watch Edit", true, false, true);
+      this.errorHandler.handleError(
+        new Error('Could not find watch to edit.'),
+        'Watch Edit',
+        true,
+        false,
+        true
+      );
     }
   }
 
@@ -186,46 +237,92 @@ export class DetailController implements OnInit {
   async addToSnipes_click(): Promise<void> {
     const item = this.viewModel.item;
     // Navigate to the snipe add page with the item details as query parameters
-    this.router.navigate(['/snipe/add'], { 
-      queryParams: { 
+    this.router.navigate(['/snipe/add'], {
+      queryParams: {
         itemNumber: item.Id,
         title: item.Title,
-        currentPrice: item.CurrentPrice
-      } 
+        currentPrice: item.CurrentPrice,
+      },
     });
   }
 
   // Remove from snipes
   async removeFromSnipes_click(itemNumber: string): Promise<void> {
-    const dialogOk = await this.ui.confirm("Are you sure you want to remove this snipe?");
+    const dialogOk = await this.ui.confirm(
+      'Are you sure you want to remove this snipe?'
+    );
     if (!dialogOk) return;
 
     this.tracker.track(TrackerConstants.Snipe.Remove);
 
-    const snipe = this.dataSource.activeSnipes?.find(s => s.Item === itemNumber);
+    const snipe = this.dataSource.activeSnipes?.find(
+      (s) => s.Item === itemNumber
+    );
 
     if (!snipe) {
-      this.logger.warn("DetailController", "removeFromSnipes_click", "Unable to delete snipe (not found).");
-      this.errorHandler.handleError(new Error("Delete Failed: Could not delete this snipe."), "Snipe Delete", true, false, true);
+      this.logger.warn(
+        'DetailController',
+        'removeFromSnipes_click',
+        'Unable to delete snipe (not found).'
+      );
+      this.errorHandler.handleError(
+        new Error('Delete Failed: Could not delete this snipe.'),
+        'Snipe Delete',
+        true,
+        false,
+        true
+      );
       return;
     }
 
     try {
-      const result = await firstValueFrom(this.auctionSniperApi.deleteSnipe(snipe.Id));
+      const result = await firstValueFrom(
+        this.auctionSniperApi.deleteSnipe(snipe.Id)
+      );
       if (result?.success) {
-        this.ui.showSuccessSnackbar("Snipe removed");
+        this.ui.showSuccessSnackbar('Snipe removed');
         if (Array.isArray(this.dataSource.activeSnipes)) {
-          _.remove(this.dataSource.activeSnipes, s => s.Item === itemNumber);
+          _.remove(this.dataSource.activeSnipes, (s) => s.Item === itemNumber);
         }
         this.viewModel.itemHasActiveSnipe = false;
       }
     } catch {
-      this.errorHandler.handleError(new Error("Delete Failed."), "Snipe Delete", true, false, true);
+      this.errorHandler.handleError(
+        new Error('Delete Failed.'),
+        'Snipe Delete',
+        true,
+        false,
+        true
+      );
     }
   }
 
+  // updateSnipe_click(itemNumber: string): void {
+  //   this.showEditSnipeDialog(itemNumber);
+  // }
+
   updateSnipe_click(itemNumber: string): void {
-    this.showEditSnipeDialog(itemNumber);
+    const snipe = this.dataSource.activeSnipes?.find(
+      (s) => s.Item === itemNumber
+    );
+    if (!snipe) {
+      this.errorHandler.handleError(
+        new Error('Update Failed: Could not find this snipe.'),
+        'Snipe Update',
+        true,
+        false,
+        true
+      );
+      this.logger.warn(
+        'DetailController',
+        'updateSnipe_click',
+        'Unable to edit snipe (not found).'
+      );
+      return;
+    }
+
+    // Navigate to the edit route
+    this.router.navigate([`/snipe/edit/${snipe.Id}`]);
   }
 
   // Refresh all view model/auction details
@@ -237,20 +334,34 @@ export class DetailController implements OnInit {
     if (!itemNumber) {
       this.viewModel.showError = true;
       this.viewModel.showSpinner = false;
-      this.logger.error("DetailController", "refresh", "No ID provided.");
-      this.errorHandler.handleError(new Error("Error: No ID provided..."), "Item Details", true, false, true);
+      this.logger.error('DetailController', 'refresh', 'No ID provided.');
+      this.errorHandler.handleError(
+        new Error('Error: No ID provided...'),
+        'Item Details',
+        true,
+        false,
+        true
+      );
       return;
     }
 
     try {
       const watches = await this.dataSource.retrieveWatches(); // if this is a Promise
-      const watch = watches?.find((w: AuctionSniperApiTypes.Watch) => w.itemnumber === itemNumber);
+      const watch = watches?.find(
+        (w: AuctionSniperApiTypes.Watch) => w.itemnumber === itemNumber
+      );
       this.viewModel.itemIsWatched = !!watch;
-      const activeSnipes = await this.dataSource.retrieveSnipes(AuctionSniperApiTypes.SnipeStatus.Active);
-      const snipe = activeSnipes?.find((s: AuctionSniperApiTypes.Snipe) => s.Item === itemNumber);
+      const activeSnipes = await this.dataSource.retrieveSnipes(
+        AuctionSniperApiTypes.SnipeStatus.Active
+      );
+      const snipe = activeSnipes?.find(
+        (s: AuctionSniperApiTypes.Snipe) => s.Item === itemNumber
+      );
       this.viewModel.itemHasActiveSnipe = !!snipe;
 
-      const itemInfoResult = await firstValueFrom(this.auctionSniperApi.getItemInfo(itemNumber, false));
+      const itemInfoResult = await firstValueFrom(
+        this.auctionSniperApi.getItemInfo(itemNumber, false)
+      );
       this.viewModel.showSpinner = false;
       if (!itemInfoResult?.success) {
         this.viewModel.showError = true;
@@ -259,37 +370,60 @@ export class DetailController implements OnInit {
 
       this.viewModel.item = itemInfoResult.item;
       var detail = {
-        items: [itemInfoResult.item]
-    };
+        items: [itemInfoResult.item],
+      };
 
-    this.countDownUtilities.initializeCountDown(
-      null,              // no scrollDelegate
-      detail,            // dataSource
-      "items",           // entityName
-      "EndTime",         // targetField
-      "CountDownTime",   // displayField
-      this.viewModel     // pass current viewModel (or null if unused)
-    );
+      this.countDownUtilities.initializeCountDown(
+        null, // no scrollDelegate
+        detail, // dataSource
+        'items', // entityName
+        'EndTime', // targetField
+        'CountDownTime', // displayField
+        this.viewModel // pass current viewModel (or null if unused)
+      );
 
       // Optionally show edit dialog if requested
-      const openEditSnipeModal = this.route.snapshot.queryParamMap.get('openEditSnipeModal');
+      const openEditSnipeModal =
+        this.route.snapshot.queryParamMap.get('openEditSnipeModal');
       if (openEditSnipeModal && this.viewModel.itemHasActiveSnipe) {
         this.showEditSnipeDialog(this.viewModel.item.Id);
       } else if (openEditSnipeModal && !this.viewModel.itemHasActiveSnipe) {
-        this.logger.warn("DetailController", "refresh", "openEditSnipeModal true, but item has no active snipe.");
+        this.logger.warn(
+          'DetailController',
+          'refresh',
+          'openEditSnipeModal true, but item has no active snipe.'
+        );
       }
     } catch (err) {
       this.viewModel.showSpinner = false;
       this.viewModel.showError = true;
-      this.errorHandler.handleError(new Error("Could not refresh details."), "Item Details", true, false, true);
+      this.errorHandler.handleError(
+        new Error('Could not refresh details.'),
+        'Item Details',
+        true,
+        false,
+        true
+      );
     }
   }
 
   private showEditSnipeDialog(itemNumber: string): void {
-    const snipe = this.dataSource.activeSnipes?.find(s => s.Item === itemNumber);
+    const snipe = this.dataSource.activeSnipes?.find(
+      (s) => s.Item === itemNumber
+    );
     if (!snipe) {
-      this.errorHandler.handleError(new Error("Update Failed: Could not find this snipe."), "Snipe Update", true, false, true);
-      this.logger.warn("DetailController", "showEditSnipeDialog", "Unable to edit snipe (not found).");
+      this.errorHandler.handleError(
+        new Error('Update Failed: Could not find this snipe.'),
+        'Snipe Update',
+        true,
+        false,
+        true
+      );
+      this.logger.warn(
+        'DetailController',
+        'showEditSnipeDialog',
+        'Unable to edit snipe (not found).'
+      );
       return;
     }
 
@@ -305,5 +439,4 @@ export class DetailController implements OnInit {
     event.target.src = 'assets/images/placeholder.jpg';
     event.target.onerror = null;
   }
-
 }

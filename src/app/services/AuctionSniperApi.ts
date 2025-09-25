@@ -79,9 +79,9 @@ export class AuctionSniperApiService {
     private platform: Platform,
     private nativeHttp: NativeHttpService,
     private preferences: PreferencesService,
-    private messageExtractor: ApiMessageExtractorService,
-   // private dataSource: DataSourceService
-  ) {
+    private messageExtractor: ApiMessageExtractorService
+  ) // private dataSource: DataSourceService
+  {
     // Initialize baseUrl based on platform
     this.baseUrl = this.getApiUrl('/Account');
   }

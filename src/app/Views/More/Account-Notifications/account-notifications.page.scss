@@ -2,26 +2,36 @@
   --background: linear-gradient(to right, #145583, #6cb1df);
   --color: #fff;
 }
-
 ion-header {
-  /* Remove extra top padding for translucent header */
-  padding-top: 0 !important;
+  /* Reset extra padding safely */
+  --padding-top: 0 !important;
+}
 
-  ion-toolbar.custom-header {
-    padding-top: var(--ion-safe-area-top, 0);
-    min-height: calc(56px + var(--ion-safe-area-top, 0));
-  }
+ion-toolbar.custom-header {
+  padding-top: var(--ion-safe-area-top, 0);
+  min-height: calc(56px + var(--ion-safe-area-top, 0));
+
+  display: flex;
+  align-items: center; /* Vertically center title + buttons */
+}
+
+ion-title {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 ion-button {
   --background: #145583;
   --color: #fff;
 }
-
 ion-radio {
+  --border-color: #145583;
   --color: #145583;
+  --background: #fff;
+  --background-checked: #fff;
   --color-checked: #145583;
-  --background-checked: #145583;
+  --border-color-checked: #145583;
 }
 
 // ion-toolbar {

@@ -21,7 +21,8 @@ import {
   IonCardSubtitle,
   IonCardContent,
   IonNote,
-  IonSpinner
+  IonSpinner,
+  IonBackButton
 } from '@ionic/angular/standalone';
 import { AccountPreferencesViewModel } from './AccountPreferencesViewModel';
 import { TrackerService } from 'src/app/services/Tracker';
@@ -80,7 +81,8 @@ import {
     IonCardContent,
     IonNote,
     IonSpinner,
-    IconPanelComponent
+    IconPanelComponent,
+    IonBackButton
   ]
 })
 export class AccountPreferencesPage implements OnInit {

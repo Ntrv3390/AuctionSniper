@@ -2,9 +2,19 @@ import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  IonHeader, IonToolbar, IonTitle,
-  IonButtons, IonButton, IonIcon, IonContent, IonList, IonItem, IonLabel, IonCheckbox,
-  IonItemDivider, IonBackButton
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonButton,
+  IonIcon,
+  IonContent,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonCheckbox,
+  IonItemDivider,
+  IonBackButton,
 } from '@ionic/angular/standalone';
 import { AccountNotificationsViewModel } from './AccountNotificationsViewModel';
 import { TrackerService } from 'src/app/services/Tracker';
@@ -33,17 +43,17 @@ import { firstValueFrom } from 'rxjs';
     IonItem,
     IonLabel,
     IonCheckbox,
-    IonItemDivider
-  ]
+    IonItemDivider,
+  ],
 })
 export class AccountNotificationsPage implements OnInit {
-
-  viewModel: AccountNotificationsViewModel = new AccountNotificationsViewModel();
+  viewModel: AccountNotificationsViewModel =
+    new AccountNotificationsViewModel();
 
   constructor(
     private tracker: TrackerService,
     private auctionSniperApi: AuctionSniperApiService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.view_beforeEnter();
@@ -68,7 +78,9 @@ export class AccountNotificationsPage implements OnInit {
 
     try {
       const result = await firstValueFrom(
-        this.auctionSniperApi.updateNotificationPreferences(this.viewModel.preferences)
+        this.auctionSniperApi.updateNotificationPreferences(
+          this.viewModel.preferences
+        )
       );
 
       if (!result || !result.success) {
@@ -88,9 +100,11 @@ export class AccountNotificationsPage implements OnInit {
   private async refresh(): Promise<void> {
     // Show loader
     this.viewModel.isLoading = true;
-    
+
     try {
-      const result = await firstValueFrom(this.auctionSniperApi.getNotificationPreferences());
+      const result = await firstValueFrom(
+        this.auctionSniperApi.getNotificationPreferences()
+      );
 
       if (!result || !result.success) {
         this.viewModel.showError = true;
