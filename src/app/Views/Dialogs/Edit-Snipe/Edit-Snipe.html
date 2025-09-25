@@ -2,11 +2,22 @@
   <ion-toolbar class="custom-header">
     <ion-buttons slot="start">
       <ion-button (click)="cancel_click()">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
       </ion-button>
     </ion-buttons>
     <ion-title mode="md">
-      <ion-icon name="locate-outline" style="margin-right: 8px;"></ion-icon>
       {{ viewModel.id ? 'Update Snipe' : 'Add Snipe' }}
     </ion-title>
   </ion-toolbar>
@@ -17,7 +28,9 @@
     <div class="item-preview">
       <h2 class="item-title">{{ viewModel.title }}</h2>
       <div class="item-details" *ngIf="viewModel.currentPrice">
-        <span class="current-price">Current: {{ viewModel.currentPrice | number: '1.2-2' }}</span>
+        <span class="current-price"
+          >Current: {{ viewModel.currentPrice | number: '1.2-2' }}</span
+        >
       </div>
     </div>
   </div>
@@ -28,9 +41,7 @@
         <ion-col size="12">
           <ion-card class="form-card">
             <ion-card-header>
-              <ion-card-title>
-                Item Details
-              </ion-card-title>
+              <ion-card-title> Item Details </ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <ion-item class="form-item">
@@ -41,13 +52,16 @@
                   [(ngModel)]="viewModel.itemNumber"
                   name="itemNumber"
                   placeholder="Enter eBay item number"
-                  required>
+                  required
+                >
                 </ion-input>
               </ion-item>
 
               <ion-item class="form-item" *ngIf="viewModel.currentPrice">
                 <ion-label>Current Price</ion-label>
-                <ion-note slot="end">{{ viewModel.currentPrice | number: '1.2-2' }}</ion-note>
+                <ion-note slot="end"
+                  >{{ viewModel.currentPrice | number: '1.2-2' }}</ion-note
+                >
               </ion-item>
             </ion-card-content>
           </ion-card>
@@ -56,9 +70,7 @@
         <ion-col size="12">
           <ion-card class="form-card">
             <ion-card-header>
-              <ion-card-title>
-                Bid Settings
-              </ion-card-title>
+              <ion-card-title> Bid Settings </ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <ion-item class="form-item">
@@ -70,7 +82,8 @@
                   name="leadTime"
                   min="2"
                   max="120"
-                  required>
+                  required
+                >
                 </ion-input>
               </ion-item>
 
@@ -82,7 +95,8 @@
                   [(ngModel)]="viewModel.maximumBid"
                   name="maximumBid"
                   step="0.01"
-                  required>
+                  required
+                >
                 </ion-input>
               </ion-item>
             </ion-card-content>
@@ -92,9 +106,7 @@
         <ion-col size="12">
           <ion-card class="form-card advanced-settings">
             <ion-card-header>
-              <ion-card-title>
-                Advanced Settings
-              </ion-card-title>
+              <ion-card-title> Advanced Settings </ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <ion-item class="form-item second-shot-row">
@@ -102,25 +114,43 @@
                 <ion-select
                   [(ngModel)]="viewModel.bidEnhancement"
                   name="bidEnhancement"
-                  interface="action-sheet">
+                  interface="action-sheet"
+                >
                   <ion-select-option value="0">None</ion-select-option>
-                  <ion-select-option value="2">2 Bid Increments</ion-select-option>
-                  <ion-select-option value="3">3 Bid Increments</ion-select-option>
-                  <ion-select-option value="4">4 Bid Increments</ion-select-option>
-                  <ion-select-option value="5">5 Bid Increments</ion-select-option>
-                  <ion-select-option value="6">6 Bid Increments</ion-select-option>
+                  <ion-select-option value="2"
+                    >2 Bid Increments</ion-select-option
+                  >
+                  <ion-select-option value="3"
+                    >3 Bid Increments</ion-select-option
+                  >
+                  <ion-select-option value="4"
+                    >4 Bid Increments</ion-select-option
+                  >
+                  <ion-select-option value="5"
+                    >5 Bid Increments</ion-select-option
+                  >
+                  <ion-select-option value="6"
+                    >6 Bid Increments</ion-select-option
+                  >
                 </ion-select>
-                <ion-icon name="help-circle-outline" color="primary"
+                <ion-icon
+                  name="help-circle-outline"
+                  color="primary"
                   slot="end"
-                  style="cursor:pointer"
-                  (click)="secondShotHelpIcon_click()">
+                  style="cursor: pointer"
+                  (click)="secondShotHelpIcon_click()"
+                >
                 </ion-icon>
               </ion-item>
 
-              <ion-item class="form-item" *ngIf="viewModel.showAddShippingInsurance">
+              <ion-item
+                class="form-item"
+                *ngIf="viewModel.showAddShippingInsurance"
+              >
                 <ion-checkbox
                   [(ngModel)]="viewModel.addShippingInsurance"
-                  name="addShippingInsurance">
+                  name="addShippingInsurance"
+                >
                 </ion-checkbox>
                 <ion-label>Add Shipping Insurance</ion-label>
               </ion-item>
@@ -131,7 +161,8 @@
                   type="text"
                   placeholder="Add a comment (optional)"
                   [(ngModel)]="viewModel.comment"
-                  name="comment">
+                  name="comment"
+                >
                 </ion-input>
               </ion-item>
             </ion-card-content>
@@ -141,15 +172,24 @@
     </ion-grid>
 
     <div class="action-buttons">
-      <ion-button expand="block" (click)="addSnipe_click()" class="submit-button">
+      <ion-button
+        expand="block"
+        (click)="addSnipe_click()"
+        class="submit-button"
+      >
         <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
         {{ viewModel.id ? "Update Snipe" : "Add Snipe" }}
       </ion-button>
-      <ion-button expand="block" color="light" fill="outline" (click)="cancel_click()" class="cancel-button">
+      <ion-button
+        expand="block"
+        color="light"
+        fill="outline"
+        (click)="cancel_click()"
+        class="cancel-button"
+      >
         <ion-icon name="close-circle-outline" slot="start"></ion-icon>
         Cancel
       </ion-button>
     </div>
   </form>
 </ion-content>
-  

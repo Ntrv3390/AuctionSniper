@@ -9,77 +9,6 @@ ion-toolbar {
 .search-content {
   --background: #f8f9fa;
 
-  // Dark mode support
-  @media (prefers-color-scheme: dark) {
-    --background: #121212;
-
-    .search-header {
-      background: linear-gradient(
-        135deg,
-        var(--ion-color-primary),
-        var(--ion-color-primary-shade)
-      );
-    }
-
-    .search-input-wrapper {
-      background: #1e1e1e;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    }
-
-    .welcome-card,
-    .deal-card,
-    .result-card {
-      --background: #1e1e1e;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    }
-
-    .search-controls {
-      background: #1e1e1e;
-      border-bottom: 1px solid #333;
-    }
-
-    .result-title {
-      color: #fff;
-    }
-
-    .price-value {
-      color: var(--ion-color-primary);
-    }
-
-    .result-time {
-      color: #b0b0b0;
-    }
-
-    .controls-row ion-button[color="medium"] {
-      --background: #2d2d2d;
-      --color: #b0b0b0;
-      --border-color: #2d2d2d;
-    }
-
-    .sort-row ion-button {
-      --background: #2d2d2d;
-      --color: #fff;
-      --border-color: #2d2d2d;
-    }
-
-    ion-popover {
-      --background: #1e1e1e;
-      --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    }
-
-    .advanced-header {
-      border-bottom: 1px solid #333;
-    }
-
-    ion-popover ion-content {
-      --background: #1e1e1e;
-    }
-
-    ion-popover ion-item {
-      --border-color: #333;
-    }
-  }
-
   padding-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
   padding-bottom: var(
     --safe-area-inset-bottom,
@@ -652,34 +581,6 @@ ion-popover ion-item {
   margin-left: 12px;
 }
 
-// Dark mode support for saved searches
-@media (prefers-color-scheme: dark) {
-  .saved-search-card,
-  .manage-searches-card {
-    --background: #1e1e1e;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-  }
-
-  .saved-search-icon,
-  .manage-searches-icon {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .saved-search-title,
-  .manage-searches-info h4 {
-    color: #fff;
-  }
-
-  .saved-search-arrow,
-  .manage-searches-arrow {
-    background: rgba(255, 255, 255, 0.1);
-  }
-}
-
 // Loading overlay
 .loading-overlay {
   position: absolute;
@@ -713,20 +614,6 @@ ion-popover ion-item {
       margin: 0;
       color: var(--ion-color-dark);
       font-weight: 500;
-    }
-  }
-}
-
-// Dark mode support for loading overlay
-@media (prefers-color-scheme: dark) {
-  .loading-overlay {
-    .loading-content {
-      background: #1e1e1e;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-
-      p {
-        color: #fff;
-      }
     }
   }
 }

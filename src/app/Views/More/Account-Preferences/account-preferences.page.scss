@@ -169,29 +169,4 @@ ion-checkbox {
       }
     }
   }
-
-  // Dark mode support for overlays
-  @media (prefers-color-scheme: dark) {
-    .loading-container,
-    .saving-overlay {
-      ion-spinner {
-        color: #fff;
-      }
-
-      p {
-        color: #fff;
-      }
-    }
-
-    .saving-overlay {
-      .saving-content {
-        background: #1e1e1e;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-
-        p {
-          color: #fff;
-        }
-      }
-    }
-  }
 }

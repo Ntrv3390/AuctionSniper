@@ -1,52 +1,308 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
+// /*
+//  * App Global CSS
+//  * ----------------------------------------------------------------------------
+//  * Put style rules here that you want to apply globally. These styles are for
+//  * the entire app and not just one component. Additionally, this file can be
+//  * used as an entry point to import other CSS/Sass files to be included in the
+//  * output CSS.
+//  * For more information on global stylesheets, visit the documentation:
+//  * https://ionicframework.com/docs/layout/global-stylesheets
+//  */
 
-/* Core CSS required for Ionic components to work properly */
+// /* Core CSS required for Ionic components to work properly */
+// @import "@ionic/angular/css/core.css";
+
+// /* Basic CSS for apps built with Ionic */
+// @import "@ionic/angular/css/normalize.css";
+// @import "@ionic/angular/css/structure.css";
+// @import "@ionic/angular/css/typography.css";
+// @import "@ionic/angular/css/display.css";
+
+// /* Optional CSS utils that can be commented out */
+// @import "@ionic/angular/css/padding.css";
+// @import "@ionic/angular/css/float-elements.css";
+// @import "@ionic/angular/css/text-alignment.css";
+// @import "@ionic/angular/css/text-transformation.css";
+// @import "@ionic/angular/css/flex-utils.css";
+
+// /**
+//  * Ionic Dark Mode
+//  * -----------------------------------------------------
+//  * For more info, please see:
+//  * https://ionicframework.com/docs/theming/dark-mode
+//  */
+
+// /* @import "@ionic/angular/css/palettes/dark.always.css"; */
+// /* @import "@ionic/angular/css/palettes/dark.class.css"; */
+// @import "@ionic/angular/css/palettes/dark.system.css";
+
+// /**
+//  * Safe Area Support
+//  * -----------------------------------------------------
+//  * CSS variables for handling notches, status bars, and other device-specific UI elements
+//  */
+
+// :root {
+//   --safe-area-inset-top: env(safe-area-inset-top);
+//   --safe-area-inset-right: env(safe-area-inset-right);
+//   --safe-area-inset-bottom: env(safe-area-inset-bottom);
+//   --safe-area-inset-left: env(safe-area-inset-left);
+
+//   /* Fallback values for browsers that don't support env() */
+//   --safe-area-inset-top-fallback: 0px;
+//   --safe-area-inset-right-fallback: 0px;
+//   --safe-area-inset-bottom-fallback: 0px;
+//   --safe-area-inset-left-fallback: 0px;
+// }
+
+// /* Apply safe area insets to the entire app */
+// ion-content {
+//   --offset-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
+//   --offset-bottom: var(
+//     --safe-area-inset-bottom,
+//     var(--safe-area-inset-bottom-fallback)
+//   );
+// }
+
+// /* Apply safe area to header */
+// ion-header {
+//   /* ANDROID (Material Design) */
+//   &.md {
+//     padding-top: 0 !important;
+
+//     ion-toolbar {
+//       padding-top: var(--ion-safe-area-top, 0);
+//       min-height: calc(56px + var(--ion-safe-area-top, 0));
+//     }
+//   }
+
+//   /* ANDROID (Material Design) */
+//   &.ios {
+//     padding-top: 0 !important;
+
+//     ion-toolbar {
+//       padding-top: var(--ion-safe-area-top, 0);
+//       min-height: calc(56px + var(--ion-safe-area-top, 0));
+//     }
+//   }
+// }
+
+// /* Apply safe area to footer */
+// ion-footer {
+//   padding-bottom: var(
+//     --safe-area-inset-bottom,
+//     var(--safe-area-inset-bottom-fallback)
+//   );
+// }
+
+// /* Apply safe area to toolbar */
+// ion-toolbar {
+//   padding-left: var(
+//     --safe-area-inset-left,
+//     var(--safe-area-inset-left-fallback)
+//   );
+//   padding-right: var(
+//     --safe-area-inset-right,
+//     var(--safe-area-inset-right-fallback)
+//   );
+// }
+
+// .safe-area-content {
+//   --padding-top: var(--ion-safe-area-top, 0);
+// }
+
+// /* Safe area utility classes */
+// .safe-area-top {
+//   padding-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
+// }
+
+// .safe-area-right {
+//   padding-right: var(
+//     --safe-area-inset-right,
+//     var(--safe-area-inset-right-fallback)
+//   );
+// }
+
+// .safe-area-bottom {
+//   padding-bottom: var(
+//     --safe-area-inset-bottom,
+//     var(--safe-area-inset-bottom-fallback)
+//   );
+// }
+
+// .safe-area-left {
+//   padding-left: var(
+//     --safe-area-inset-left,
+//     var(--safe-area-inset-left-fallback)
+//   );
+// }
+
+// .safe-area-all {
+//   padding-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
+//   padding-right: var(
+//     --safe-area-inset-right,
+//     var(--safe-area-inset-right-fallback)
+//   );
+//   padding-bottom: var(
+//     --safe-area-inset-bottom,
+//     var(--safe-area-inset-bottom-fallback)
+//   );
+//   padding-left: var(
+//     --safe-area-inset-left,
+//     var(--safe-area-inset-left-fallback)
+//   );
+// }
+
+// .safe-area-margin-top {
+//   margin-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
+// }
+
+// .safe-area-margin-right {
+//   margin-right: var(
+//     --safe-area-inset-right,
+//     var(--safe-area-inset-right-fallback)
+//   );
+// }
+
+// .safe-area-margin-bottom {
+//   margin-bottom: var(
+//     --safe-area-inset-bottom,
+//     var(--safe-area-inset-bottom-fallback)
+//   );
+// }
+
+// .safe-area-margin-left {
+//   margin-left: var(
+//     --safe-area-inset-left,
+//     var(--safe-area-inset-left-fallback)
+//   );
+// }
+
+// .safe-area-margin-all {
+//   margin-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
+//   margin-right: var(
+//     --safe-area-inset-right,
+//     var(--safe-area-inset-right-fallback)
+//   );
+//   margin-bottom: var(
+//     --safe-area-inset-bottom,
+//     var(--safe-area-inset-bottom-fallback)
+//   );
+//   margin-left: var(
+//     --safe-area-inset-left,
+//     var(--safe-area-inset-left-fallback)
+//   );
+// }
+
+// /* For elements that need to fill the safe area */
+// .safe-area-fill {
+//   margin-top: calc(
+//     -1 * var(--safe-area-inset-top, var(--safe-area-inset-top-fallback))
+//   );
+//   margin-bottom: calc(
+//     -1 * var(--safe-area-inset-bottom, var(--safe-area-inset-bottom-fallback))
+//   );
+//   margin-left: calc(
+//     -1 * var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
+//   );
+//   margin-right: calc(
+//     -1 * var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
+//   );
+//   padding-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
+//   padding-bottom: var(
+//     --safe-area-inset-bottom,
+//     var(--safe-area-inset-bottom-fallback)
+//   );
+//   padding-left: var(
+//     --safe-area-inset-left,
+//     var(--safe-area-inset-left-fallback)
+//   );
+//   padding-right: var(
+//     --safe-area-inset-right,
+//     var(--safe-area-inset-right-fallback)
+//   );
+// }
+
+// /* Fix for translucent headers */
+// ion-header[translucent="true"] {
+//   position: relative;
+
+//   ion-toolbar {
+//     --background: transparent;
+//     --ion-toolbar-background: transparent;
+//   }
+// }
+
+// /* Error Dialog Styles - Make it appear as a dialog instead of bottom sheet */
+// .error-dialog-modal {
+//   --height: auto;
+//   --max-height: 90%;
+//   --width: 90%;
+//   --max-width: 500px;
+//   --border-radius: 16px;
+//   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+//   margin: auto;
+// }
+
+// .error-dialog-modal ion-backdrop {
+//   background: rgba(0, 0, 0, 0.5);
+// }
+
+// @media (min-width: 768px) {
+//   .error-dialog-modal {
+//     --width: 500px;
+//   }
+// }
+
+// /* Ensure the dialog appears centered */
+// .error-dialog-modal .modal-wrapper {
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+// }
+
+// body {
+//   padding: env(safe-area-inset-top) env(safe-area-inset-right)
+//     env(safe-area-inset-bottom) env(safe-area-inset-left);
+// }
+
+// .ios ion-tab-bar {
+//   padding-bottom: 0 !important;   /* remove extra safe area padding */
+//   height: 60px !important;        /* consistent tab bar height */
+//   z-index: 9999 !important;       /* keep above all other content */
+//   position: relative !important;  /* ensure stacking works */
+// }
+
+// .ios ion-tab-bar ion-tab-button {
+//   padding-bottom: 6px !important;     /* add small breathing space above home indicator */
+// }
+
+/* Core Ionic CSS */
 @import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
 
-/* Optional CSS utils that can be commented out */
+/* Optional utilities */
 @import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/flex-utils.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+/* Dark mode support */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
-/**
- * Safe Area Support
- * -----------------------------------------------------
- * CSS variables for handling notches, status bars, and other device-specific UI elements
- */
-
+/* -------------------------------------------------------------------
+   Safe Area / Notch / Status Bar Handling
+   ------------------------------------------------------------------- */
 :root {
-  --safe-area-inset-top: env(safe-area-inset-top);
-  --safe-area-inset-right: env(safe-area-inset-right);
-  --safe-area-inset-bottom: env(safe-area-inset-bottom);
-  --safe-area-inset-left: env(safe-area-inset-left);
+  /* Device safe area insets */
+  --ion-safe-area-top: env(safe-area-inset-top, 0px);
+  --ion-safe-area-right: env(safe-area-inset-right, 0px);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --ion-safe-area-left: env(safe-area-inset-left, 0px);
 
   /* Fallback values for browsers that don't support env() */
   --safe-area-inset-top-fallback: 0px;
@@ -55,190 +311,68 @@
   --safe-area-inset-left-fallback: 0px;
 }
 
-/* Apply safe area insets to the entire app */
+/* Apply safe area padding to ion-content globally */
+
 ion-content {
-  --offset-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
-  --offset-bottom: var(
-    --safe-area-inset-bottom,
-    var(--safe-area-inset-bottom-fallback)
-  );
+  --offset-top: var(--ion-safe-area-top);
+  --offset-bottom: var(--ion-safe-area-bottom);
 }
 
-/* Apply safe area to header */
+/* Header safe area handling */
 ion-header {
-  /* ANDROID (Material Design) */
-  &.md {
-    padding-top: 0 !important;
-
-    ion-toolbar {
-      padding-top: var(--ion-safe-area-top, 0);
-      min-height: calc(56px + var(--ion-safe-area-top, 0));
-    }
-  }
-
-  /* ANDROID (Material Design) */
-  &.ios {
-    padding-top: 0 !important;
-
-    ion-toolbar {
-      padding-top: var(--ion-safe-area-top, 0);
-      min-height: calc(56px + var(--ion-safe-area-top, 0));
-    }
-  }
+  padding-top: var(--ion-safe-area-top);
 }
 
-/* Apply safe area to footer */
-ion-footer {
-  padding-bottom: var(
-    --safe-area-inset-bottom,
-    var(--safe-area-inset-bottom-fallback)
-  );
-}
-
-/* Apply safe area to toolbar */
+/* Toolbar safe area handling */
 ion-toolbar {
-  padding-left: var(
-    --safe-area-inset-left,
-    var(--safe-area-inset-left-fallback)
-  );
-  padding-right: var(
-    --safe-area-inset-right,
-    var(--safe-area-inset-right-fallback)
-  );
+  padding-left: var(--ion-safe-area-left);
+  padding-right: var(--ion-safe-area-right);
 }
 
-.safe-area-content {
-  --padding-top: var(--ion-safe-area-top, 0);
+/* Footer / Tab Bar safe area handling */
+ion-footer,
+ion-tab-bar {
+  padding-bottom: var(--ion-safe-area-bottom);
 }
 
-/* Safe area utility classes */
+/* Translucent headers (iOS style) */
+ion-header[translucent="true"] ion-toolbar {
+  --background: transparent;
+  --ion-toolbar-background: transparent;
+}
+
+/* -------------------------------------------------------------------
+   Utility classes for safe areas (optional)
+   ------------------------------------------------------------------- */
 .safe-area-top {
-  padding-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
-}
-
-.safe-area-right {
-  padding-right: var(
-    --safe-area-inset-right,
-    var(--safe-area-inset-right-fallback)
-  );
+  padding-top: var(--ion-safe-area-top);
 }
 
 .safe-area-bottom {
-  padding-bottom: var(
-    --safe-area-inset-bottom,
-    var(--safe-area-inset-bottom-fallback)
-  );
+  padding-bottom: var(--ion-safe-area-bottom);
 }
 
 .safe-area-left {
-  padding-left: var(
-    --safe-area-inset-left,
-    var(--safe-area-inset-left-fallback)
-  );
+  padding-left: var(--ion-safe-area-left);
+}
+
+.safe-area-right {
+  padding-right: var(--ion-safe-area-right);
 }
 
 .safe-area-all {
-  padding-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
-  padding-right: var(
-    --safe-area-inset-right,
-    var(--safe-area-inset-right-fallback)
-  );
-  padding-bottom: var(
-    --safe-area-inset-bottom,
-    var(--safe-area-inset-bottom-fallback)
-  );
-  padding-left: var(
-    --safe-area-inset-left,
-    var(--safe-area-inset-left-fallback)
-  );
+  padding: var(--ion-safe-area-top) var(--ion-safe-area-right)
+    var(--ion-safe-area-bottom) var(--ion-safe-area-left);
 }
 
-.safe-area-margin-top {
-  margin-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
-}
-
-.safe-area-margin-right {
-  margin-right: var(
-    --safe-area-inset-right,
-    var(--safe-area-inset-right-fallback)
-  );
-}
-
-.safe-area-margin-bottom {
-  margin-bottom: var(
-    --safe-area-inset-bottom,
-    var(--safe-area-inset-bottom-fallback)
-  );
-}
-
-.safe-area-margin-left {
-  margin-left: var(
-    --safe-area-inset-left,
-    var(--safe-area-inset-left-fallback)
-  );
-}
-
-.safe-area-margin-all {
-  margin-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
-  margin-right: var(
-    --safe-area-inset-right,
-    var(--safe-area-inset-right-fallback)
-  );
-  margin-bottom: var(
-    --safe-area-inset-bottom,
-    var(--safe-area-inset-bottom-fallback)
-  );
-  margin-left: var(
-    --safe-area-inset-left,
-    var(--safe-area-inset-left-fallback)
-  );
-}
-
-/* For elements that need to fill the safe area */
-.safe-area-fill {
-  margin-top: calc(
-    -1 * var(--safe-area-inset-top, var(--safe-area-inset-top-fallback))
-  );
-  margin-bottom: calc(
-    -1 * var(--safe-area-inset-bottom, var(--safe-area-inset-bottom-fallback))
-  );
-  margin-left: calc(
-    -1 * var(--safe-area-inset-left, var(--safe-area-inset-left-fallback))
-  );
-  margin-right: calc(
-    -1 * var(--safe-area-inset-right, var(--safe-area-inset-right-fallback))
-  );
-  padding-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
-  padding-bottom: var(
-    --safe-area-inset-bottom,
-    var(--safe-area-inset-bottom-fallback)
-  );
-  padding-left: var(
-    --safe-area-inset-left,
-    var(--safe-area-inset-left-fallback)
-  );
-  padding-right: var(
-    --safe-area-inset-right,
-    var(--safe-area-inset-right-fallback)
-  );
-}
-
-/* Fix for translucent headers */
-ion-header[translucent="true"] {
-  position: relative;
-
-  ion-toolbar {
-    --background: transparent;
-    --ion-toolbar-background: transparent;
-  }
-}
-
-/* Error Dialog Styles - Make it appear as a dialog instead of bottom sheet */
+/* -------------------------------------------------------------------
+   Modal / Error Dialog Styles
+   ------------------------------------------------------------------- */
 .error-dialog-modal {
-  --height: auto;
-  --max-height: 90%;
   --width: 90%;
   --max-width: 500px;
+  --height: auto;
+  --max-height: 90%;
   --border-radius: 16px;
   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
   margin: auto;
@@ -248,13 +382,6 @@ ion-header[translucent="true"] {
   background: rgba(0, 0, 0, 0.5);
 }
 
-@media (min-width: 768px) {
-  .error-dialog-modal {
-    --width: 500px;
-  }
-}
-
-/* Ensure the dialog appears centered */
 .error-dialog-modal .modal-wrapper {
   position: absolute;
   top: 50%;
@@ -262,19 +389,32 @@ ion-header[translucent="true"] {
   transform: translate(-50%, -50%);
 }
 
-body {
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left);
+@media (min-width: 768px) {
+  .error-dialog-modal {
+    --width: 500px;
+  }
 }
 
+/* -------------------------------------------------------------------
+   iOS-specific Tab Bar Fix
+   ------------------------------------------------------------------- */
 .ios ion-tab-bar {
-  padding-bottom: 0 !important;   /* remove extra safe area padding */
-  height: 60px !important;        /* consistent tab bar height */
-  z-index: 9999 !important;       /* keep above all other content */
-  position: relative !important;  /* ensure stacking works */
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  height: 60px;
+  z-index: 9999;
+  position: relative;
 }
-
 
 .ios ion-tab-bar ion-tab-button {
-  padding-bottom: 6px !important;     /* add small breathing space above home indicator */
+  padding-bottom: 6px;
+}
+
+/* -------------------------------------------------------------------
+   Apply safe area padding to body (fallback for non-Ionic elements)
+   ------------------------------------------------------------------- */
+body {
+  padding-top: var(--ion-safe-area-top);
+  padding-right: var(--ion-safe-area-right);
+  padding-bottom: var(--ion-safe-area-bottom);
+  padding-left: var(--ion-safe-area-left);
 }

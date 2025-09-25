@@ -301,22 +301,4 @@ ion-toolbar {
       }
     }
   }
-
-  // Dark mode support for overlays
-  @media (prefers-color-scheme: dark) {
-    .processing-overlay {
-      .processing-content {
-        background: #1e1e1e;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-
-        ion-spinner {
-          color: #fff;
-        }
-
-        p {
-          color: #fff;
-        }
-      }
-    }
-  }
 }

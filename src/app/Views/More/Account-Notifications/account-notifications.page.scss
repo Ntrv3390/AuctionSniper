@@ -3,6 +3,16 @@
   --color: #fff;
 }
 
+ion-header {
+  /* Remove extra top padding for translucent header */
+  padding-top: 0 !important;
+
+  ion-toolbar.custom-header {
+    padding-top: var(--ion-safe-area-top, 0);
+    min-height: calc(56px + var(--ion-safe-area-top, 0));
+  }
+}
+
 ion-button {
   --background: #145583;
   --color: #fff;
@@ -13,13 +23,11 @@ ion-radio {
   --color-checked: #145583;
   --background-checked: #145583;
 }
-.header-icon ion-header {
-  padding-top: 0 !important;
-}
-ion-toolbar {
-  --padding-top: 0 !important;
-  --min-height: 56px;
-}
+
+// ion-toolbar {
+//   --padding-top: 0 !important;
+//   --min-height: 56px;
+// }
 
 ion-checkbox {
   --color: #145583;
@@ -55,7 +63,7 @@ ion-checkbox {
       backdrop-filter: blur(6px);
 
       svg {
-        color: #fff; 
+        color: #fff;
         width: 48px;
         height: 48px;
       }
@@ -215,31 +223,6 @@ ion-checkbox {
         margin: 0;
         color: var(--ion-color-dark);
         font-weight: 500;
-      }
-    }
-  }
-
-  // Dark mode support for overlays
-  @media (prefers-color-scheme: dark) {
-    .loading-container,
-    .saving-overlay {
-      ion-spinner {
-        color: #fff;
-      }
-
-      p {
-        color: #fff;
-      }
-    }
-
-    .saving-overlay {
-      .saving-content {
-        background: #1e1e1e;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-
-        p {
-          color: #fff;
-        }
       }
     }
   }

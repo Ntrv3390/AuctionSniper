@@ -157,27 +157,3 @@ ion-toggle[slot="end"] {
     margin: 0 auto 20px auto;
   }
 }
-
-/* Dark mode overrides */
-@media (prefers-color-scheme: dark) {
-  .loading-overlay {
-    background: rgba(0, 0, 0, 0.8);
-  }
-
-  .loading-content {
-    background: var(
-      --ion-card-background,
-      var(--ion-background-color, #1e1e1e)
-    );
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-  }
-
-  .form-container,
-  .item-info-card {
-    background: var(
-      --ion-card-background,
-      var(--ion-background-color, #1e1e1e)
-    );
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  }
-}

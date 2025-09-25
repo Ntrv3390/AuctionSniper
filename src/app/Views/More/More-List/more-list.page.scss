@@ -27,37 +27,6 @@ ion-toolbar {
   height: 100%;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-
-  // Dark mode
-  @media (prefers-color-scheme: dark) {
-    background: #121212;
-
-    .activation-card {
-      --background: #1e1e1e;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    }
-
-    .option-card {
-      --background: #1e1e1e;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-
-      &:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      }
-
-      .option-text h3 {
-        color: #fff;
-      }
-      .option-text p {
-        color: #b0b0b0;
-      }
-    }
-
-    ion-item-divider {
-      --background: #2d2d2d;
-      --color: #fff;
-    }
-  }
 }
 
 // Activation Card

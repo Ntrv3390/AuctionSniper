@@ -63,16 +63,4 @@
       margin: 0 12px 0 0;
     }
   }
-  
-  // Dark mode support
-  @media (prefers-color-scheme: dark) {
-    .advanced-header {
-      border-bottom: 1px solid #333;
-      background: #1e1e1e;
-    }
-    
-    .section-title {
-      color: #fff;
-    }
-  }
 }
