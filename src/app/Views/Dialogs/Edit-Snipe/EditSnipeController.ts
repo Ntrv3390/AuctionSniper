@@ -241,10 +241,14 @@ export class EditSnipeController implements OnInit {
         this.dataSource.activeSnipes?.push(result.snipe);
         this.location.back();
       } else {
-        await this.presentToast(
-          'Something went wrong! Please try again later.',
-          'danger'
-        );
+        if (result.message.Level == -1) {
+          await this.presentToast(`${result.message.MessageContent}`, 'danger');
+        } else {
+          await this.presentToast(
+            'Something went wrong! Please try again later.',
+            'danger'
+          );
+        }
       }
     }
   }
