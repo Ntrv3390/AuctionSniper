@@ -5,7 +5,6 @@ import { PreferencesService } from 'src/app/services/Preferences';
 import { UIService } from 'src/app/services/UI';
 import { TrackerService } from 'src/app/services/Tracker';
 import { TrackerConstants } from 'src/app/constants/tracker.constants';
-import { PinEntryDialogModel } from 'src/app/Views/Dialogs/Pin-Entry/PinEntryDialogModel';
 import { Router } from '@angular/router';
 
 import {
@@ -23,7 +22,8 @@ import {
   IonItemDivider,
   IonList,
   IonItem,
-  IonLabel
+  IonLabel,
+  ToastController,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -47,18 +47,18 @@ import {
     IonItemDivider,
     IonList,
     IonItem,
-    IonLabel
-  ]
+    IonLabel,
+  ],
 })
 export class ConfigurePinPage implements OnInit {
-
   viewModel: ConfigurePinViewModel = new ConfigurePinViewModel();
 
   constructor(
     private tracker: TrackerService,
     private ui: UIService,
     private preferences: PreferencesService,
-    private router: Router
+    private router: Router,
+    private toastController: ToastController
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +68,7 @@ export class ConfigurePinPage implements OnInit {
   //#region BaseController Overrides
 
   view_beforeEnter(): void {
-    this.viewModel.isPinSet = this.preferences.pin !== null;
+    this.viewModel.isPinSet = !!this.preferences.pin;
   }
 
   //#endregion
@@ -77,40 +77,64 @@ export class ConfigurePinPage implements OnInit {
 
   async setPin_click(): Promise<void> {
     this.tracker.track(TrackerConstants.Account.SetPin);
-    
-    // Navigate to PIN entry page for setting PIN
+
     this.router.navigate(['/pin-entry'], {
       queryParams: {
         promptText: 'Enter a value for your new PIN',
-        operation: 'set'
-      }
+        operation: 'set',
+      },
     });
   }
 
   async changePin_click(): Promise<void> {
     this.tracker.track(TrackerConstants.Account.ChangePin);
-    
-    // Navigate to PIN entry page for changing PIN (first step - verify current PIN)
+
+    if (!this.preferences.pin) {
+      this.showToast('No PIN is set. Please set a PIN first.', 'danger');
+      return;
+    }
+
     this.router.navigate(['/pin-entry'], {
       queryParams: {
         promptText: 'Enter your current PIN',
         pinToMatch: this.preferences.pin,
-        operation: 'change-verify'
-      }
+        operation: 'change-verify',
+      },
     });
   }
 
   async removePin_click(): Promise<void> {
     this.tracker.track(TrackerConstants.Account.RemovePin);
-    
-    // Navigate to PIN entry page for removing PIN
+
+    if (!this.preferences.pin) {
+      this.showToast('No PIN is set to remove.', 'danger');
+      return;
+    }
+
     this.router.navigate(['/pin-entry'], {
       queryParams: {
         promptText: 'Enter your current PIN',
         pinToMatch: this.preferences.pin,
-        operation: 'remove'
-      }
+        operation: 'remove',
+      },
     });
+  }
+
+  //#endregion
+
+  //#region Helpers
+
+  private async showToast(
+    message: string,
+    color: 'success' | 'danger' = 'danger'
+  ) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      position: 'bottom',
+      color,
+    });
+    await toast.present();
   }
 
   //#endregion

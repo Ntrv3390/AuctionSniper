@@ -128,6 +128,9 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import { SafeArea } from 'capacitor-plugin-safe-area';
 import { Capacitor } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
+import { PreferencesService } from './services/Preferences';
+import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -139,10 +142,13 @@ export class AppComponent implements OnInit {
   constructor(
     private pushNotifications: PushNotificationsService,
     private capacitorInit: CapacitorInitService,
-    private platform: Platform
+    private platform: Platform,
+    private preferences: PreferencesService,
+    private toastCtrl: ToastController,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     // Initialize Capacitor plugins
     this.capacitorInit.initialize();
 
@@ -152,6 +158,42 @@ export class AppComponent implements OnInit {
     // Initialize status bar and safe area
     this.initializeStatusBar();
     this.applySafeAreaInsets();
+
+    await this.preferences.initialize();
+
+    this.checkPinOnStartup();
+  }
+
+  private async checkPinOnStartup(): Promise<void> {
+    const savedPin = this.preferences.pin;
+
+    if (savedPin && savedPin.trim() !== '') {
+      // Navigate to pin-entry login screen
+      this.router.navigate(['/pin-entry'], {
+        queryParams: {
+          promptText: 'Enter your PIN to continue',
+          pinToMatch: savedPin,
+          operation: 'login',
+        },
+      });
+    } else {
+      // No PIN set → go to home
+      this.router.navigate(['/home']);
+    }
+  }
+
+  // Utility for showing toast
+  async showToast(
+    message: string,
+    color: 'success' | 'danger' | 'warning' = 'danger'
+  ) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      color,
+      position: 'bottom',
+    });
+    await toast.present();
   }
 
   /**
