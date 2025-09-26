@@ -22,6 +22,8 @@ import {
 import { PinEntryViewModel } from './PinEntryViewModel';
 import { PreferencesService } from 'src/app/services/Preferences';
 import { UIService } from 'src/app/services/UI';
+import { NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-pin-entry',
@@ -58,9 +60,6 @@ export class PinEntryPage implements OnInit {
   private operation: string = '';
   private newPin: string = '';
 
-  // Track if logged in this session
-  private static isSessionValidated = false;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -68,7 +67,18 @@ export class PinEntryPage implements OnInit {
     private preferences: PreferencesService,
     private ui: UIService,
     private toastController: ToastController
-  ) {}
+  ) {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (
+          event.url.startsWith('/search/query') ||
+          event.url.startsWith('/root/search')
+        ) {
+          return;
+        }
+      });
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -93,7 +103,7 @@ export class PinEntryPage implements OnInit {
       this.viewModel.pin += value.toString();
 
       if (this.viewModel.pin.length === 4) {
-        setTimeout(() => this.validatePin(), 200); // slight delay for UX
+        setTimeout(() => this.validatePin(), 200);
       }
     }
   }
@@ -127,6 +137,20 @@ export class PinEntryPage implements OnInit {
   }
 
   private validatePin() {
+    if (!this.viewModel.pin || this.viewModel.pin.length < 4) {
+      return;
+    }
+
+    if (this.operation === '' || this.operation === 'login') {
+      if (this.viewModel.pin === this.preferences.pin) {
+        this.showToast('Login successful.', 'success');
+        this.goHome();
+      } else {
+        this.resetWithError('Invalid PIN. Please try again.');
+      }
+      return;
+    }
+
     switch (this.operation) {
       case 'set':
         this.navigateWithParams(
@@ -140,7 +164,7 @@ export class PinEntryPage implements OnInit {
         if (this.viewModel.pin === this.viewModel.pinToMatch) {
           this.preferences.pin = this.newPin;
           this.showToast('Your PIN has been configured.', 'success');
-          this.location.back();
+          this.goToPinPage();
         } else {
           this.resetWithError('PINs do not match. Please try again.');
         }
@@ -166,7 +190,7 @@ export class PinEntryPage implements OnInit {
         if (this.viewModel.pin === this.viewModel.pinToMatch) {
           this.preferences.pin = this.newPin;
           this.showToast('Your PIN has been changed.', 'success');
-          this.location.back();
+          this.goToPinPage();
         } else {
           this.resetWithError('PINs do not match. Please try again.');
         }
@@ -176,27 +200,22 @@ export class PinEntryPage implements OnInit {
         if (this.viewModel.pin === this.viewModel.pinToMatch) {
           this.preferences.pin = '';
           this.showToast('The PIN has been removed.', 'success');
-          this.location.back();
+          this.goToPinPage();
         } else {
           this.resetWithError('Invalid PIN. Please try again.');
         }
         break;
 
       default:
-        // Default: login check (once per session)
-        if (!PinEntryPage.isSessionValidated) {
-          if (this.viewModel.pin === this.preferences.pin) {
-            PinEntryPage.isSessionValidated = true;
-            this.showToast('Login successful.', 'success');
-            this.goHome();
-          } else {
-            this.resetWithError('Invalid PIN. Please try again.');
-          }
-        } else {
-          // Already validated this session
-          this.location.back();
-        }
+        break;
     }
+  }
+
+  private goToPinPage() {
+    this.router.navigateByUrl('/configure-pin', {
+      replaceUrl: true,
+      skipLocationChange: false,
+    });
   }
 
   private navigateWithParams(
@@ -216,6 +235,6 @@ export class PinEntryPage implements OnInit {
   }
 
   private goHome() {
-    this.router.navigate(['/'], { replaceUrl: true });
+    this.router.navigate(['/root/search'], { replaceUrl: true });
   }
 }

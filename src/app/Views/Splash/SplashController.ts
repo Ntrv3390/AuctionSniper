@@ -4,19 +4,21 @@ import { IonicModule } from '@ionic/angular';
 import { PreferencesService } from 'src/app/services/Preferences';
 import { NavController } from '@ionic/angular';
 import { PluginsService } from 'src/app/services/Plugins';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-splash',
   templateUrl: './Splash.html',
   styleUrls: ['./Splash.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, IonicModule],
 })
 export class SplashController implements OnInit {
   constructor(
     private preferences: PreferencesService,
     private navCtrl: NavController,
-    private plugins: PluginsService
+    private plugins: PluginsService,
+    private router: Router
   ) {
     console.log('SplashController: Constructor called');
   }
@@ -25,7 +27,7 @@ export class SplashController implements OnInit {
     console.log('SplashController: ngOnInit called');
     // Start progress animation
     this.animateProgress();
-    
+
     // Initialize app
     await this.initializeApp();
   }
@@ -41,27 +43,43 @@ export class SplashController implements OnInit {
       // Initialize preferences
       await this.preferences.initialize();
       console.log('SplashController: Preferences initialized');
-      
+
       // Simulate a minimum loading time for better UX (2 seconds)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Hide the native splash screen
       try {
         await this.plugins.splashScreen.hide();
         console.log('SplashController: Native splash screen hidden');
       } catch (error) {
-        console.error('SplashController: Error hiding native splash screen', error);
+        console.error(
+          'SplashController: Error hiding native splash screen',
+          error
+        );
       }
-      
 
       // this.navCtrl.navigateRoot('/root/search', { replaceUrl: true });
 
       // Check if user is logged in and redirect accordingly
-      console.log('SplashController: User logged in status:', this.preferences.isUserLoggedIn);
+      console.log(
+        'SplashController: User logged in status:',
+        this.preferences.isUserLoggedIn
+      );
       if (this.preferences.isUserLoggedIn) {
         // User is logged in, go to root page with default tab
-        console.log('SplashController: Navigating to root');
-        this.navCtrl.navigateRoot('/root/search', { replaceUrl: true });
+        const savedPin = this.preferences.pin;
+
+        if (savedPin && savedPin.trim() !== '') {
+          this.router.navigate(['/pin-entry'], {
+            queryParams: {
+              promptText: 'Enter your PIN to continue',
+              operation: 'login',
+            },
+          });
+        } else {
+          console.log('SplashController: Navigating to root');
+          this.navCtrl.navigateRoot('/root/search', { replaceUrl: true });
+        }
       } else {
         // User is not logged in, go to login page
         console.log('SplashController: Navigating to login');
@@ -73,7 +91,10 @@ export class SplashController implements OnInit {
       try {
         await this.plugins.splashScreen.hide();
       } catch (hideError) {
-        console.error('Error hiding native splash screen in fallback', hideError);
+        console.error(
+          'Error hiding native splash screen in fallback',
+          hideError
+        );
       }
       this.navCtrl.navigateRoot('/login', { replaceUrl: true });
     }
