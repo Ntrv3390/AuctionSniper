@@ -202,11 +202,13 @@ export class EditSnipeController implements OnInit {
     // Hide keyboard
     await Keyboard.hide();
 
-    if (!(await this.isValidSnipe())) return;
+    if (!(await this.isValidSnipe())) {
+      await this.presentToast('Snipe is not valid!', 'danger');
+      return;
+    }
 
     if (this.viewModel.id) {
       this.tracker.track(TrackerConstants.Snipe.Update);
-
       const updateParams: AuctionSniperApiTypes.CreateSnipeParameters = {
         Id: this.viewModel.id,
         Item: this.viewModel.itemNumber,
@@ -236,10 +238,13 @@ export class EditSnipeController implements OnInit {
       );
       if (result.success) {
         await this.presentToast('Snipe updated!', 'success');
-
         this.dataSource.activeSnipes?.push(result.snipe);
-        // Navigate back to snipe list after adding
         this.location.back();
+      } else {
+        await this.presentToast(
+          'Something went wrong! Please try again later.',
+          'danger'
+        );
       }
     }
   }
