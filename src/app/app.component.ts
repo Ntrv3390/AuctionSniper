@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Renderer2,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
 import { IonApp, IonRouterOutlet, Platform } from '@ionic/angular/standalone';
 import { PushNotificationsService } from './services/PushNotifications';
 import { CapacitorInitService } from './services/CapacitorInit';
@@ -8,6 +14,7 @@ import { Capacitor } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
 import { App } from '@capacitor/app';
 import { Keyboard } from '@capacitor/keyboard';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +23,17 @@ import { Keyboard } from '@capacitor/keyboard';
   imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent implements OnInit {
+  private keyboardShowListener: any;
+  private keyboardHideListener: any;
+  private resumeSubscription?: Subscription;
+
   constructor(
     private pushNotifications: PushNotificationsService,
     private capacitorInit: CapacitorInitService,
     private platform: Platform,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private renderer: Renderer2,
+    private el: ElementRef
   ) {
     Keyboard.addListener('keyboardWillHide', () => {
       this.showTabBar();
@@ -43,7 +56,7 @@ export class AppComponent implements OnInit {
     App.addListener('resume', () => {
       this.showTabBar();
       setTimeout(() => {
-        window.dispatchEvent(new Event('resize')); // fix layout shift
+        window.dispatchEvent(new Event('resize'));
       }, 100);
     });
   }
