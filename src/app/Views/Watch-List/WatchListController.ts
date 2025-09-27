@@ -102,7 +102,7 @@ export class WatchListPage implements OnInit, OnDestroy {
     this.sortByEndingSoonest = true;
     this.showSpinner = true;
     // Use cached data when available, don't force refresh from eBay
-    this.refresh(false);
+    await this.refresh(true);
   }
 
   async openFilterSheet() {
@@ -130,27 +130,25 @@ export class WatchListPage implements OnInit, OnDestroy {
     return watch.itemnumber;
   }
 
-  ionViewWillEnter() {
-    // Initialize countdown with proper dataSource
-    this.countdownHandler = this.countdownService.initializeCountDown(
-      null, // no scrollDelegate
-      this.dataSource, // dataSource object
-      'watches', // entityName
-      'endtime', // targetField
-      'countdowntime', // displayField
-      this.viewModel // viewModel
-    );
-
+  async ionViewWillEnter() {
     // Sync viewModel with component properties
     this.viewModel.showSpinner = this.showSpinner;
     this.viewModel.showError = this.showError;
     this.viewModel.watches = this.watches;
     this.viewModel.snipeItemIds = this.snipeItemIds;
 
-    // Only refresh if we don't have data
-    if (!this.watches || this.watches.length === 0) {
-      this.refresh(false);
-    }
+    // Always refresh data from server (forceRefresh = true)
+    await this.refresh(true);
+
+    // Initialize countdown
+    this.countdownHandler = this.countdownService.initializeCountDown(
+      null,
+      this.dataSource,
+      'watches',
+      'endtime',
+      'countdowntime',
+      this.viewModel
+    );
   }
 
   ionViewWillLeave() {
@@ -178,9 +176,9 @@ export class WatchListPage implements OnInit, OnDestroy {
     await popover.present();
   }
 
-  applyFilter(sortDescending: boolean = false) {
+  async applyFilter(sortDescending: boolean = false) {
     this.currentSortDescending = sortDescending;
-    this.refresh();
+    await this.refresh();
   }
 
   async refresh(forceRefresh: boolean = false) {
@@ -231,10 +229,10 @@ export class WatchListPage implements OnInit, OnDestroy {
     this.viewModel.showSpinner = false;
   }
 
-  retry() {
+  async retry() {
     this.showSpinner = true;
     this.viewModel.showSpinner = true;
-    this.refresh(true);
+    await this.refresh(true);
   }
 
   private sortWatchListByEndTime(

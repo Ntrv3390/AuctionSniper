@@ -142,9 +142,9 @@ export class SnipeListPage implements OnInit {
     await actionSheet.present();
   }
 
-  applyFilter(sortDescending: boolean = false) {
+  async applyFilter(sortDescending: boolean = false) {
     this.viewModel.sortByEndingSoonest = sortDescending;
-    this.refresh();
+    await this.refresh();
   }
 
   trackByItemNumber(index: number, watch: any) {
@@ -160,10 +160,10 @@ export class SnipeListPage implements OnInit {
     this.view_beforeLeave();
   }
 
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
     // Refresh data when view enters
     if (this.viewModel.snipes.length === 0) {
-      this.refresh();
+      await this.refresh(true);
     }
   }
 
@@ -186,7 +186,7 @@ export class SnipeListPage implements OnInit {
     // Only refresh if we don't have data or it's the first load
     if (this.viewModel.snipes.length === 0) {
       this.viewModel.showSpinner = true;
-      await this.refresh();
+      await this.refresh(true);
     }
   }
 
@@ -194,7 +194,7 @@ export class SnipeListPage implements OnInit {
     this.countDownUtilities.clearCountDown();
   }
 
-  protected filterBar_click(status: any) {
+  protected async filterBar_click(status: any) {
     const statusNum = parseInt(status, 10);
     if (this.viewModel.isRefreshing || this.viewModel.showError) {
       return;
@@ -216,16 +216,16 @@ export class SnipeListPage implements OnInit {
     }
     this.viewModel.status = statusNum;
     this.viewModel.showSpinner = true;
-    this.refresh(true);
+    await this.refresh(true);
   }
 
-  protected retry_click(): void {
+  protected async retry_click() {
     this.viewModel.showSpinner = true;
-    this.refresh(true);
+    await this.refresh(true);
   }
 
-  protected refresher_refresh(event: any): void {
-    this.refresh(true);
+  protected async refresher_refresh(event: any) {
+    await this.refresh(true);
     if (event && event.target) {
       event.target.complete();
     }
