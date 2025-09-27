@@ -6,9 +6,7 @@ const config: CapacitorConfig = {
   appName: 'Auction Sniper',
   webDir: 'www',
   server: {
-    allowNavigation: [
-      'https://services.auctionsniper.com'
-    ]
+    allowNavigation: ['https://services.auctionsniper.com'],
   },
   ios: {
     contentInset: 'always',
@@ -17,22 +15,22 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchShowDuration: 0,
       launchAutoHide: false,
-      backgroundColor: "#1a2a6c",
-      androidSplashResourceName: "splash",
-      androidScaleType: "CENTER_CROP",
+      backgroundColor: '#1a2a6c',
+      androidSplashResourceName: 'splash',
+      androidScaleType: 'CENTER_CROP',
       showSpinner: false,
       splashFullScreen: true,
       splashImmersive: true,
     },
     StatusBar: {
-      style: "LIGHT",
-      backgroundColor: "#156DAB",
-      overlaysWebView: true
+      style: 'LIGHT',
+      backgroundColor: '#156DAB',
+      overlaysWebView: true,
     },
     Keyboard: {
-      resize: KeyboardResize.None
-    }
-  }
+      resize: KeyboardResize.None,
+    },
+  },
 };
 
 export default config;

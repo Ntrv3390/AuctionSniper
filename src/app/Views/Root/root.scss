@@ -1,4 +1,6 @@
 ion-tab-bar {
+  height: 56px;
+  --padding-bottom: 0 !important;
   ion-tab-button {
     &.tab-selected {
       ion-icon {
@@ -10,5 +12,3 @@ ion-tab-bar {
     }
   }
 }
-
-

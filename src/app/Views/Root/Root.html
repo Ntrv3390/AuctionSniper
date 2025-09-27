@@ -1,6 +1,11 @@
 <ion-tabs (ionTabsDidChange)="onTabChange($event)">
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="search" [routerLink]="'search'" routerLinkActive="tab-selected" [routerLinkActiveOptions]="{exact: true}">
+    <ion-tab-button
+      tab="search"
+      [routerLink]="'search'"
+      routerLinkActive="tab-selected"
+      [routerLinkActiveOptions]="{exact: true}"
+    >
       <ion-icon name="search-outline"></ion-icon>
       <ion-label>Search</ion-label>
       <ion-badge *ngIf="viewModel.searchTabBadgeCount > 0" color="danger">
@@ -8,7 +13,12 @@
       </ion-badge>
     </ion-tab-button>
 
-    <ion-tab-button tab="watches" [routerLink]="'watches'" routerLinkActive="tab-selected" [routerLinkActiveOptions]="{exact: true}">
+    <ion-tab-button
+      tab="watches"
+      [routerLink]="'watches'"
+      routerLinkActive="tab-selected"
+      [routerLinkActiveOptions]="{exact: true}"
+    >
       <ion-icon name="eye-outline"></ion-icon>
       <ion-label>My Watches</ion-label>
       <ion-badge *ngIf="viewModel.watchesTabBadgeCount > 0" color="danger">
@@ -16,7 +26,12 @@
       </ion-badge>
     </ion-tab-button>
 
-    <ion-tab-button tab="snipes" [routerLink]="'snipes'" routerLinkActive="tab-selected" [routerLinkActiveOptions]="{exact: true}">
+    <ion-tab-button
+      tab="snipes"
+      [routerLink]="'snipes'"
+      routerLinkActive="tab-selected"
+      [routerLinkActiveOptions]="{exact: true}"
+    >
       <ion-icon name="locate-outline"></ion-icon>
       <ion-label>My Snipes</ion-label>
       <ion-badge *ngIf="viewModel.snipesTabBadgeCount > 0" color="danger">
@@ -24,7 +39,12 @@
       </ion-badge>
     </ion-tab-button>
 
-    <ion-tab-button tab="more" [routerLink]="'more'" routerLinkActive="tab-selected" [routerLinkActiveOptions]="{exact: true}">
+    <ion-tab-button
+      tab="more"
+      [routerLink]="'more'"
+      routerLinkActive="tab-selected"
+      [routerLinkActiveOptions]="{exact: true}"
+    >
       <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
       <ion-label>More</ion-label>
       <ion-badge *ngIf="viewModel.moreTabBadgeCount > 0" color="danger">
@@ -32,5 +52,4 @@
       </ion-badge>
     </ion-tab-button>
   </ion-tab-bar>
-
 </ion-tabs>
