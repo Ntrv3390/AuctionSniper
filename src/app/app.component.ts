@@ -4,6 +4,7 @@ import { PushNotificationsService } from './services/PushNotifications';
 import { CapacitorInitService } from './services/CapacitorInit';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { ToastController } from '@ionic/angular';
+import { App } from '@capacitor/app';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +42,11 @@ export class AppComponent implements OnInit {
 
   private async initializeStatusBar(): Promise<void> {
     try {
-      await StatusBar.setOverlaysWebView({ overlay: false });
+      if (this.platform.is('ios')) {
+        await StatusBar.setOverlaysWebView({ overlay: true });
+      } else {
+        await StatusBar.setOverlaysWebView({ overlay: false });
+      }
       await StatusBar.setStyle({ style: Style.Light });
       await StatusBar.setBackgroundColor({ color: '#156DAB' });
       await StatusBar.show();

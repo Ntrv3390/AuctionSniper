@@ -28,7 +28,7 @@ PODS:
     - Capacitor
   - CapacitorSplashScreen (7.0.2):
     - Capacitor
-  - CapacitorStatusBar (7.0.2):
+  - CapacitorStatusBar (7.0.3):
     - Capacitor
   - CordovaPlugins (7.4.3):
     - CapacitorCordova
@@ -104,7 +104,7 @@ SPEC CHECKSUMS:
   CapacitorPreferences: b583b5deb74e564c35968189d25d32c0fd41200d
   CapacitorPushNotifications: 6ffcf5df95f17d71a1b02893549bc4727f80540c
   CapacitorSplashScreen: 8d6c8cb0542a8e81585c593815db8785ed8ce454
-  CapacitorStatusBar: 5526833b87fa9c96a2a90c1322bb1f663c04505f
+  CapacitorStatusBar: 7d8fcbd6768db014bd721d75e246590b014928e8
   CordovaPlugins: 64931e3435a866da9d124e6242a9361b484e9b05
 
 PODFILE CHECKSUM: 6a19cd914a7b977fd0637a83852ff2f96af4894b

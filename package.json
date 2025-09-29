@@ -37,7 +37,7 @@
     "@capacitor/preferences": "^7.0.1",
     "@capacitor/push-notifications": "^7.0.1",
     "@capacitor/splash-screen": "^7.0.1",
-    "@capacitor/status-bar": "^7.0.1",
+    "@capacitor/status-bar": "^7.0.3",
     "@ionic/angular": "^8.0.0",
     "@types/lodash": "^4.17.20",
     "@uirouter/angularjs": "^1.1.1",
