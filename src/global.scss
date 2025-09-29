@@ -1,114 +1,71 @@
-/* Core Ionic CSS */
 @import "@ionic/angular/css/core.css";
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
-
-/* Optional utilities */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/flex-utils.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 
-/* Dark mode support */
-@import "@ionic/angular/css/palettes/dark.system.css";
-
-/* -------------------------------------------------------------------
-   Safe Area / Notch / Status Bar Handling
-   ------------------------------------------------------------------- */
-:root {
-  /* Device safe area insets */
-  --ion-safe-area-top: env(safe-area-inset-top);
-  --ion-safe-area-bottom: env(safe-area-inset-bottom);
+:root.md {
+  --ion-safe-area-top: env(
+    safe-area-inset-top,
+    24px
+  ); 
   --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --ion-safe-area-left: env(safe-area-inset-left, 0px);
-
-  /* Fallback values for browsers that don't support env() */
-  --safe-area-inset-top-fallback: 0px;
-  --safe-area-inset-right-fallback: 0px;
-  --safe-area-inset-bottom-fallback: 0px;
-  --safe-area-inset-left-fallback: 0px;
+  --ion-safe-area-right: env(safe-area-inset-right, 0px);
 }
 
-ion-tab-bar {
-  height: calc(56px + env(safe-area-inset-bottom));
-  padding-bottom: env(safe-area-inset-bottom);
-  box-sizing: content-box;
+.md ion-header {
+  --ion-safe-area-top: 35px;
 }
 
-/* Apply safe area padding to ion-content globally */
-
-ion-content {
-  --offset-top: var(--ion-safe-area-top);
-  --offset-bottom: var(--ion-safe-area-bottom);
+.md ion-tab-bar {
+  --ion-safe-area-bottom: 15px;
 }
 
-/* Header safe area handling */
-
-ion-header {
-  padding-top: var(--ion-safe-area-top);
-}
-
-/* Toolbar safe area handling */
-ion-toolbar {
+.md ion-toolbar {
   padding-left: var(--ion-safe-area-left);
   padding-right: var(--ion-safe-area-right);
 }
 
-/* Footer / Tab Bar safe area handling */
-ion-footer {
-  padding-bottom: var(--ion-safe-area-bottom);
-}
-
-/* Translucent headers (iOS style) */
-ion-header[translucent="true"] ion-toolbar {
-  --background: transparent;
-  --ion-toolbar-background: transparent;
-}
-
-/* -------------------------------------------------------------------
-   Utility classes for safe areas (optional)
-   ------------------------------------------------------------------- */
-.safe-area-top {
+.md .safe-area-top {
   padding-top: var(--ion-safe-area-top);
 }
 
-.safe-area-bottom {
+.md .safe-area-bottom {
   padding-bottom: var(--ion-safe-area-bottom);
 }
 
-.safe-area-left {
+.md .safe-area-left {
   padding-left: var(--ion-safe-area-left);
 }
 
-.safe-area-right {
+.md .safe-area-right {
   padding-right: var(--ion-safe-area-right);
 }
 
-.safe-area-all {
+.md .safe-area-all {
   padding: var(--ion-safe-area-top) var(--ion-safe-area-right)
     var(--ion-safe-area-bottom) var(--ion-safe-area-left);
 }
 
-/* -------------------------------------------------------------------
-   Modal / Error Dialog Styles
-   ------------------------------------------------------------------- */
-.error-dialog-modal {
+.md .error-dialog-modal {
   --width: 90%;
   --max-width: 500px;
-  --height: auto;
   --max-height: 90%;
   --border-radius: 16px;
   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
   margin: auto;
 }
 
-.error-dialog-modal ion-backdrop {
+.md .error-dialog-modal ion-backdrop {
   background: rgba(0, 0, 0, 0.5);
 }
 
-.error-dialog-modal .modal-wrapper {
+.md .error-dialog-modal .modal-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -116,17 +73,7 @@ ion-header[translucent="true"] ion-toolbar {
 }
 
 @media (min-width: 768px) {
-  .error-dialog-modal {
+  .md .error-dialog-modal {
     --width: 500px;
   }
-}
-
-/* -------------------------------------------------------------------
-   Apply safe area padding to body (fallback for non-Ionic elements)
-   ------------------------------------------------------------------- */
-body {
-  padding-top: var(--ion-safe-area-top);
-  padding-right: var(--ion-safe-area-right);
-  padding-bottom: var(--ion-safe-area-bottom);
-  padding-left: var(--ion-safe-area-left);
 }
