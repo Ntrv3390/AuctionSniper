@@ -19,7 +19,8 @@
 }
 
 .md ion-header {
-  --ion-safe-area-top: 35px;
+  --ion-safe-area-top: constant(safe-area-inset-top);
+  --ion-safe-area-top: env(safe-area-inset-top);
 }
 
 .md ion-tab-bar {
