@@ -6,6 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { addIcons } from 'ionicons';
 import {
   IonHeader,
   IonToolbar,
@@ -45,6 +46,8 @@ import { TimeZoneList } from 'src/app/models/timezone-list.constant';
 import { ApiErrorHandlerService } from 'src/app/services/ApiErrorHandler';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { DataSourceService } from 'src/app/services/DataSource';
+import { eyeOutline } from 'ionicons/icons';
+import { eyeOffOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-login',
@@ -84,6 +87,8 @@ export class LoginPage implements OnInit {
   versionDisplay = '';
   showDebugOptions = false;
   isLoading = false;
+  showPassword = false;
+  showConfirmPassword = false;
 
   private _versionClickCount = 0;
   timeZoneList = TimeZoneList;
@@ -101,7 +106,12 @@ export class LoginPage implements OnInit {
     private errorHandler: ApiErrorHandlerService,
     private toastCtrl: ToastController,
     private dataSource: DataSourceService
-  ) {}
+  ) {
+    addIcons({
+      'eye-outline': eyeOutline,
+      'eye-off-outline': eyeOffOutline,
+    });
+  }
 
   ngOnInit(): void {
     this.setupForm();
@@ -122,6 +132,14 @@ export class LoginPage implements OnInit {
 
     // Set initial validators based on sign in mode
     this.toggleAuthMode(true);
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   toggleAuthMode(signIn: boolean): void {

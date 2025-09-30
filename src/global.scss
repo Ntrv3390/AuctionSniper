@@ -20,10 +20,6 @@ ion-header {
   --ion-safe-area-top: env(safe-area-inset-top);
 }
 
-ion-tab-bar {
-  --ion-safe-area-bottom: 15px;
-}
-
 ion-toolbar {
   padding-left: var(--ion-safe-area-left);
   padding-right: var(--ion-safe-area-right);

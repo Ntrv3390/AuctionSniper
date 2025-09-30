@@ -35,6 +35,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonCheckbox,
+  IonBackButton,
   ToastController,
 } from '@ionic/angular/standalone';
 
@@ -66,6 +67,7 @@ import {
     IonNote,
     IonSelect,
     IonSelectOption,
+    IonBackButton,
     IonCheckbox,
   ],
 })

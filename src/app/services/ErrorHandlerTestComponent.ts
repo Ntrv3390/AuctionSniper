@@ -7,7 +7,7 @@ import { ApiErrorTestService } from './ApiErrorTestService';
 @Component({
   selector: 'app-error-handler-test',
   template: `
-    <ion-header [translucent]="true">
+    <ion-header>
       <ion-toolbar>
         <ion-title mode="md">Error Handler Test</ion-title>
       </ion-toolbar>

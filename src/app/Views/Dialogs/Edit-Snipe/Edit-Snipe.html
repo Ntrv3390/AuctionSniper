@@ -1,21 +1,7 @@
-﻿<ion-header [translucent]="true">
+﻿<ion-header>
   <ion-toolbar class="custom-header">
     <ion-buttons slot="start">
-      <ion-button (click)="cancel_click()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="white"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </ion-button>
+      <ion-back-button color="light" defaultHref="/snipes"></ion-back-button>
     </ion-buttons>
     <ion-title mode="md">
       {{ viewModel.id ? 'Update Snipe' : 'Add Snipe' }}

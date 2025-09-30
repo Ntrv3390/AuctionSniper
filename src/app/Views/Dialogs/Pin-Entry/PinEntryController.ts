@@ -17,6 +17,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonBackButton,
   ToastController,
 } from '@ionic/angular/standalone';
 import { PinEntryViewModel } from './PinEntryViewModel';
@@ -45,15 +46,17 @@ import { filter } from 'rxjs';
     IonIcon,
     IonGrid,
     IonRow,
-    IonCol,
+    IonBackButton,
+    IonCol
   ],
 })
 export class PinEntryPage implements OnInit {
-  viewModel: PinEntryViewModel = {
+  viewModel: PinEntryViewModel & { pinDigits: string[] } = {
     pin: '',
     pinToMatch: '',
     showBackButton: false,
     promptText: '',
+    pinDigits: ['', '', '', ''],
   };
 
   isLandscape = false;
@@ -94,13 +97,11 @@ export class PinEntryPage implements OnInit {
     this.viewModel.showBackButton = true;
   }
 
-  close_click() {
-    this.location.back();
-  }
-
   number_click(value: number | string) {
     if (this.viewModel.pin.length < 4) {
       this.viewModel.pin += value.toString();
+      this.viewModel.pinDigits[this.viewModel.pin.length - 1] =
+        value.toString();
 
       if (this.viewModel.pin.length === 4) {
         setTimeout(() => this.validatePin(), 200);
@@ -110,7 +111,9 @@ export class PinEntryPage implements OnInit {
 
   clear_click() {
     if (this.viewModel.pin.length > 0) {
+      const lastIndex = this.viewModel.pin.length - 1;
       this.viewModel.pin = this.viewModel.pin.slice(0, -1);
+      this.viewModel.pinDigits[lastIndex] = '';
     }
   }
 
@@ -223,11 +226,15 @@ export class PinEntryPage implements OnInit {
     operation: string,
     newPin: string = ''
   ) {
+    const pinToSend = this.viewModel.pin;
+    this.viewModel.pin = '';
+    this.viewModel.pinDigits = ['', '', '', ''];
+
     this.router.navigate(['/pin-entry'], {
       replaceUrl: true,
       queryParams: {
         promptText,
-        pinToMatch: this.viewModel.pin,
+        pinToMatch: pinToSend,
         operation,
         newPin,
       },

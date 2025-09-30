@@ -1,5 +1,5 @@
 .custom-header {
-  --background: linear-gradient(to right, #145583, #6cb1df);
+  --background: #145583;
   --color: #fff;
 }
 
@@ -97,18 +97,9 @@ ion-toolbar {
   margin: 0;
 
   // Safe area padding
-  padding-left: var(
-    --safe-area-inset-left,
-    var(--safe-area-inset-left-fallback)
-  );
-  padding-right: var(
-    --safe-area-inset-right,
-    var(--safe-area-inset-right-fallback)
-  );
-  padding-bottom: var(
-    --safe-area-inset-bottom,
-    var(--safe-area-inset-bottom-fallback)
-  );
+  padding-left: calc(16px + var(--ion-safe-area-left, 0px));
+  padding-right: calc(16px + var(--ion-safe-area-right, 0px));
+  padding-bottom: calc(16px + var(--ion-safe-area-bottom, 0px));
 }
 
 ion-item-divider {
