@@ -36,6 +36,12 @@ import { EditSnipeModel } from 'src/app/Views/Dialogs/Edit-Snipe/EditSnipeModel'
 import _ from 'lodash';
 import { AddWatchModel } from 'src/app/Views/Dialogs/Add-Watch/AddWatchModel';
 import { DialogOptions } from 'src/app/Framework/DialogOptions';
+import { addIcons } from 'ionicons';
+import {
+  closeCircleOutline,
+  timeOutline,
+  refreshOutline,
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-detail',
@@ -75,7 +81,13 @@ export class DetailController implements OnInit {
     private plugins: PluginsService,
     private platform: PlatformService,
     private errorHandler: ApiErrorHandlerService
-  ) {}
+  ) {
+    addIcons({
+      'close-circle-outline': closeCircleOutline,
+      'time-outline': timeOutline,
+      'refresh-outline': refreshOutline,
+    });
+  }
 
   ngOnInit(): void {
     this.refresh();

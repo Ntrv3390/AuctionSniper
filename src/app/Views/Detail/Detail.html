@@ -6,34 +6,28 @@
     <ion-title mode="md">Item Details</ion-title>
     <ion-buttons slot="end">
       <ion-button fill="clear" (click)="viewOnEbay_click()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#fff"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-          <polyline points="15 3 21 3 21 9" />
-          <line x1="10" y1="14" x2="21" y2="3" />
-        </svg>
+        <ion-icon name="open-outline" color="light"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="detail-content">
-  <!-- Error loading panel -->
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="viewModel.showSpinner">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p>Loading item details...</p>
+  </div>
+
+  <!-- Error -->
   <div class="error-state" *ngIf="viewModel.showError">
     <ion-card class="error-card">
-      <ion-card-content class="error-content">
-        <div class="error-icon">
-          <ion-icon name="cloud-offline-outline" color="danger"></ion-icon>
-        </div>
+      <ion-card-content>
+        <ion-icon
+          name="cloud-offline-outline"
+          color="danger"
+          class="error-icon"
+        ></ion-icon>
         <h3>Connection Error</h3>
         <p>Unexpected error; please try again.</p>
         <ion-button fill="solid" color="primary" (click)="retry_click()">
@@ -44,19 +38,12 @@
     </ion-card>
   </div>
 
-  <!-- Full-view spinner -->
-  <div class="loading-state" *ngIf="viewModel.showSpinner">
-    <div class="loading-content">
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>Loading item details...</p>
-    </div>
-  </div>
-
+  <!-- Main Content -->
   <div
     *ngIf="!viewModel.showError && !viewModel.showSpinner"
     class="detail-container"
   >
-    <!-- Hero Image Section -->
+    <!-- Hero Section -->
     <div class="hero-section" *ngIf="viewModel.item">
       <div class="item-image-container">
         <img
@@ -65,8 +52,6 @@
           class="item-image"
           (error)="onImageError($event)"
         />
-
-        <!-- Status Badge -->
         <div
           class="status-badge"
           [ngClass]="{ 'ended': viewModel.item.HasEnded }"
@@ -82,28 +67,24 @@
       </div>
     </div>
 
-    <!-- Item Details Section -->
+    <!-- Product Detail Card -->
     <div class="details-section" *ngIf="viewModel.item">
       <ion-card class="detail-card">
         <ion-card-content>
           <h1 class="item-title">{{ viewModel.item.Title }}</h1>
 
-          <div class="price-section">
-            <div class="current-price">
-              <span class="price-label">Current Price</span>
-              <span class="price-value">
-                {{ viewModel.item.Currency }}{{ viewModel.item.CurrentPrice |
-                number:'1.2-2' }}
-              </span>
-            </div>
-
-            <div class="bids-section">
+          <div class="price-highlight">
+            <span class="price">
+              {{ viewModel.item.Currency }}{{ viewModel.item.CurrentPrice |
+              number:'1.2-2' }}
+            </span>
+            <div class="bids">
               <ion-icon name="hammer-outline" color="medium"></ion-icon>
               <span>{{ viewModel.item.Bids }} bids</span>
             </div>
           </div>
 
-          <div class="meta-section">
+          <div class="meta-info">
             <div class="meta-item">
               <ion-icon name="calendar-outline" color="medium"></ion-icon>
               <span
@@ -111,140 +92,100 @@
                 }}</span
               >
             </div>
-
             <div class="meta-item" *ngIf="viewModel.item.FreeShipping">
               <ion-icon name="car-outline" color="success"></ion-icon>
-              <span class="free-shipping">Free Shipping</span>
+              <span>Free Shipping</span>
             </div>
-
             <div class="meta-item" *ngIf="!viewModel.item.Auction">
               <ion-icon name="pricetag-outline" color="warning"></ion-icon>
-              <span>Fixed Price Item</span>
+              <span>Fixed Price</span>
             </div>
           </div>
         </ion-card-content>
       </ion-card>
     </div>
 
-    <!-- Action Buttons Section -->
+    <!-- Actions Section -->
     <div class="actions-section" *ngIf="viewModel.item">
-      <!-- Snipe Actions -->
       <ion-card class="actions-card" *ngIf="!viewModel.item.HasEnded">
-        <ion-card-header>
-          <ion-card-title>
-            <ion-icon name="locate-outline"></ion-icon>
-            Snipe Actions
-          </ion-card-title>
-        </ion-card-header>
         <ion-card-content>
-          <div class="action-buttons">
-            <!-- Add to Snipes -->
-            <ion-button
-              expand="block"
-              [fill]="!viewModel.item.Auction ? 'outline' : null"
-              [disabled]="!viewModel.item.Auction"
-              *ngIf="!viewModel.itemHasActiveSnipe"
-              (click)="addToSnipes_click()"
-            >
-              <ion-icon name="crosshairs-outline" slot="start"></ion-icon>
-              Add to Snipes
-              <span class="disabled-text" *ngIf="!viewModel.item.Auction"
-                >(Disabled non-auction)</span
-              >
-            </ion-button>
+          <ion-button
+            expand="block"
+            [disabled]="!viewModel.item.Auction"
+            *ngIf="!viewModel.itemHasActiveSnipe"
+            (click)="addToSnipes_click()"
+          >
+            <ion-icon name="crosshairs-outline" slot="start"></ion-icon>
+            Add to Snipes
+          </ion-button>
 
-            <!-- Update Snipe -->
-            <ion-button
-              expand="block"
-              *ngIf="viewModel.itemHasActiveSnipe"
-              (click)="updateSnipe_click(viewModel.item.Id)"
-            >
-              <ion-icon name="create-outline" slot="start"></ion-icon>
-              Update Snipe
-            </ion-button>
+          <ion-button
+            expand="block"
+            *ngIf="viewModel.itemHasActiveSnipe"
+            (click)="updateSnipe_click(viewModel.item.Id)"
+          >
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            Update Snipe
+          </ion-button>
 
-            <!-- Remove from Snipes -->
-            <ion-button
-              expand="block"
-              color="danger"
-              fill="outline"
-              *ngIf="viewModel.itemHasActiveSnipe"
-              (click)="removeFromSnipes_click(viewModel.item.Id)"
-            >
-              <ion-icon name="close-outline" slot="start"></ion-icon>
-              Remove from Snipes
-            </ion-button>
-          </div>
+          <ion-button
+            expand="block"
+            color="danger"
+            fill="outline"
+            *ngIf="viewModel.itemHasActiveSnipe"
+            (click)="removeFromSnipes_click(viewModel.item.Id)"
+          >
+            <ion-icon name="close-outline" slot="start"></ion-icon>
+            Remove Snipe
+          </ion-button>
         </ion-card-content>
       </ion-card>
 
-      <!-- Watch Actions -->
       <ion-card class="actions-card" *ngIf="!viewModel.item.HasEnded">
-        <ion-card-header>
-          <ion-card-title>
-            <ion-icon name="eye-outline"></ion-icon>
-            Watch Actions
-          </ion-card-title>
-        </ion-card-header>
         <ion-card-content>
-          <div class="action-buttons">
-            <!-- Add to Watches -->
-            <ion-button
-              expand="block"
-              fill="outline"
-              *ngIf="!viewModel.itemIsWatched"
-              (click)="addToWatches_click(viewModel.item.Id)"
-            >
-              <ion-icon name="eye-outline" slot="start"></ion-icon>
-              Add to Watches
-            </ion-button>
+          <ion-button
+            expand="block"
+            fill="outline"
+            *ngIf="!viewModel.itemIsWatched"
+            (click)="addToWatches_click(viewModel.item.Id)"
+          >
+            <ion-icon name="eye-outline" slot="start"></ion-icon>
+            Add to Watchlist
+          </ion-button>
 
-            <!-- Remove from Watches -->
-            <ion-button
-              expand="block"
-              color="danger"
-              fill="outline"
-              *ngIf="viewModel.itemIsWatched"
-              (click)="removeFromWatches_click(viewModel.item.Id)"
-            >
-              <ion-icon name="eye-off-outline" slot="start"></ion-icon>
-              Remove from Watches
-            </ion-button>
+          <ion-button
+            expand="block"
+            color="danger"
+            fill="outline"
+            *ngIf="viewModel.itemIsWatched"
+            (click)="removeFromWatches_click(viewModel.item.Id)"
+          >
+            <ion-icon name="eye-off-outline" slot="start"></ion-icon>
+            Remove from Watchlist
+          </ion-button>
 
-            <!-- Edit Watch -->
-            <ion-button
-              expand="block"
-              fill="outline"
-              *ngIf="viewModel.itemIsWatched"
-              (click)="editWatch_click(viewModel.item.Id)"
-            >
-              <ion-icon name="create-outline" slot="start"></ion-icon>
-              Edit Watch
-            </ion-button>
-          </div>
+          <ion-button
+            expand="block"
+            fill="outline"
+            *ngIf="viewModel.itemIsWatched"
+            (click)="editWatch_click(viewModel.item.Id)"
+          >
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            Edit Watch
+          </ion-button>
         </ion-card-content>
       </ion-card>
 
-      <!-- External Actions -->
       <ion-card class="actions-card">
-        <ion-card-header>
-          <ion-card-title>
-            <ion-icon name="link-outline"></ion-icon>
-            External Actions
-          </ion-card-title>
-        </ion-card-header>
         <ion-card-content>
-          <div class="action-buttons">
-            <!-- View on E-Bay -->
-            <ion-button
-              expand="block"
-              fill="outline"
-              (click)="viewOnEbay_click()"
-            >
-              <ion-icon name="globe-outline" slot="start"></ion-icon>
-              View on eBay
-            </ion-button>
-          </div>
+          <ion-button
+            expand="block"
+            fill="outline"
+            (click)="viewOnEbay_click()"
+          >
+            <ion-icon name="globe-outline" slot="start"></ion-icon>
+            View on eBay
+          </ion-button>
         </ion-card-content>
       </ion-card>
     </div>

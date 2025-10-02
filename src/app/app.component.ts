@@ -28,12 +28,42 @@ export class AppComponent implements OnInit {
     this.pushNotifications.initialize();
     await this.initializeStatusBar();
 
+    // if (this.platform.is('ios')) {
+    //   // Keyboard open
+    //   Keyboard.addListener('keyboardWillShow', async () => {
+    //     if (!this.overlayEnabled) {
+    //       this.overlayEnabled = true;
+    //       //await StatusBar.setOverlaysWebView({ overlay: true });
+    //     }
+    //   });
+
+    //   // Keyboard close
+    //   Keyboard.addListener('keyboardWillHide', async () => {
+    //     if (this.overlayEnabled) {
+    //       this.overlayEnabled = false;
+    //       await StatusBar.setOverlaysWebView({ overlay: true });
+    //       setTimeout(async () => {
+    //         await StatusBar.setOverlaysWebView({ overlay: false });
+    //       }, 800);
+    //     }
+    //   });
+
+    //   // App resume
+    //   App.addListener('resume', async () => {
+    //     this.overlayEnabled = false;
+    //     await StatusBar.setOverlaysWebView({ overlay: true });
+    //     setTimeout(async () => {
+    //       await StatusBar.setOverlaysWebView({ overlay: false });
+    //     }, 800);
+    //   });
+    // }
+
     if (this.platform.is('ios')) {
       // Keyboard open
       Keyboard.addListener('keyboardWillShow', async () => {
         if (!this.overlayEnabled) {
           this.overlayEnabled = true;
-          //await StatusBar.setOverlaysWebView({ overlay: true });
+          await StatusBar.setOverlaysWebView({ overlay: true });
         }
       });
 
@@ -41,20 +71,16 @@ export class AppComponent implements OnInit {
       Keyboard.addListener('keyboardWillHide', async () => {
         if (this.overlayEnabled) {
           this.overlayEnabled = false;
-          await StatusBar.setOverlaysWebView({ overlay: true });
-          setTimeout(async () => {
-            await StatusBar.setOverlaysWebView({ overlay: false });
-          }, 800);
+          await StatusBar.setOverlaysWebView({ overlay: false });
         }
       });
 
       // App resume
       App.addListener('resume', async () => {
-        this.overlayEnabled = false;
-        await StatusBar.setOverlaysWebView({ overlay: true });
-        setTimeout(async () => {
+        if (this.overlayEnabled) {
+          this.overlayEnabled = false;
           await StatusBar.setOverlaysWebView({ overlay: false });
-        }, 800);
+        }
       });
     }
   }
