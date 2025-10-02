@@ -75,6 +75,32 @@ export class AppComponent implements OnInit {
         }
       });
 
+      // Input focus
+      document.addEventListener('focusin', async (event: any) => {
+        if (
+          event.target.tagName === 'INPUT' ||
+          event.target.tagName === 'TEXTAREA'
+        ) {
+          if (!this.overlayEnabled) {
+            this.overlayEnabled = true;
+            await StatusBar.setOverlaysWebView({ overlay: true });
+          }
+        }
+      });
+
+      // Input blur
+      document.addEventListener('focusout', async (event: any) => {
+        if (
+          event.target.tagName === 'INPUT' ||
+          event.target.tagName === 'TEXTAREA'
+        ) {
+          if (this.overlayEnabled) {
+            this.overlayEnabled = false;
+            await StatusBar.setOverlaysWebView({ overlay: false });
+          }
+        }
+      });
+
       // App resume
       App.addListener('resume', async () => {
         if (this.overlayEnabled) {
