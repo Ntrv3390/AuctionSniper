@@ -42,9 +42,33 @@ export class AppComponent implements OnInit {
         if (this.overlayEnabled) {
           this.overlayEnabled = false;
           // await StatusBar.setOverlaysWebView({ overlay: true });
-          setTimeout(async () => {
-            await StatusBar.setOverlaysWebView({ overlay: false });
-          }, 800);
+          // setTimeout(async () => {
+          //   await StatusBar.setOverlaysWebView({ overlay: false });
+          // }, 800);
+          await StatusBar.setOverlaysWebView({ overlay: false });
+        }
+      });
+
+      document.addEventListener('focusin', async (event) => {
+        // Only apply for text-like inputs
+        const tag = (event.target as HTMLElement)?.tagName?.toLowerCase();
+        if (tag === 'input' || tag === 'textarea') {
+          if (!this.overlayEnabled) {
+            this.overlayEnabled = true;
+            await StatusBar.setOverlaysWebView({ overlay: true });
+          }
+        }
+      });
+
+      document.addEventListener('focusout', async (event) => {
+        const tag = (event.target as HTMLElement)?.tagName?.toLowerCase();
+        if (tag === 'input' || tag === 'textarea') {
+          this.overlayEnabled = false;
+          // await StatusBar.setOverlaysWebView({ overlay: true });
+          // setTimeout(async () => {
+          //   await StatusBar.setOverlaysWebView({ overlay: false });
+          // }, 800);
+          await StatusBar.setOverlaysWebView({ overlay: false });
         }
       });
 
