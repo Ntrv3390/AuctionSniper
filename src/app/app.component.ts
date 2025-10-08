@@ -24,43 +24,39 @@ export class AppComponent implements OnInit {
   private overlayEnabled = false;
   async ngOnInit() {
     await this.platform.ready();
-    // 2️⃣ Force safe area recalc (dummy resize trigger)
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 500);
-    // this.capacitorInit.initialize();
+    this.capacitorInit.initialize();
     this.pushNotifications.initialize();
-    // await this.initializeStatusBar();
+    await this.initializeStatusBar();
 
-    // if (this.platform.is('ios')) {
-    //   // Keyboard open
-    //   Keyboard.addListener('keyboardWillShow', async () => {
-    //     if (!this.overlayEnabled) {
-    //       this.overlayEnabled = true;
-    //       //await StatusBar.setOverlaysWebView({ overlay: true });
-    //     }
-    //   });
+    if (this.platform.is('ios')) {
+      // Keyboard open
+      Keyboard.addListener('keyboardWillShow', async () => {
+        if (!this.overlayEnabled) {
+          this.overlayEnabled = true;
+          //await StatusBar.setOverlaysWebView({ overlay: true });
+        }
+      });
 
-    //   // Keyboard close
-    //   Keyboard.addListener('keyboardWillHide', async () => {
-    //     if (this.overlayEnabled) {
-    //       this.overlayEnabled = false;
-    //       await StatusBar.setOverlaysWebView({ overlay: true });
-    //       setTimeout(async () => {
-    //         await StatusBar.setOverlaysWebView({ overlay: false });
-    //       }, 800);
-    //     }
-    //   });
+      // Keyboard close
+      Keyboard.addListener('keyboardWillHide', async () => {
+        if (this.overlayEnabled) {
+          this.overlayEnabled = false;
+          await StatusBar.setOverlaysWebView({ overlay: true });
+          setTimeout(async () => {
+            await StatusBar.setOverlaysWebView({ overlay: false });
+          }, 800);
+        }
+      });
 
-    //   // App resume
-    //   App.addListener('resume', async () => {
-    //     this.overlayEnabled = false;
-    //     await StatusBar.setOverlaysWebView({ overlay: true });
-    //     setTimeout(async () => {
-    //       await StatusBar.setOverlaysWebView({ overlay: false });
-    //     }, 800);
-    //   });
-    // }
+      // App resume
+      App.addListener('resume', async () => {
+        this.overlayEnabled = false;
+        await StatusBar.setOverlaysWebView({ overlay: true });
+        setTimeout(async () => {
+          await StatusBar.setOverlaysWebView({ overlay: false });
+        }, 800);
+      });
+    }
   }
 
   async showToast(
@@ -78,7 +74,11 @@ export class AppComponent implements OnInit {
 
   private async initializeStatusBar(): Promise<void> {
     try {
-      await StatusBar.setOverlaysWebView({ overlay: false });
+      if (this.platform.is('ios')) {
+        await StatusBar.setOverlaysWebView({ overlay: false });
+      } else {
+        await StatusBar.setOverlaysWebView({ overlay: false });
+      }
       await StatusBar.setStyle({ style: Style.Dark });
       await StatusBar.setBackgroundColor({ color: '#145583' });
       await StatusBar.show();

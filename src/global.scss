@@ -1,91 +1,73 @@
-// /* ---------------------------------------------------
-//  * Core Ionic CSS (must come first)
-//  * --------------------------------------------------- */
-// @import "@ionic/angular/css/core.css";
-// @import "@ionic/angular/css/normalize.css";
-// @import "@ionic/angular/css/structure.css";
-// @import "@ionic/angular/css/typography.css";
-// @import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/flex-utils.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
 
-// /* Ionic utility styles */
-// @import "@ionic/angular/css/padding.css";
-// @import "@ionic/angular/css/flex-utils.css";
-// @import "@ionic/angular/css/text-alignment.css";
-// @import "@ionic/angular/css/text-transformation.css";
+:root {
+  --ion-safe-area-top: env(safe-area-inset-top, 24px);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --ion-safe-area-left: env(safe-area-inset-left, 0px);
+  --ion-safe-area-right: env(safe-area-inset-right, 0px);
+}
 
-// /* ---------------------------------------------------
-//  * Universal SAFE AREA handling (iOS + Android)
-//  * ---------------------------------------------------
-//  * Ionic already defines --ion-safe-area-* based on env(safe-area-inset-*).
-//  * These helper classes let you apply them where needed.
-//  * No need to hardcode or manually update values.
-//  */
+ion-header {
+  --ion-safe-area-top: constant(safe-area-inset-top);
+  --ion-safe-area-top: env(safe-area-inset-top);
+}
 
-// .safe-area-top {
-//   padding-top: var(--ion-safe-area-top);
-// }
+ion-toolbar {
+  padding-left: var(--ion-safe-area-left);
+  padding-right: var(--ion-safe-area-right);
+}
 
-// .safe-area-bottom {
-//   padding-bottom: var(--ion-safe-area-bottom);
-// }
+.safe-area-top {
+  padding-top: var(--ion-safe-area-top);
+}
 
-// .safe-area-left {
-//   padding-left: var(--ion-safe-area-left);
-// }
+.safe-area-bottom {
+  padding-bottom: var(--ion-safe-area-bottom);
+}
 
-// .safe-area-right {
-//   padding-right: var(--ion-safe-area-right);
-// }
+.safe-area-left {
+  padding-left: var(--ion-safe-area-left);
+}
 
-// .safe-area-all {
-//   padding: var(--ion-safe-area-top) var(--ion-safe-area-right)
-//     var(--ion-safe-area-bottom) var(--ion-safe-area-left);
-// }
+.safe-area-right {
+  padding-right: var(--ion-safe-area-right);
+}
 
-// /* ---------------------------------------------------
-//  * Default header / footer / tab-bar safe-area support
-//  * --------------------------------------------------- */
-// ion-header,
-// ion-footer,
-// ion-tab-bar {
-//   padding-top: var(--ion-safe-area-top);
-//   padding-bottom: var(--ion-safe-area-bottom);
-//   background: var(--ion-background-color, #fff);
-//   backdrop-filter: blur(10px);
-//   -webkit-backdrop-filter: blur(10px);
-// }
+.safe-area-all {
+  padding: var(--ion-safe-area-top) var(--ion-safe-area-right)
+    var(--ion-safe-area-bottom) var(--ion-safe-area-left);
+}
 
-// /* Optional: remove Ionic's default thin shadow */
-// ion-header::after,
-// ion-tab-bar::after {
-//   display: none !important;
-// }
+.error-dialog-modal {
+  --width: 90%;
+  --max-width: 500px;
+  --max-height: 90%;
+  --border-radius: 16px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+  margin: auto;
+}
 
-// /* ---------------------------------------------------
-//  * Global modal styling (example from your code)
-//  * --------------------------------------------------- */
-// .error-dialog-modal {
-//   --width: 90%;
-//   --max-width: 500px;
-//   --max-height: 90%;
-//   --border-radius: 16px;
-//   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
-//   margin: auto;
-// }
+.error-dialog-modal ion-backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
 
-// .error-dialog-modal ion-backdrop {
-//   background: rgba(0, 0, 0, 0.5);
-// }
+.error-dialog-modal .modal-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
-// .error-dialog-modal .modal-wrapper {
-//   position: absolute;
-//   top: 50%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
-
-// @media (min-width: 768px) {
-//   .error-dialog-modal {
-//     --width: 500px;
-//   }
-// }
+@media (min-width: 768px) {
+  .error-dialog-modal {
+    --width: 500px;
+  }
+}
