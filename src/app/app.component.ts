@@ -24,9 +24,13 @@ export class AppComponent implements OnInit {
   private overlayEnabled = false;
   async ngOnInit() {
     await this.platform.ready();
-   // this.capacitorInit.initialize();
+    // 2️⃣ Force safe area recalc (dummy resize trigger)
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 500);
+    // this.capacitorInit.initialize();
     this.pushNotifications.initialize();
-   // await this.initializeStatusBar();
+    // await this.initializeStatusBar();
 
     // if (this.platform.is('ios')) {
     //   // Keyboard open
