@@ -128,7 +128,7 @@ export class ApiMessageExtractorService {
    * @param obj The object to extract message from
    * @returns The extracted message or null if not found
    */
-  private extractMessageFromObject(obj: any): string | null {
+  extractMessageFromObject(obj: any): string | null {
     if (!obj || typeof obj !== 'object') {
       return null;
     }

@@ -40,7 +40,7 @@ import { UIService } from 'src/app/services/UI';
 import { DataSourceService } from 'src/app/services/DataSource';
 import { CountDownUtilitiesService } from 'src/app/services/CountDownUtilities';
 import { TrackerService } from 'src/app/services/Tracker';
-
+import { ApiMessageExtractorService } from 'src/app/services/ApiMessageExtractor';
 // Components / Constants
 import { WatchListFilterComponent } from 'src/app/Views/Watch-List/Watch-List-Filter/WatchListFilterController';
 import { TrackerConstants } from 'src/app/constants/tracker.constants';
@@ -108,8 +108,12 @@ export class SnipeListPage implements OnInit {
     private tracker: TrackerService,
     private popoverCtrl: PopoverController,
     private actionSheetCtrl: ActionSheetController,
-    private router: Router
+    private router: Router,
+    private messageExtractor: ApiMessageExtractorService
   ) {}
+
+  apiError: string | null = '';
+  isError = false;
 
   async ngOnInit() {
     // Initialize the component
@@ -311,7 +315,9 @@ export class SnipeListPage implements OnInit {
       this.initializeCountDown(
         this.viewModel.status ?? AuctionSniperApiTypes.SnipeStatus.Active
       );
-    } catch (err) {
+    } catch (err: any) {
+      this.isError = true;
+      this.apiError = this.messageExtractor.extractMessageFromObject(err);
       this.viewModel.showError = true;
       this.viewModel.showSpinner = false;
       this.viewModel.isRefreshing = false;
