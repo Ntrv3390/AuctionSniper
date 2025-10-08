@@ -30,55 +30,51 @@ export class AppComponent implements OnInit {
 
     if (this.platform.is('ios')) {
       // Keyboard open
-      Keyboard.addListener('keyboardWillShow', async () => {
-        if (!this.overlayEnabled) {
-          this.overlayEnabled = true;
-          await StatusBar.setOverlaysWebView({ overlay: true });
-        }
+      // Keyboard.addListener('keyboardWillShow', () => {
+      //   if (!this.overlayEnabled) {
+      //     this.overlayEnabled = true;
+      //     StatusBar.setOverlaysWebView({ overlay: true }).catch(() => {});
+      //   }
+      // });
+
+      // // Keyboard close
+      // Keyboard.addListener('keyboardWillHide', () => {
+      //   if (this.overlayEnabled) {
+      //     this.overlayEnabled = false;
+      //     setTimeout(() => {
+      //       StatusBar.setOverlaysWebView({ overlay: false }).catch(() => {});
+      //     }, 400);
+      //   }
+      // });
+
+      // App resume
+      App.addListener('resume', () => {
+        this.overlayEnabled = false;
+        StatusBar.setOverlaysWebView({ overlay: true }).catch(() => {});
+        setTimeout(() => {
+          StatusBar.setOverlaysWebView({ overlay: false }).catch(() => {});
+        }, 400);
       });
 
-      // Keyboard close
-      Keyboard.addListener('keyboardWillHide', async () => {
-        if (this.overlayEnabled) {
-          this.overlayEnabled = false;
-          // await StatusBar.setOverlaysWebView({ overlay: true });
-          // setTimeout(async () => {
-          //   await StatusBar.setOverlaysWebView({ overlay: false });
-          // }, 800);
-          await StatusBar.setOverlaysWebView({ overlay: false });
-        }
-      });
-
-      document.addEventListener('focusin', async (event) => {
-        // Only apply for text-like inputs
+      // Input focus handling (extra stability)
+      document.addEventListener('focusin', (event) => {
         const tag = (event.target as HTMLElement)?.tagName?.toLowerCase();
         if (tag === 'input' || tag === 'textarea') {
           if (!this.overlayEnabled) {
             this.overlayEnabled = true;
-            await StatusBar.setOverlaysWebView({ overlay: true });
+            StatusBar.setOverlaysWebView({ overlay: true }).catch(() => {});
           }
         }
       });
 
-      document.addEventListener('focusout', async (event) => {
+      document.addEventListener('focusout', (event) => {
         const tag = (event.target as HTMLElement)?.tagName?.toLowerCase();
         if (tag === 'input' || tag === 'textarea') {
           this.overlayEnabled = false;
-          // await StatusBar.setOverlaysWebView({ overlay: true });
-          // setTimeout(async () => {
-          //   await StatusBar.setOverlaysWebView({ overlay: false });
-          // }, 800);
-          await StatusBar.setOverlaysWebView({ overlay: false });
+          setTimeout(() => {
+            StatusBar.setOverlaysWebView({ overlay: false }).catch(() => {});
+          }, 400);
         }
-      });
-
-      // App resume
-      App.addListener('resume', async () => {
-        this.overlayEnabled = false;
-        await StatusBar.setOverlaysWebView({ overlay: true });
-        setTimeout(async () => {
-          await StatusBar.setOverlaysWebView({ overlay: false });
-        }, 800);
       });
     }
   }

@@ -9,7 +9,7 @@ import { ApiErrorTestService } from './ApiErrorTestService';
   template: `
     <ion-header>
       <ion-toolbar>
-        <ion-title mode="md">Error Handler Test</ion-title>
+        <ion-title>Error Handler Test</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
