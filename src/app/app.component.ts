@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
       Keyboard.addListener('keyboardWillShow', async () => {
         if (!this.overlayEnabled) {
           this.overlayEnabled = true;
-          //await StatusBar.setOverlaysWebView({ overlay: true });
+          await StatusBar.setOverlaysWebView({ overlay: true });
         }
       });
 
@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
       Keyboard.addListener('keyboardWillHide', async () => {
         if (this.overlayEnabled) {
           this.overlayEnabled = false;
-          await StatusBar.setOverlaysWebView({ overlay: true });
+          // await StatusBar.setOverlaysWebView({ overlay: true });
           setTimeout(async () => {
             await StatusBar.setOverlaysWebView({ overlay: false });
           }, 800);
