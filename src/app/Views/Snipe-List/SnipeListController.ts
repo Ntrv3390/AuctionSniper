@@ -316,8 +316,9 @@ export class SnipeListPage implements OnInit {
         this.viewModel.status ?? AuctionSniperApiTypes.SnipeStatus.Active
       );
     } catch (err: any) {
-      this.isError = true;
-      this.apiError = this.messageExtractor.extractMessageFromObject(err);
+      this.isError = err.message.Level == 'Error' ? true : false;
+      // this.apiError = this.messageExtractor.extractMessageFromObject(err);
+      this.apiError = this.isError ? err.message.MessageContent : '';
       this.viewModel.showError = true;
       this.viewModel.showSpinner = false;
       this.viewModel.isRefreshing = false;
