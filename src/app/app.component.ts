@@ -31,23 +31,21 @@ export class AppComponent implements OnInit {
     if (this.platform.is('ios')) {
       // Keyboard open
       Keyboard.addListener('keyboardWillShow', async () => {
-        // if (!this.overlayEnabled) {
-        //   this.overlayEnabled = true;
-        //   //await StatusBar.setOverlaysWebView({ overlay: true });
-        // }
-        await StatusBar.hide();
+        if (!this.overlayEnabled) {
+          this.overlayEnabled = true;
+          //await StatusBar.setOverlaysWebView({ overlay: true });
+        }
       });
 
       // Keyboard close
       Keyboard.addListener('keyboardWillHide', async () => {
-        // if (this.overlayEnabled) {
-        //   this.overlayEnabled = false;
-        //   await StatusBar.setOverlaysWebView({ overlay: true });
-        //   setTimeout(async () => {
-        //     await StatusBar.setOverlaysWebView({ overlay: false });
-        //   }, 800);
-        // }
-        await StatusBar.show();
+        if (this.overlayEnabled) {
+          this.overlayEnabled = false;
+          await StatusBar.setOverlaysWebView({ overlay: true });
+          setTimeout(async () => {
+            await StatusBar.setOverlaysWebView({ overlay: false });
+          }, 800);
+        }
       });
 
       // App resume
