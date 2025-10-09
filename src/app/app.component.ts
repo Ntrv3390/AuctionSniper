@@ -92,3 +92,13 @@ export class AppComponent implements OnInit {
     }
   }
 }
+
+// // all apis error format
+// {
+//   you'll get message in that level and messageccontnet
+
+//   "message": {
+//     "Level": "Error",
+//     "MessageContent": "blah blah"
+//   }
+// }
