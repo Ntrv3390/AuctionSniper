@@ -199,27 +199,25 @@ export class SnipeListPage implements OnInit {
   }
 
   protected filterBar_click(status: any) {
-    const statusNum = parseInt(status, 10);
-    if (this.viewModel.isRefreshing || this.viewModel.showError) {
-      return;
-    }
-    let trackingLabel: string | null = null;
-    switch (statusNum) {
-      case AuctionSniperApiTypes.SnipeStatus.Active:
-        trackingLabel = TrackerConstants.Snipe.FilterLabel.Active;
-        break;
-      case AuctionSniperApiTypes.SnipeStatus.Won:
-        trackingLabel = TrackerConstants.Snipe.FilterLabel.Won;
-        break;
-      case AuctionSniperApiTypes.SnipeStatus.Lost:
-        trackingLabel = TrackerConstants.Snipe.FilterLabel.Lost;
-        break;
-    }
-    if (trackingLabel) {
-      this.tracker.track(TrackerConstants.Snipe.Filter, trackingLabel);
-    }
-    this.viewModel.status = statusNum;
-    this.viewModel.showSpinner = true;
+    const statusNum = Number(status);
+    const { viewModel, tracker } = this;
+
+    if (viewModel.isRefreshing || viewModel.showError) return;
+
+    const statusLabelMap: Record<number, string> = {
+      [AuctionSniperApiTypes.SnipeStatus.Active]:
+        TrackerConstants.Snipe.FilterLabel.Active,
+      [AuctionSniperApiTypes.SnipeStatus.Won]:
+        TrackerConstants.Snipe.FilterLabel.Won,
+      [AuctionSniperApiTypes.SnipeStatus.Lost]:
+        TrackerConstants.Snipe.FilterLabel.Lost,
+    };
+
+    const trackingLabel = statusLabelMap[statusNum];
+    if (trackingLabel)
+      tracker.track(TrackerConstants.Snipe.Filter, trackingLabel);
+
+    Object.assign(viewModel, { status: statusNum, showSpinner: true });
     this.refresh(true);
   }
 

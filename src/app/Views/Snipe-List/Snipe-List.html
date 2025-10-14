@@ -50,6 +50,7 @@
   <!-- Filter Bar -->
   <ion-toolbar class="filter-toolbar">
     <ion-segment
+      [disabled]="viewModel.isRefreshing"
       [value]="(viewModel.status || 0).toString()"
       (ionChange)="filterBar_click($event.detail.value)"
     >

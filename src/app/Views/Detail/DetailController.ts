@@ -41,6 +41,8 @@ import {
   closeCircleOutline,
   timeOutline,
   refreshOutline,
+  cloudOfflineOutline,
+  openOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -86,6 +88,8 @@ export class DetailController implements OnInit {
       'close-circle-outline': closeCircleOutline,
       'time-outline': timeOutline,
       'refresh-outline': refreshOutline,
+      'cloud-offline-outline': cloudOfflineOutline,
+      'open-outline': openOutline,
     });
   }
 

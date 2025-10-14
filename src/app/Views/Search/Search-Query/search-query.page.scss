@@ -397,6 +397,12 @@ ion-toolbar {
     var(--safe-area-inset-right, var(--safe-area-inset-right-fallback));
 }
 
+.no-results-content ion-button {
+  --border-color: #145583;
+  --color: #145583;
+  --background: transparent;
+}
+
 .sort-row ion-button {
   --border-radius: 20px;
   height: 36px;
