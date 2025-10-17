@@ -33,6 +33,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import { ActionSheetController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { SnipeCacheService } from 'src/app/services/SnipeCacheService';
 
 // Services
 import { Logger } from 'src/app/services/Logger';
@@ -109,7 +110,8 @@ export class SnipeListPage implements OnInit {
     private popoverCtrl: PopoverController,
     private actionSheetCtrl: ActionSheetController,
     private router: Router,
-    private messageExtractor: ApiMessageExtractorService
+    private messageExtractor: ApiMessageExtractorService,
+    private cacheService: SnipeCacheService
   ) {}
 
   apiError: string | null = '';
@@ -218,7 +220,10 @@ export class SnipeListPage implements OnInit {
       tracker.track(TrackerConstants.Snipe.Filter, trackingLabel);
 
     Object.assign(viewModel, { status: statusNum, showSpinner: true });
-    this.refresh(true);
+
+    // 🔹 Try cache first when switching filters
+    const hasCache = !!this.cacheService.getCachedSnipes(statusNum);
+    this.refresh(!hasCache); // only force API if cache missing
   }
 
   protected retry_click(): void {
@@ -226,8 +231,10 @@ export class SnipeListPage implements OnInit {
     this.refresh(true);
   }
 
-  protected refresher_refresh(event: any): void {
-    this.refresh(true);
+  protected async refresher_refresh(event: any): Promise<void> {
+    this.viewModel.showSpinner = true;
+    await this.refresh(true);
+    this.viewModel.showSpinner = false;
     if (event && event.target) {
       event.target.complete();
     }
@@ -273,34 +280,44 @@ export class SnipeListPage implements OnInit {
   }
 
   private async refresh(forceRefresh: boolean = false): Promise<void> {
+    const status =
+      this.viewModel.status ?? AuctionSniperApiTypes.SnipeStatus.Active;
     this.viewModel.isRefreshing = true;
     this.viewModel.showError = false;
     this.countDownUtilities.clearCountDown();
 
-    const cacheBehavior = forceRefresh
-      ? CacheBehavior.InvalidateCache
-      : CacheBehavior.Default;
-
     try {
-      const snipes = await this.dataSource.retrieveSnipes(
-        this.viewModel.status ?? AuctionSniperApiTypes.SnipeStatus.Active,
-        cacheBehavior
-      );
+      let snipes: AuctionSniperApiTypes.Snipe[] | null = null;
 
+      // 🔹 Try using cache if not forced
+      if (!forceRefresh) {
+        snipes = this.cacheService.getCachedSnipes(status);
+      }
+
+      // 🔹 If no valid cache, call API
+      if (!snipes) {
+        const cacheBehavior = forceRefresh
+          ? CacheBehavior.InvalidateCache
+          : CacheBehavior.Default;
+
+        snipes = await this.dataSource.retrieveSnipes(status, cacheBehavior);
+
+        // Store fresh data in cache
+        this.cacheService.setCachedSnipes(status, snipes);
+      }
+
+      // Update viewModel
+      this.viewModel.snipes = snipes || [];
       this.viewModel.showSpinner = false;
       this.viewModel.isRefreshing = false;
 
       if (!snipes || snipes.length === 0) {
-        this.viewModel.snipes = [];
-        // Initialize countdown even when there are no snipes
-        this.initializeCountDown(
-          this.viewModel.status ?? AuctionSniperApiTypes.SnipeStatus.Active
-        );
+        this.initializeCountDown(status);
         return;
       }
 
       const sortDirection =
-        this.viewModel.status === AuctionSniperApiTypes.SnipeStatus.Active
+        status === AuctionSniperApiTypes.SnipeStatus.Active
           ? this.viewModel.sortByEndingSoonest
             ? SortDirection.Ascending
             : SortDirection.Descending
@@ -310,13 +327,10 @@ export class SnipeListPage implements OnInit {
         snipes,
         sortDirection
       );
-      this.initializeCountDown(
-        this.viewModel.status ?? AuctionSniperApiTypes.SnipeStatus.Active
-      );
+      this.initializeCountDown(status);
     } catch (err: any) {
-      this.isError = err.message.Level == 'Error' ? true : false;
-      // this.apiError = this.messageExtractor.extractMessageFromObject(err);
-      this.apiError = this.isError ? err.message.MessageContent : '';
+      this.isError = err.message?.Level === 'Error';
+      this.apiError = this.isError ? err.message?.MessageContent : '';
       this.viewModel.showError = true;
       this.viewModel.showSpinner = false;
       this.viewModel.isRefreshing = false;

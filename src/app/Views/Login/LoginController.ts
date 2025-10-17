@@ -48,6 +48,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
 import { DataSourceService } from 'src/app/services/DataSource';
 import { eyeOutline } from 'ionicons/icons';
 import { eyeOffOutline } from 'ionicons/icons';
+import { SnipeCacheService } from 'src/app/services/SnipeCacheService';
 
 @Component({
   selector: 'app-login',
@@ -105,7 +106,8 @@ export class LoginPage implements OnInit {
     private api: AuctionSniperApiService,
     private errorHandler: ApiErrorHandlerService,
     private toastCtrl: ToastController,
-    private dataSource: DataSourceService
+    private dataSource: DataSourceService,
+    private cacheService: SnipeCacheService
   ) {
     addIcons({
       'eye-outline': eyeOutline,
@@ -114,6 +116,7 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cacheService.clearCache();
     this.setupForm();
     this.versionDisplay = `${this.configuration.values.AppVersion}`;
     this.showDebugOptions =
