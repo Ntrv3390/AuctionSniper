@@ -79,9 +79,8 @@ export class AuctionSniperApiService {
     private platform: Platform,
     private nativeHttp: NativeHttpService,
     private preferences: PreferencesService,
-    private messageExtractor: ApiMessageExtractorService
-  ) // private dataSource: DataSourceService
-  {
+    private messageExtractor: ApiMessageExtractorService // private dataSource: DataSourceService
+  ) {
     // Initialize baseUrl based on platform
     this.baseUrl = this.getApiUrl('/Account');
   }
@@ -867,6 +866,8 @@ export class AuctionSniperApiService {
   ): Observable<AuctionSniperApiTypes.SearchItemInfoResult> {
     const url = this.getApiUrl('/Search/ItemInfo');
     const params = { Id: id };
+    alert(url);
+    alert(params.Id);
     const headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json',

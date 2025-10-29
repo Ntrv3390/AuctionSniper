@@ -169,7 +169,8 @@ export class LoginPage implements OnInit {
 
   onForgotPassword(): void {
     // const forgotUrl = `${this.configuration.webSiteUrl}/resetpassword.aspx`;
-    const forgotUrl = `http://rtwebservice.paperbirdtech.com/resetpassword.aspx`;
+    // const forgotUrl = `http://rtwebservice.paperbirdtech.com/resetpassword.aspx`;
+    const forgotUrl = `http://main1.auctionsniper.com/resetpassword.aspx`;
     window.open(forgotUrl, '_system');
   }
 

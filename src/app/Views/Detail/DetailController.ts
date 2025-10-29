@@ -341,6 +341,9 @@ export class DetailController implements OnInit {
     this.router.navigate([`/snipe/edit/${snipe.Id}`]);
   }
 
+  isError = false;
+  apiError = '';
+
   // Refresh all view model/auction details
   async refresh(): Promise<void> {
     this.viewModel.showError = false;
@@ -349,6 +352,8 @@ export class DetailController implements OnInit {
     const itemNumber = this.route.snapshot.paramMap.get('id');
     if (!itemNumber) {
       this.viewModel.showError = true;
+      this.apiError = 'lol';
+      this.isError = true;
       this.viewModel.showSpinner = false;
       this.logger.error('DetailController', 'refresh', 'No ID provided.');
       this.errorHandler.handleError(
@@ -361,44 +366,108 @@ export class DetailController implements OnInit {
       return;
     }
 
+    let watches: AuctionSniperApiTypes.Watch[] = [];
+    let activeSnipes: AuctionSniperApiTypes.Snipe[] = [];
+    let itemInfoResult: any;
+
     try {
-      const watches = await this.dataSource.retrieveWatches(); // if this is a Promise
+      watches = await this.dataSource.retrieveWatches();
       const watch = watches?.find(
         (w: AuctionSniperApiTypes.Watch) => w.itemnumber === itemNumber
       );
       this.viewModel.itemIsWatched = !!watch;
-      const activeSnipes = await this.dataSource.retrieveSnipes(
+    } catch (err: any) {
+      this.isError = true;
+      this.apiError = this.isError ? err.message?.MessageContent : 'watch';
+      this.logger.error('DetailController', 'retrieveWatches', err);
+      this.viewModel.showError = true;
+      this.viewModel.showSpinner = false;
+      this.errorHandler.handleError(
+        new Error('Failed to retrieve watches.'),
+        'Item Details',
+        true,
+        false,
+        true
+      );
+      return;
+    }
+
+    try {
+      activeSnipes = await this.dataSource.retrieveSnipes(
         AuctionSniperApiTypes.SnipeStatus.Active
       );
       const snipe = activeSnipes?.find(
         (s: AuctionSniperApiTypes.Snipe) => s.Item === itemNumber
       );
       this.viewModel.itemHasActiveSnipe = !!snipe;
+    } catch (err: any) {
+      this.isError = true;
+      this.apiError = this.isError ? err.message?.MessageContent : 'active';
+      this.logger.error('DetailController', 'retrieveSnipes', err);
+      this.viewModel.showError = true;
+      this.viewModel.showSpinner = false;
+      this.errorHandler.handleError(
+        new Error('Failed to retrieve active snipes.'),
+        'Item Details',
+        true,
+        false,
+        true
+      );
+      return;
+    }
 
-      const itemInfoResult = await firstValueFrom(
+    try {
+      itemInfoResult = await firstValueFrom(
         this.auctionSniperApi.getItemInfo(itemNumber, false)
       );
-      this.viewModel.showSpinner = false;
       if (!itemInfoResult?.success) {
         this.viewModel.showError = true;
+        this.apiError = 'lolu';
+      this.isError = true;
+        this.viewModel.showSpinner = false;
+        this.logger.warn(
+          'DetailController',
+          'getItemInfo',
+          'Item info retrieval failed'
+        );
         return;
       }
-
       this.viewModel.item = itemInfoResult.item;
-      var detail = {
-        items: [itemInfoResult.item],
-      };
+    } catch (err: any) {
+      this.isError = true;
+      this.apiError = this.isError ? err.message?.MessageContent : 'item';
+      this.logger.error('DetailController', 'getItemInfo', err);
+      this.viewModel.showError = true;
+      this.viewModel.showSpinner = false;
+      this.errorHandler.handleError(
+        new Error('Failed to retrieve item info.'),
+        'Item Details',
+        true,
+        false,
+        true
+      );
+      return;
+    }
 
+    // 4️⃣ Initialize Countdown
+    try {
+      const detail = { items: [itemInfoResult.item] };
       this.countDownUtilities.initializeCountDown(
         null, // no scrollDelegate
         detail, // dataSource
         'items', // entityName
         'EndTime', // targetField
         'CountDownTime', // displayField
-        this.viewModel // pass current viewModel (or null if unused)
+        this.viewModel
       );
+    } catch (err: any) {
+      this.isError = true;
+      this.apiError = this.isError ? err.message?.MessageContent : 'countdonw';
+      this.logger.error('DetailController', 'initializeCountDown', err);
+    }
 
-      // Optionally show edit dialog if requested
+    // 5️⃣ Optionally Open Edit Snipe Modal
+    try {
       const openEditSnipeModal =
         this.route.snapshot.queryParamMap.get('openEditSnipeModal');
       if (openEditSnipeModal && this.viewModel.itemHasActiveSnipe) {
@@ -410,17 +479,13 @@ export class DetailController implements OnInit {
           'openEditSnipeModal true, but item has no active snipe.'
         );
       }
-    } catch (err) {
-      this.viewModel.showSpinner = false;
-      this.viewModel.showError = true;
-      this.errorHandler.handleError(
-        new Error('Could not refresh details.'),
-        'Item Details',
-        true,
-        false,
-        true
-      );
+    } catch (err: any) {
+      this.isError = true;
+      this.apiError = this.isError ? err.message?.MessageContent : 'open edit';
+      this.logger.error('DetailController', 'showEditSnipeDialog', err);
     }
+
+    this.viewModel.showSpinner = false;
   }
 
   private showEditSnipeDialog(itemNumber: string): void {
