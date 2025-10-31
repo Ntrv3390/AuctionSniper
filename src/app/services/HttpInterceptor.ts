@@ -42,7 +42,7 @@ export class HttpInterceptor implements NgHttpInterceptor {
     }
 
     // Handle direct HTTPS URLs - skip interceptor processing for direct HTTPS URLs
-    const isDirectHttpsUrl = config.url.startsWith('https://services.auctionsniper.com');
+    const isDirectHttpsUrl = config.url.startsWith('https://main.auctionsniper.com');
 
     // Add Key header to all requests if we have a token
     let headers = req.headers;
