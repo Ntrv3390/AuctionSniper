@@ -1,6 +1,6 @@
 {
   "/*": {
-    "target": "https://main.auctionsniper.com",
+    "target": "http://services.main1.auctionsniper.com",
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"

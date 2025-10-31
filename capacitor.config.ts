@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   appName: 'Auction Sniper',
   webDir: 'www',
   server: {
-    allowNavigation: ['https://main.auctionsniper.com'],
+    allowNavigation: ['http://services.main1.auctionsniper.com'],
   },
   ios: {
     contentInset: 'always',

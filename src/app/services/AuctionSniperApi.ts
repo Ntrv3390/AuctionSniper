@@ -88,7 +88,8 @@ export class AuctionSniperApiService {
   private getApiUrl(endpoint: string): string {
     // ALWAYS use HTTPS for all platforms to ensure secure communication
     // Note: /api is NOT needed in the URL as the server handles this internally
-    const url = `https://main.auctionsniper.com${endpoint}`;
+    const url = `http://services.main1.auctionsniper.com
+${endpoint}`;
     return url;
   }
 
