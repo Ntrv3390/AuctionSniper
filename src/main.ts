@@ -35,7 +35,7 @@ const defaultBuildVars: BuildVars = {
     AuthorName: 'AuctionSniper.com',
     AuthorEmail: 'support@auctionsniper.com',
     AuthorWebsite: 'https://auctionsniper.com',
-    ApiUrl: 'http://services.main1.auctionsniper.com',
+    ApiUrl: 'https://services.auctionsniper.com',
     WebSiteUrl: 'https://auctionsniper.com',
     TermsOfServiceUrl: 'https://auctionsniper.com/terms',
     PrivacyPolicyUrl: 'https://auctionsniper.com/privacy',
