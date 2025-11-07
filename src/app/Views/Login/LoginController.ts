@@ -107,7 +107,8 @@ export class LoginPage implements OnInit {
     private errorHandler: ApiErrorHandlerService,
     private toastCtrl: ToastController,
     private dataSource: DataSourceService,
-    private cacheService: SnipeCacheService
+    private cacheService: SnipeCacheService,
+    private toastController: ToastController
   ) {
     addIcons({
       'eye-outline': eyeOutline,
@@ -320,6 +321,19 @@ export class LoginPage implements OnInit {
     });
   }
 
+  private async showToast(
+    message: string,
+    color: 'success' | 'danger' = 'danger'
+  ) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      position: 'bottom',
+      color,
+    });
+    await toast.present();
+  }
+
   onSignIn(): void {
     if (this.form.invalid) {
       this.errorHandler.handleError(
@@ -355,7 +369,8 @@ export class LoginPage implements OnInit {
 
         if (result.success) {
           // Handle successful login and store the Key
-          this.errorHandler.handleSuccess('Welcome back!', 'Login');
+          // this.showToast('Login successful.', 'success');
+          // this.errorHandler.handleSuccess('Welcome back!', 'Login');
           if (result.user?.Key) {
             this.preferences.token = result.user.Key;
             this.preferences.userUid = result.user.Id;

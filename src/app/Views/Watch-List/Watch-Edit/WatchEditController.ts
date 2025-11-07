@@ -21,7 +21,8 @@ import {
   IonCard,
   IonCardContent,
   IonToggle,
-  IonSpinner
+  IonSpinner,
+  IonBackButton
 } from '@ionic/angular/standalone';
 import { PluginsService } from 'src/app/services/Plugins';
 import { UIService } from 'src/app/services/UI';
@@ -32,6 +33,10 @@ import { TrackerConstants } from 'src/app/constants/tracker.constants';
 import { AuctionSniperApiTypes } from 'src/app/Interfaces/auction-sniper-api-types.interface';
 import { firstValueFrom } from 'rxjs';
 import { Location } from '@angular/common';
+import { Keyboard } from '@capacitor/keyboard';
+import { addIcons } from 'ionicons';
+import { checkmarkCircleOutline } from 'ionicons/icons';
+import { NavController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-watch-edit',
@@ -59,7 +64,8 @@ import { Location } from '@angular/common';
     IonCard,
     IonCardContent,
     IonToggle,
-    IonSpinner
+    IonSpinner,
+    IonBackButton
   ]
 })
 export class WatchEditController implements OnInit {
@@ -86,8 +92,13 @@ export class WatchEditController implements OnInit {
     private auctionSniperApi: AuctionSniperApiService,
     private dataSource: DataSourceService,
     private tracker: TrackerService,
-    private location: Location
-  ) {}
+    private location: Location,
+    private navCtrl: NavController
+  ) {
+    addIcons({
+          'checkmark-circle-outline': checkmarkCircleOutline,
+        });
+  }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -146,7 +157,8 @@ export class WatchEditController implements OnInit {
   }
 
   async saveWatch() {
-    await this.plugins.keyboard.hide();
+    // await this.plugins.keyboard.hide();
+    await Keyboard.hide()
     
     if (!this.validateForm()) {
       return;
@@ -255,7 +267,7 @@ export class WatchEditController implements OnInit {
   }
 
   cancel() {
-    this.location.back();
+    this.navCtrl.back();
   }
 
   async deleteWatch() {

@@ -97,7 +97,6 @@ export class AddWatchComponent implements OnInit {
   }
 
   protected async addWatch_click(): Promise<void> {
-    await Keyboard.hide();
   
     if (!this.viewModel.itemnumber) {
       this.UI.showInfoSnackbar('An e-bay item number is required.');

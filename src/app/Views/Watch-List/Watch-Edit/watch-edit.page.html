@@ -1,42 +1,25 @@
 <ion-header>
   <ion-toolbar class="custom-header">
     <ion-buttons slot="start">
-      <ion-button (click)="cancel()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#fff"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </ion-button>
+      <ion-back-button color="light" defaultHref="/"></ion-back-button>
     </ion-buttons>
+
     <ion-title mode="md">
       {{ viewModel.isEditMode ? 'Edit Watch' : 'Add Watch' }}
     </ion-title>
+
     <ion-buttons slot="end">
-      <ion-button (click)="saveWatch()" [disabled]="viewModel.isLoading">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 512 512"
-          width="24"
-          height="24"
-        >
-          <path
-            fill="none"
-            stroke="#fff"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="48"
-            d="M416 128L192 384l-96-96"
-          />
-        </svg>
+      <ion-button
+        color="light"
+        *ngIf="!viewModel.showError && !viewModel.isLoading"
+        (click)="saveWatch()">
+        Save
+      </ion-button>
+      <ion-button
+        *ngIf="viewModel.isLoading"
+        color="light"
+        disabled>
+        Saving
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -52,18 +35,13 @@
 
   <div class="content-container">
     <!-- Item Info Card (for edit mode) -->
-    <ion-card
-      class="item-info-card"
-      *ngIf="viewModel.isEditMode && viewModel.watch.title"
-    >
+    <ion-card class="item-info-card" *ngIf="viewModel.isEditMode && viewModel.watch.title">
       <ion-card-content>
         <div class="item-header">
-          <ion-icon name="pricetag-outline" color="primary"></ion-icon>
           <h2>{{ viewModel.watch.title }}</h2>
         </div>
         <div class="item-details">
           <p class="item-number">
-            <ion-icon name="barcode-outline"></ion-icon>
             Item #{{ viewModel.watch.itemnumber }}
           </p>
         </div>
@@ -76,50 +54,32 @@
         <!-- Item Number (Read-only in edit mode) -->
         <ion-item>
           <ion-label position="stacked">Item Number</ion-label>
-          <ion-input
-            type="text"
-            placeholder="Enter eBay item number"
-            [(ngModel)]="viewModel.watch.itemnumber"
-            [disabled]="viewModel.isEditMode"
-            required
-          >
+          <ion-input type="text" placeholder="Enter eBay item number" [(ngModel)]="viewModel.watch.itemnumber"
+            [disabled]="viewModel.isEditMode" required>
           </ion-input>
         </ion-item>
 
         <!-- Quantity -->
         <ion-item>
           <ion-label position="stacked">Maximum Quantity</ion-label>
-          <ion-input
-            type="number"
-            placeholder="Enter maximum quantity"
-            [(ngModel)]="viewModel.watch.watchQuantity"
-            min="1"
-            required
-          >
+          <ion-input type="number" placeholder="Enter maximum quantity" [(ngModel)]="viewModel.watch.watchQuantity"
+            min="1" required>
           </ion-input>
         </ion-item>
 
         <!-- Max Offer -->
         <ion-item>
           <ion-label position="stacked">Maximum Offer ($)</ion-label>
-          <ion-input
-            type="number"
-            placeholder="Optional maximum offer amount"
-            [(ngModel)]="viewModel.watch.watchPrice"
-            min="0"
-            step="0.01"
-          >
+          <ion-input type="number" placeholder="Optional maximum offer amount" [(ngModel)]="viewModel.watch.watchPrice"
+            min="0" step="0.01">
           </ion-input>
         </ion-item>
 
         <!-- Comment -->
         <ion-item>
           <ion-label position="stacked">Comment</ion-label>
-          <ion-textarea
-            placeholder="Add a comment about this watch (optional)"
-            [(ngModel)]="viewModel.watch.comment"
-            rows="3"
-          >
+          <ion-textarea placeholder="Add a comment about this watch (optional)" [(ngModel)]="viewModel.watch.comment"
+            rows="3">
           </ion-textarea>
         </ion-item>
 
@@ -135,37 +95,21 @@
       <ion-grid class="action-buttons">
         <ion-row>
           <ion-col size="12">
-            <ion-button
-              class="add-update-watch"
-              expand="block"
-              (click)="saveWatch()"
-              [disabled]="viewModel.isLoading"
-            >
-              <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+            <ion-button class="add-update-watch" expand="block" (click)="saveWatch()" [disabled]="viewModel.isLoading">
+           
               {{ viewModel.isEditMode ? 'Update Watch' : 'Add Watch' }}
             </ion-button>
           </ion-col>
 
           <ion-col size="12" *ngIf="viewModel.isEditMode">
-            <ion-button
-              expand="block"
-              color="danger"
-              fill="outline"
-              (click)="deleteWatch()"
-              [disabled]="viewModel.isLoading"
-            >
-              <ion-icon name="trash-outline" slot="start"></ion-icon>
+            <ion-button expand="block" color="danger" fill="outline" (click)="deleteWatch()"
+              [disabled]="viewModel.isLoading">
               Delete Watch
             </ion-button>
           </ion-col>
 
           <ion-col size="12">
-            <ion-button
-              class="cancel-btn"
-              expand="block"
-              fill="outline"
-              (click)="cancel()"
-            >
+            <ion-button class="cancel-btn" expand="block" fill="outline" (click)="cancel()">
               Cancel
             </ion-button>
           </ion-col>

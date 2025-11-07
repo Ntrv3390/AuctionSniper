@@ -190,7 +190,6 @@ export class EditSnipeController implements OnInit {
   }
 
   cancel_click(): void {
-    // Navigate back instead of closing modal
     this.location.back();
   }
 
@@ -201,8 +200,6 @@ export class EditSnipeController implements OnInit {
   }
 
   async addSnipe_click(): Promise<void> {
-    // Hide keyboard
-    await Keyboard.hide();
 
     if (!(await this.isValidSnipe())) {
       await this.presentToast('Snipe is not valid!', 'danger');
@@ -259,7 +256,6 @@ export class EditSnipeController implements OnInit {
     updateParams: AuctionSniperApiTypes.CreateSnipeParameters
   ) {
     // Hide keyboard
-    await Keyboard.hide();
     if (!(await this.isValidSnipe())) return;
     const result = await firstValueFrom(
       this.auctionSniperApi.updateSnipe(updateParams)

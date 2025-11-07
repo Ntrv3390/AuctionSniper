@@ -366,8 +366,15 @@ export class DetailController implements OnInit {
       return;
     }
 
+    // 🟢 Read snipeStatus from query params
+    const snipeStatusParam = this.route.snapshot.queryParamMap.get('snipeStatus');
+    const snipeStatus =
+      snipeStatusParam !== null
+        ? Number(snipeStatusParam)
+        : AuctionSniperApiTypes.SnipeStatus.Active; // fallback if not provided
+
     let watches: AuctionSniperApiTypes.Watch[] = [];
-    let activeSnipes: AuctionSniperApiTypes.Snipe[] = [];
+    let snipes: AuctionSniperApiTypes.Snipe[] = [];
     let itemInfoResult: any;
 
     try {
@@ -376,6 +383,7 @@ export class DetailController implements OnInit {
         (w: AuctionSniperApiTypes.Watch) => w.itemnumber === itemNumber
       );
       this.viewModel.itemIsWatched = !!watch;
+
     } catch (err: any) {
       this.isError = true;
       this.apiError = this.isError ? err.message?.MessageContent : 'watch';
@@ -392,14 +400,14 @@ export class DetailController implements OnInit {
       return;
     }
 
+    // 🟢 Use dynamic status from query param instead of static Active
     try {
-      activeSnipes = await this.dataSource.retrieveSnipes(
-        AuctionSniperApiTypes.SnipeStatus.Active
-      );
-      const snipe = activeSnipes?.find(
+      snipes = await this.dataSource.retrieveSnipes(snipeStatus);
+      const snipe = snipes?.find(
         (s: AuctionSniperApiTypes.Snipe) => s.Item === itemNumber
       );
       this.viewModel.itemHasActiveSnipe = !!snipe;
+
     } catch (err: any) {
       this.isError = true;
       this.apiError = this.isError ? err.message?.MessageContent : 'active';
@@ -407,7 +415,7 @@ export class DetailController implements OnInit {
       this.viewModel.showError = true;
       this.viewModel.showSpinner = false;
       this.errorHandler.handleError(
-        new Error('Failed to retrieve active snipes.'),
+        new Error('Failed to retrieve snipes.'),
         'Item Details',
         true,
         false,
@@ -415,7 +423,6 @@ export class DetailController implements OnInit {
       );
       return;
     }
-
     try {
       itemInfoResult = await firstValueFrom(
         this.auctionSniperApi.getItemInfo(itemNumber, false)
@@ -423,7 +430,7 @@ export class DetailController implements OnInit {
       if (!itemInfoResult?.success) {
         this.viewModel.showError = true;
         this.apiError = 'lolu';
-      this.isError = true;
+        this.isError = true;
         this.viewModel.showSpinner = false;
         this.logger.warn(
           'DetailController',
@@ -433,6 +440,7 @@ export class DetailController implements OnInit {
         return;
       }
       this.viewModel.item = itemInfoResult.item;
+
     } catch (err: any) {
       this.isError = true;
       this.apiError = this.isError ? err.message?.MessageContent : 'item';
@@ -449,6 +457,7 @@ export class DetailController implements OnInit {
       return;
     }
 
+
     // 4️⃣ Initialize Countdown
     try {
       const detail = { items: [itemInfoResult.item] };
@@ -464,6 +473,7 @@ export class DetailController implements OnInit {
       this.isError = true;
       this.apiError = this.isError ? err.message?.MessageContent : 'countdonw';
       this.logger.error('DetailController', 'initializeCountDown', err);
+
     }
 
     // 5️⃣ Optionally Open Edit Snipe Modal
@@ -483,8 +493,8 @@ export class DetailController implements OnInit {
       this.isError = true;
       this.apiError = this.isError ? err.message?.MessageContent : 'open edit';
       this.logger.error('DetailController', 'showEditSnipeDialog', err);
-    }
 
+    }
     this.viewModel.showSpinner = false;
   }
 
