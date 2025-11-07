@@ -11,6 +11,18 @@ ion-toolbar {
   --min-height: 56px;
 }
 
+:host-context(.ios) {
+  ion-toolbar {
+    --ion-title-text-align: center;
+  }
+
+  ion-title {
+    width: 100%;
+    text-align: center;
+    padding-right: 20%;
+  }
+}
+
 .button-item {
   --padding-start: 0;
   --inner-padding-end: 0;

@@ -22,7 +22,8 @@ import {
   IonCardContent,
   IonToggle,
   IonSpinner,
-  IonBackButton
+  IonBackButton,
+  Platform,
 } from '@ionic/angular/standalone';
 import { PluginsService } from 'src/app/services/Plugins';
 import { UIService } from 'src/app/services/UI';
@@ -37,6 +38,8 @@ import { Keyboard } from '@capacitor/keyboard';
 import { addIcons } from 'ionicons';
 import { checkmarkCircleOutline } from 'ionicons/icons';
 import { NavController } from '@ionic/angular/standalone';
+import { StatusBar } from '@capacitor/status-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-watch-edit',
@@ -65,8 +68,8 @@ import { NavController } from '@ionic/angular/standalone';
     IonCardContent,
     IonToggle,
     IonSpinner,
-    IonBackButton
-  ]
+    IonBackButton,
+  ],
 })
 export class WatchEditController implements OnInit {
   viewModel: any = {
@@ -79,10 +82,10 @@ export class WatchEditController implements OnInit {
       watchPrice: '',
       comment: '',
       folderId: 1,
-      notify: true
+      notify: true,
     },
     isLoading: false,
-    error: null
+    error: null,
   };
 
   constructor(
@@ -93,11 +96,13 @@ export class WatchEditController implements OnInit {
     private dataSource: DataSourceService,
     private tracker: TrackerService,
     private location: Location,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private platform: Platform,
+    private router: Router
   ) {
     addIcons({
-          'checkmark-circle-outline': checkmarkCircleOutline,
-        });
+      'checkmark-circle-outline': checkmarkCircleOutline,
+    });
   }
 
   ngOnInit() {
@@ -114,30 +119,45 @@ export class WatchEditController implements OnInit {
     }
   }
 
+  goBack() {
+    const id = this.viewModel.watch?.itemnumber;
+    if (id) {
+      this.router.navigate(['/watch/detail', id]);
+    } else {
+      this.router.navigate(['/root/watches']);
+    }
+  }
+
   async loadWatch(id: string) {
     this.viewModel.isLoading = true;
     try {
       // Find in existing watches first
-      const watch = this.dataSource.watches?.find(w => w.WID.toString() === id);
+      const watch = this.dataSource.watches?.find(
+        (w) => w.WID.toString() === id
+      );
       if (watch) {
         this.populateWatchData(watch);
       } else {
         // If not found, fetch from API
-        const result = await firstValueFrom(this.auctionSniperApi.getWatchList(false));
+        const result = await firstValueFrom(
+          this.auctionSniperApi.getWatchList(false)
+        );
         if (result.success) {
-          const foundWatch = result.watches?.find(w => w.WID.toString() === id);
+          const foundWatch = result.watches?.find(
+            (w) => w.WID.toString() === id
+          );
           if (foundWatch) {
             this.populateWatchData(foundWatch);
           } else {
             this.ui.showErrorSnackbar('Watch not found');
-            this.location.back();
+            this.goBack();
           }
         }
       }
     } catch (error) {
       console.error('Error loading watch:', error);
       this.ui.showErrorSnackbar('Failed to load watch details');
-      this.location.back();
+      this.goBack();
     } finally {
       this.viewModel.isLoading = false;
     }
@@ -152,20 +172,17 @@ export class WatchEditController implements OnInit {
       watchPrice: watch.watchPrice,
       comment: watch.comment,
       folderId: watch.folderid,
-      notify: true // Default to true since there's no notify property in the Watch interface
+      notify: true, // Default to true since there's no notify property in the Watch interface
     };
   }
 
   async saveWatch() {
-    // await this.plugins.keyboard.hide();
-    await Keyboard.hide()
-    
     if (!this.validateForm()) {
       return;
     }
 
     this.viewModel.isLoading = true;
-    
+
     try {
       if (this.viewModel.isEditMode) {
         // For edit mode, we'll delete the existing watch and create a new one
@@ -176,7 +193,9 @@ export class WatchEditController implements OnInit {
       }
     } catch (error) {
       console.error('Error saving watch:', error);
-      this.ui.showErrorSnackbar(`Failed to ${this.viewModel.isEditMode ? 'update' : 'create'} watch`);
+      this.ui.showErrorSnackbar(
+        `Failed to ${this.viewModel.isEditMode ? 'update' : 'create'} watch`
+      );
     } finally {
       this.viewModel.isLoading = false;
     }
@@ -184,10 +203,12 @@ export class WatchEditController implements OnInit {
 
   private async deleteAndRecreateWatch() {
     this.tracker.track(TrackerConstants.Watch.RemoveWatch);
-    
+
     // First delete the existing watch
-    const deleteResult = await firstValueFrom(this.auctionSniperApi.deleteWatch(this.viewModel.watch.Id));
-    
+    const deleteResult = await firstValueFrom(
+      this.auctionSniperApi.deleteWatch(this.viewModel.watch.Id)
+    );
+
     if (deleteResult.success) {
       // Then create a new watch with updated data
       const createParams: AuctionSniperApiTypes.CreateWatchParameters = {
@@ -195,55 +216,71 @@ export class WatchEditController implements OnInit {
         watchQuantity: this.viewModel.watch.watchQuantity,
         watchPrice: this.viewModel.watch.watchPrice,
         folderId: this.viewModel.watch.folderId,
-        comment: this.viewModel.watch.comment && this.viewModel.watch.comment.trim().length > 0 
-          ? this.viewModel.watch.comment.trim() 
-          : undefined
+        comment:
+          this.viewModel.watch.comment &&
+          this.viewModel.watch.comment.trim().length > 0
+            ? this.viewModel.watch.comment.trim()
+            : undefined,
       };
 
-      const createResult = await firstValueFrom(this.auctionSniperApi.createWatch(createParams));
-      
+      const createResult = await firstValueFrom(
+        this.auctionSniperApi.createWatch(createParams)
+      );
+
       if (createResult.success) {
         this.ui.showSuccessSnackbar('Watch updated successfully!');
         // Update in dataSource if it exists
         if (this.dataSource.watches) {
-          const index = this.dataSource.watches.findIndex(w => w.WID === this.viewModel.watch.Id);
+          const index = this.dataSource.watches.findIndex(
+            (w) => w.WID === this.viewModel.watch.Id
+          );
           if (index !== -1) {
             this.dataSource.watches.splice(index, 1);
           }
           this.dataSource.watches.push(createResult.watches[0]);
         }
-        this.location.back();
+        this.goBack();
       } else {
-        this.ui.showErrorSnackbar('Failed to update watch: ' + (createResult.message || 'Unknown error'));
+        this.ui.showErrorSnackbar(
+          'Failed to update watch: ' + (createResult.message || 'Unknown error')
+        );
       }
     } else {
-      this.ui.showErrorSnackbar('Failed to update watch: ' + (deleteResult.message || 'Unknown error'));
+      this.ui.showErrorSnackbar(
+        'Failed to update watch: ' + (deleteResult.message || 'Unknown error')
+      );
     }
   }
 
   private async createWatch() {
     this.tracker.track(TrackerConstants.Watch.AddWatch);
-    
+
     const params: AuctionSniperApiTypes.CreateWatchParameters = {
       itemNumber: this.viewModel.watch.itemnumber,
       watchQuantity: this.viewModel.watch.watchQuantity,
       watchPrice: this.viewModel.watch.watchPrice,
       folderId: this.viewModel.watch.folderId,
-      comment: this.viewModel.watch.comment && this.viewModel.watch.comment.trim().length > 0 
-        ? this.viewModel.watch.comment.trim() 
-        : undefined
+      comment:
+        this.viewModel.watch.comment &&
+        this.viewModel.watch.comment.trim().length > 0
+          ? this.viewModel.watch.comment.trim()
+          : undefined,
     };
 
-    const result = await firstValueFrom(this.auctionSniperApi.createWatch(params));
-    
+    const result = await firstValueFrom(
+      this.auctionSniperApi.createWatch(params)
+    );
+
     if (result.success) {
       this.ui.showSuccessSnackbar('Watch added successfully!');
       if (this.dataSource.watches) {
         this.dataSource.watches.push(result.watches[0]);
       }
-      this.location.back();
+      this.goBack();
     } else {
-      this.ui.showErrorSnackbar('Failed to add watch: ' + (result.message || 'Unknown error'));
+      this.ui.showErrorSnackbar(
+        'Failed to add watch: ' + (result.message || 'Unknown error')
+      );
     }
   }
 
@@ -252,47 +289,61 @@ export class WatchEditController implements OnInit {
       this.ui.showInfoSnackbar('Item number is required');
       return false;
     }
-    
-    if (!this.viewModel.watch.watchQuantity || this.viewModel.watch.watchQuantity <= 0) {
+
+    if (
+      !this.viewModel.watch.watchQuantity ||
+      this.viewModel.watch.watchQuantity <= 0
+    ) {
       this.ui.showInfoSnackbar('Quantity must be greater than 0');
       return false;
     }
-    
-    if (this.viewModel.watch.watchPrice && parseFloat(this.viewModel.watch.watchPrice) < 0) {
+
+    if (
+      this.viewModel.watch.watchPrice &&
+      parseFloat(this.viewModel.watch.watchPrice) < 0
+    ) {
       this.ui.showInfoSnackbar('Max offer cannot be negative');
       return false;
     }
-    
+
     return true;
   }
 
-  cancel() {
-    this.navCtrl.back();
+  async cancel() {
+    this.goBack();
   }
 
   async deleteWatch() {
     if (!this.viewModel.isEditMode) return;
-    
-    const confirmed = await this.ui.confirm('Are you sure you want to delete this watch?');
+
+    const confirmed = await this.ui.confirm(
+      'Are you sure you want to delete this watch?'
+    );
     if (!confirmed) return;
-    
+
     this.tracker.track(TrackerConstants.Watch.RemoveWatch);
-    
+
     try {
-      const result = await firstValueFrom(this.auctionSniperApi.deleteWatch(this.viewModel.watch.Id));
-      
+      const result = await firstValueFrom(
+        this.auctionSniperApi.deleteWatch(this.viewModel.watch.Id)
+      );
+
       if (result.success) {
         this.ui.showSuccessSnackbar('Watch deleted successfully!');
         // Remove from dataSource if it exists
         if (this.dataSource.watches) {
-          const index = this.dataSource.watches.findIndex(w => w.WID === this.viewModel.watch.Id);
+          const index = this.dataSource.watches.findIndex(
+            (w) => w.WID === this.viewModel.watch.Id
+          );
           if (index !== -1) {
             this.dataSource.watches.splice(index, 1);
           }
         }
-        this.location.back();
+        this.goBack();
       } else {
-        this.ui.showErrorSnackbar('Failed to delete watch: ' + (result.message || 'Unknown error'));
+        this.ui.showErrorSnackbar(
+          'Failed to delete watch: ' + (result.message || 'Unknown error')
+        );
       }
     } catch (error) {
       console.error('Error deleting watch:', error);

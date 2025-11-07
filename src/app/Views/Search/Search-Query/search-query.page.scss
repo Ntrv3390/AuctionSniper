@@ -1,3 +1,52 @@
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 8px;
+  height: 56px; /* perfect touch-friendly height */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease, transform 0.1s ease;
+
+  .search-icon {
+    color: #777;
+    font-size: 18px;
+    margin-right: 6px;
+  }
+}
+
+.search-input-wrapper:focus-within {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.search-icon {
+  color: #fff;
+  font-size: 18px;
+  margin-right: 3px;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 15px;
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --background: transparent;
+}
+
+.search-button {
+  --background: #75a8ccaa; /* iOS blue */
+  --background-activated: #145583;
+  --border-radius: 8px;
+  height: 32px;
+  padding: 0 14px;
+  margin-left: 8px;
+  font-size: 14px;
+  line-height: 1;
+}
+
 ion-header {
   padding-top: 0 !important;
 }
@@ -36,45 +85,6 @@ ion-toolbar {
 
   .search-form {
     width: 100%;
-  }
-
-  .search-input-wrapper {
-    display: flex;
-    align-items: center;
-    background: #fff;
-    border-radius: 12px;
-    padding: 8px 12px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-  }
-
-  .search-input-wrapper:focus-within {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-  }
-
-  .search-icon {
-    font-size: 20px;
-    color: #666;
-    margin-right: 10px;
-  }
-
-  .search-input {
-    flex: 1;
-    font-size: 16px;
-    padding: 10px 6px;
-    --padding-start: 0;
-    --placeholder-color: #999;
-    color: #333;
-  }
-
-  .search-button {
-    --background: #145583;
-    --border-radius: 8px;
-    font-weight: 600;
-    text-transform: none;
-    padding: 0 20px;
-    margin-left: 8px;
-    height: 40px;
   }
 
   /* Rounded bottom effect */

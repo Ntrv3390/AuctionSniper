@@ -44,10 +44,9 @@ import { TrackerConstants } from 'src/app/constants/tracker.constants';
 import { AuctionSniperApiService } from 'src/app/services/AuctionSniperApi';
 import { TimeZoneList } from 'src/app/models/timezone-list.constant';
 import { ApiErrorHandlerService } from 'src/app/services/ApiErrorHandler';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { DataSourceService } from 'src/app/services/DataSource';
-import { eyeOutline } from 'ionicons/icons';
-import { eyeOffOutline } from 'ionicons/icons';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { SnipeCacheService } from 'src/app/services/SnipeCacheService';
 
 @Component({
@@ -90,6 +89,7 @@ export class LoginPage implements OnInit {
   isLoading = false;
   showPassword = false;
   showConfirmPassword = false;
+  successMessage = ''; // ✅ new field
 
   private _versionClickCount = 0;
   timeZoneList = TimeZoneList;
@@ -105,10 +105,9 @@ export class LoginPage implements OnInit {
     private utilities: Utilities,
     private api: AuctionSniperApiService,
     private errorHandler: ApiErrorHandlerService,
-    private toastCtrl: ToastController,
+    private toastController: ToastController,
     private dataSource: DataSourceService,
-    private cacheService: SnipeCacheService,
-    private toastController: ToastController
+    private cacheService: SnipeCacheService
   ) {
     addIcons({
       'eye-outline': eyeOutline,
@@ -134,7 +133,6 @@ export class LoginPage implements OnInit {
       timeZone: [null],
     });
 
-    // Set initial validators based on sign in mode
     this.toggleAuthMode(true);
   }
 
@@ -149,8 +147,8 @@ export class LoginPage implements OnInit {
   toggleAuthMode(signIn: boolean): void {
     this.isSignIn = signIn;
     this.form.reset();
+    this.successMessage = '';
 
-    // Reset form validators based on mode
     if (this.isSignIn) {
       this.form.get('confirmPassword')?.clearValidators();
       this.form.get('email')?.clearValidators();
@@ -169,18 +167,15 @@ export class LoginPage implements OnInit {
   }
 
   onForgotPassword(): void {
-    // const forgotUrl = `${this.configuration.webSiteUrl}/resetpassword.aspx`;
-    // const forgotUrl = `http://rtwebservice.paperbirdtech.com/resetpassword.aspx`;
     const forgotUrl = `https://main1.auctionsniper.com/resetpassword.aspx`;
     window.open(forgotUrl, '_system');
   }
 
   onCreateAccount(): void {
     if (this.form.invalid) {
+      this.successMessage = '';
       this.errorHandler.handleError(
-        new Error(
-          'Please fill all required fields:\n• Username\n• Password\n• Confirm Password\n• Email Address\n• Time Zone'
-        ),
+        new Error('Please fill all required fields'),
         'Validation Error',
         true,
         false,
@@ -193,24 +188,10 @@ export class LoginPage implements OnInit {
       this.form.value;
 
     if (password !== confirmPassword) {
+      this.successMessage = '';
       this.errorHandler.handleError(
-        new Error(
-          'The passwords you entered do not match.\n\nPlease ensure both password fields contain the same value.'
-        ),
+        new Error('Passwords do not match'),
         'Password Mismatch',
-        true,
-        false,
-        true
-      );
-      return;
-    }
-
-    if (!email || !timeZone) {
-      this.errorHandler.handleError(
-        new Error(
-          'Please complete all required fields:\n• Email Address is required for account recovery\n• Time Zone is required for proper auction timing'
-        ),
-        'Missing Information',
         true,
         false,
         true
@@ -227,36 +208,25 @@ export class LoginPage implements OnInit {
     };
 
     this.tracker.track(TrackerConstants.Account.RegisterAccount);
-
-    // Show loading indicator
     this.isLoading = true;
-    this.errorHandler.showLoading('Creating account');
 
     this.api.register(params).subscribe({
       next: (result) => {
         this.isLoading = false;
-        this.errorHandler.hideLoading();
 
         if (result.success) {
-          this.errorHandler.handleSuccess(
-            'Account created successfully! Signing you in...',
-            'Registration'
-          );
-          this.signInAfterRegister(userId, password);
+          this.successMessage = 'Registration successful!';
+          setTimeout(() => {
+            this.signInAfterRegister(userId, password);
+          }, 2500);
         } else {
-          // Handle API-level failure with dialog
-          this.errorHandler.handleApiResult(
-            result,
-            'Registration',
-            true,
-            false,
-            true
-          );
+          this.successMessage = '';
+          this.errorHandler.handleApiResult(result, 'Registration', true, false, true);
         }
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorHandler.hideLoading();
+        this.successMessage = '';
         this.errorHandler.handleError(error, 'Registration', true, false, true);
       },
     });
@@ -270,76 +240,37 @@ export class LoginPage implements OnInit {
       LaunchLinkInfo: '',
     };
 
-    this.errorHandler.showLoading('Signing you in');
-
     this.api.logon(loginParams).subscribe({
       next: (loginResult) => {
-        this.errorHandler.hideLoading();
-
         if (loginResult.success) {
-          // Store the Key from the login response
-          if (loginResult.user?.Key) {
-            this.preferences.token = loginResult.user.Key;
-            this.preferences.userUid = loginResult.user.Id;
-            this.preferences.userId = loginResult.user.UserName;
-            this.preferences.userEmail = loginResult.user.Email;
-          }
+          this.successMessage = '✅ Registration and auto login successful!';
+          setTimeout(() => {
+            if (loginResult.user?.Key) {
+              this.preferences.token = loginResult.user.Key;
+              this.preferences.userUid = loginResult.user.Id;
+              this.preferences.userId = loginResult.user.UserName;
+              this.preferences.userEmail = loginResult.user.Email;
+              this.navigator.continueAfterSuccessfulLogin(loginResult.user);
+            }
+          }, 2500);
           this.form.reset();
-          this.navigator.continueAfterSuccessfulLogin(loginResult.user, true);
         } else {
-          // Auto-login failed after registration, switch to sign-in mode
-          this.errorHandler.handleError(
-            new Error(
-              'Your account was created successfully! However, the automatic sign-in failed. Please sign in manually using your new credentials.'
-            ),
-            'Account Created',
-            true,
-            false,
-            true
-          );
+          this.successMessage = '';
           this.isSignIn = true;
-          this.form.reset();
         }
       },
-      error: (error) => {
-        this.errorHandler.hideLoading();
-        console.error('Auto-login error after registration:', error);
-
-        // Auto-login failed, switch to sign-in mode
-        this.errorHandler.handleError(
-          new Error(
-            'Your account was created successfully! However, the automatic sign-in failed. Please sign in manually using your new credentials.'
-          ),
-          'Account Created',
-          true,
-          false,
-          true
-        );
+      error: () => {
+        this.successMessage = '';
         this.isSignIn = true;
-        this.form.reset();
       },
     });
-  }
-
-  private async showToast(
-    message: string,
-    color: 'success' | 'danger' = 'danger'
-  ) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 2000,
-      position: 'bottom',
-      color,
-    });
-    await toast.present();
   }
 
   onSignIn(): void {
     if (this.form.invalid) {
+      this.successMessage = '';
       this.errorHandler.handleError(
-        new Error(
-          'Please enter both username and password to sign in.\n\nBoth fields are required for authentication.'
-        ),
+        new Error('Please enter username and password'),
         'Missing Credentials',
         true,
         false,
@@ -350,10 +281,7 @@ export class LoginPage implements OnInit {
 
     const { userId, password } = this.form.value;
     this.tracker.track(TrackerConstants.Account.Login);
-
-    // Show loading indicator
     this.isLoading = true;
-    this.errorHandler.showLoading('Signing in');
 
     const loginParams: AuctionSniperApiTypes.LoginParameters = {
       UserName: userId,
@@ -365,28 +293,26 @@ export class LoginPage implements OnInit {
     this.api.logon(loginParams).subscribe({
       next: (result) => {
         this.isLoading = false;
-        this.errorHandler.hideLoading();
-
         if (result.success) {
-          // Handle successful login and store the Key
-          // this.showToast('Login successful.', 'success');
-          // this.errorHandler.handleSuccess('Welcome back!', 'Login');
-          if (result.user?.Key) {
-            this.preferences.token = result.user.Key;
-            this.preferences.userUid = result.user.Id;
-            this.preferences.userId = result.user.UserName;
-            this.preferences.userEmail = result.user.Email;
-          }
+          this.successMessage = 'Login success!';
+          setTimeout(() => {
+            if (result.user?.Key) {
+              this.preferences.token = result.user.Key;
+              this.preferences.userUid = result.user.Id;
+              this.preferences.userId = result.user.UserName;
+              this.preferences.userEmail = result.user.Email;
+              this.navigator.continueAfterSuccessfulLogin(result.user);
+            }
+          }, 2500);
           this.form.reset();
-          this.navigator.continueAfterSuccessfulLogin(result.user);
         } else {
-          // Handle API-level failure with dialog
+          this.successMessage = '';
           this.errorHandler.handleApiResult(result, 'Login', true, false, true);
         }
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorHandler.hideLoading();
+        this.successMessage = '';
         this.errorHandler.handleError(error, 'Login', true, false, true);
       },
     });
@@ -394,7 +320,6 @@ export class LoginPage implements OnInit {
 
   onVersionClick(): void {
     if (this.configuration.enableDeveloperTools) return;
-
     this._versionClickCount++;
     if (this._versionClickCount > 9) this.showDebugOptions = true;
   }

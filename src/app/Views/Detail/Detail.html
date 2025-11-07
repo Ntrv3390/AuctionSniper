@@ -28,9 +28,8 @@
           color="danger"
           class="error-icon"
         ></ion-icon>
-        <h3>Connection Error</h3>
-        <p>Unexpected error; please try again.</p>
-        <p>{{ isError ? apiError : "no api error" }} -  {{isError}}</p>
+        <h3>{{isError ? "Error Occured" : "Connection Error"}}</h3>
+        <p>{{isError ? apiError : "Unexpected error; please try again."}}</p>
         <ion-button fill="solid" color="primary" (click)="retry_click()">
           <ion-icon name="refresh-outline" slot="start"></ion-icon>
           Try Again

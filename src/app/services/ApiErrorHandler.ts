@@ -281,9 +281,9 @@ export class ApiErrorHandlerService {
    * @param message Success message
    * @param context Optional context for the success
    */
-  handleSuccess(message: string, context?: string): void {
+  handleSuccess(message: string, context?: string, duration=5000): void {
     const title = context ? `${context} Successful` : 'Success';
-    this.ui.showSuccessSnackbar(message, title);
+    this.ui.showSuccessSnackbar(message, title, duration);
   }
 
   /**

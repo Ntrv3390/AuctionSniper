@@ -202,12 +202,12 @@ export class UIService {
     await toast.present();
   }
 
-  async showSuccessSnackbar(message: string, title?: string) {
+  async showSuccessSnackbar(message: string, title?: string, duration=5000) {
     const toast = await this.toastCtrl.create({
       header: title,
       message: message,
       color: 'success',
-      duration: 5000,
+      duration: duration,
       position: 'bottom',
       buttons: [
         {

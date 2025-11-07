@@ -7,18 +7,24 @@ ion-header {
   --padding-top: 0 !important;
 }
 
+:host-context(.ios) {
+  ion-toolbar {
+    --ion-title-text-align: center;
+  }
+
+  ion-title {
+    width: 100%;
+    text-align: center;
+    padding-left: 15%;
+  }
+}
+
 ion-toolbar.custom-header {
   padding-top: var(--ion-safe-area-top, 0);
   min-height: calc(56px + var(--ion-safe-area-top, 0));
 
   display: flex;
   align-items: center; /* Vertically center title + buttons */
-}
-
-ion-title {
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 600;
 }
 
 ion-button {

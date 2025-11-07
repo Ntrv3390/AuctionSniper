@@ -3,6 +3,18 @@
   --color: #fff;
 }
 
+:host-context(.ios) {
+  ion-toolbar {
+    --ion-title-text-align: center;
+  }
+
+  ion-title {
+    width: 100%;
+    text-align: center;
+    padding-left: 15%;
+  }
+}
+
 ion-button {
   --background: #145583;
   --color: #fff;

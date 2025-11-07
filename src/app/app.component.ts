@@ -59,6 +59,14 @@ export class AppComponent implements OnInit {
     }
   }
 
+  async makeUIProper() {
+    if (!this.platform.is('ios')) return;
+    await StatusBar.setOverlaysWebView({ overlay: true });
+    setTimeout(async () => {
+      await StatusBar.setOverlaysWebView({ overlay: false });
+    }, 800);
+  }
+
   async showToast(
     message: string,
     color: 'success' | 'danger' | 'warning' = 'danger'

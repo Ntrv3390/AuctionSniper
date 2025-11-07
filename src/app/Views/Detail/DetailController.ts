@@ -44,6 +44,7 @@ import {
   cloudOfflineOutline,
   openOutline,
 } from 'ionicons/icons';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-detail',
@@ -82,7 +83,8 @@ export class DetailController implements OnInit {
     private countDownUtilities: CountDownUtilitiesService,
     private plugins: PluginsService,
     private platform: PlatformService,
-    private errorHandler: ApiErrorHandlerService
+    private errorHandler: ApiErrorHandlerService,
+    private app: AppComponent
   ) {
     addIcons({
       'close-circle-outline': closeCircleOutline,
@@ -93,7 +95,8 @@ export class DetailController implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.app.makeUIProper();
     this.refresh();
   }
 
@@ -346,6 +349,7 @@ export class DetailController implements OnInit {
 
   // Refresh all view model/auction details
   async refresh(): Promise<void> {
+    const compareError = 'Item cannot be loaded due to an unknown error';
     this.viewModel.showError = false;
     this.viewModel.showSpinner = true;
 
@@ -367,7 +371,8 @@ export class DetailController implements OnInit {
     }
 
     // 🟢 Read snipeStatus from query params
-    const snipeStatusParam = this.route.snapshot.queryParamMap.get('snipeStatus');
+    const snipeStatusParam =
+      this.route.snapshot.queryParamMap.get('snipeStatus');
     const snipeStatus =
       snipeStatusParam !== null
         ? Number(snipeStatusParam)
@@ -383,7 +388,6 @@ export class DetailController implements OnInit {
         (w: AuctionSniperApiTypes.Watch) => w.itemnumber === itemNumber
       );
       this.viewModel.itemIsWatched = !!watch;
-
     } catch (err: any) {
       this.isError = true;
       this.apiError = this.isError ? err.message?.MessageContent : 'watch';
@@ -407,7 +411,6 @@ export class DetailController implements OnInit {
         (s: AuctionSniperApiTypes.Snipe) => s.Item === itemNumber
       );
       this.viewModel.itemHasActiveSnipe = !!snipe;
-
     } catch (err: any) {
       this.isError = true;
       this.apiError = this.isError ? err.message?.MessageContent : 'active';
@@ -429,7 +432,13 @@ export class DetailController implements OnInit {
       );
       if (!itemInfoResult?.success) {
         this.viewModel.showError = true;
-        this.apiError = 'lolu';
+        if (itemInfoResult?.message?.MessageContent == compareError) {
+          this.apiError = "Sorry, we're having trouble loading this item from ebay.";
+        } else {
+          this.apiError =
+            itemInfoResult?.message?.MessageContent ?? 'Item error';
+        }
+
         this.isError = true;
         this.viewModel.showSpinner = false;
         this.logger.warn(
@@ -440,10 +449,14 @@ export class DetailController implements OnInit {
         return;
       }
       this.viewModel.item = itemInfoResult.item;
-
     } catch (err: any) {
       this.isError = true;
-      this.apiError = this.isError ? err.message?.MessageContent : 'item';
+      if (err?.message?.MessageContent == compareError) {
+        this.apiError = "Sorry, we're having trouble loading this item from ebay.";
+      } else {
+        this.apiError = err?.message?.MessageContent ?? 'Item error';
+      }
+
       this.logger.error('DetailController', 'getItemInfo', err);
       this.viewModel.showError = true;
       this.viewModel.showSpinner = false;
@@ -456,7 +469,6 @@ export class DetailController implements OnInit {
       );
       return;
     }
-
 
     // 4️⃣ Initialize Countdown
     try {
@@ -473,7 +485,6 @@ export class DetailController implements OnInit {
       this.isError = true;
       this.apiError = this.isError ? err.message?.MessageContent : 'countdonw';
       this.logger.error('DetailController', 'initializeCountDown', err);
-
     }
 
     // 5️⃣ Optionally Open Edit Snipe Modal
@@ -493,7 +504,6 @@ export class DetailController implements OnInit {
       this.isError = true;
       this.apiError = this.isError ? err.message?.MessageContent : 'open edit';
       this.logger.error('DetailController', 'showEditSnipeDialog', err);
-
     }
     this.viewModel.showSpinner = false;
   }

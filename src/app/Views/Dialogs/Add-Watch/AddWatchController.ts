@@ -2,8 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { Keyboard } from '@capacitor/keyboard';
+import { StatusBar } from '@capacitor/status-bar';
 import {
   IonHeader,
   IonToolbar,
@@ -16,11 +17,10 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonButton
+  IonButton,
 } from '@ionic/angular/standalone';
 import { AuctionSniperApiTypes } from 'src/app/Interfaces/auction-sniper-api-types.interface';
 import { TrackerConstants } from 'src/app/constants/tracker.constants';
-// Services — replace with your actual Angular service implementations
 import { PluginsService } from 'src/app/services/Plugins';
 import { UIService } from 'src/app/services/UI';
 import { AuctionSniperApiService } from 'src/app/services/AuctionSniperApi';
@@ -47,11 +47,10 @@ import { firstValueFrom } from 'rxjs';
     IonGrid,
     IonRow,
     IonCol,
-    IonButton
-  ]
+    IonButton,
+  ],
 })
 export class AddWatchComponent implements OnInit {
-
   @Input() data!: { itemnumber?: string };
 
   viewModel: any = {
@@ -59,7 +58,7 @@ export class AddWatchComponent implements OnInit {
     folderId: '1',
     watchQuantity: '1',
     watchPrice: undefined,
-    comment: ''
+    comment: '',
   };
 
   constructor(
@@ -69,71 +68,70 @@ export class AddWatchComponent implements OnInit {
     private UI: UIService,
     private AuctionSniperApi: AuctionSniperApiService,
     private DataSource: DataSourceService,
-    private Tracker: TrackerService
+    private Tracker: TrackerService,
+    private platform: Platform
   ) {}
 
-  ngOnInit() {
-    // Redirect to the new watch edit page instead of showing the dialog
+  async ngOnInit() {}
+
+  async ionViewDidEnter() {
+    // If data contains item number, navigate after view is ready
     const itemNumber = this.data?.itemnumber || '';
     if (itemNumber) {
-      this.router.navigate(['/watch/add'], { queryParams: { itemNumber: itemNumber } });
-    } else {
-      this.router.navigate(['/watch/add']);
+      await this.modalCtrl.dismiss(); // properly close modal first
+      this.router.navigate(['/watch/add'], {
+        queryParams: { itemNumber },
+      });
     }
-    this.close(false);
   }
-
-  //#region BaseDialogController Overrides
-  protected dialog_shown(): void {
-    this.viewModel.itemnumber = this.data?.itemnumber || '';
-    this.viewModel.folderId = '1';
-    this.viewModel.watchQuantity = '1';
-  }
-  //#endregion
 
   //#region Controller Methods
-  protected cancel_click(): void {
+  cancel_click(): void {
     this.close(false);
   }
 
-  protected async addWatch_click(): Promise<void> {
-  
+  async addWatch_click(): Promise<void> {
     if (!this.viewModel.itemnumber) {
-      this.UI.showInfoSnackbar('An e-bay item number is required.');
+      this.UI.showInfoSnackbar('An eBay item number is required.');
       return;
     }
-  
+
     if (!this.viewModel.watchQuantity) {
       this.UI.showInfoSnackbar('A max offer is required.');
       return;
     }
-  
+
     this.Tracker.track(TrackerConstants.Watch.AddWatch);
-  
+
     const params: AuctionSniperApiTypes.CreateWatchParameters = {
       itemNumber: this.viewModel.itemnumber,
       watchQuantity: parseInt(this.viewModel.watchQuantity, 10),
       watchPrice: this.viewModel.watchPrice,
       folderId: parseInt(this.viewModel.folderId, 10),
-      comment: this.viewModel.comment
+      comment: this.viewModel.comment,
     };
-  
+
     try {
-      const result = await firstValueFrom(this.AuctionSniperApi.createWatch(params));
-  
+      const result = await firstValueFrom(
+        this.AuctionSniperApi.createWatch(params)
+      );
+
       if (result.success) {
         this.UI.showSuccessSnackbar('Watch added!');
         if (this.DataSource.watches) {
           this.DataSource.watches.push(result.watches[0]);
         }
         this.close(true);
+      } else {
+        const msg = result?.message?.MessageContent ?? 'Failed to add watch.';
+        this.UI.showErrorSnackbar(msg);
       }
-    } catch (error) {
-      this.UI.showErrorSnackbar('Failed to add watch.');
+    } catch (error: any) {
+      const msg = error?.message?.MessageContent ?? 'Failed to add watch.';
+      this.UI.showErrorSnackbar(msg);
       console.error(error);
     }
   }
-  
   //#endregion
 
   private close(success: boolean) {

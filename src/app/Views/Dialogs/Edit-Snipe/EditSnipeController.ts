@@ -129,6 +129,17 @@ export class EditSnipeController implements OnInit {
   //   this.viewModel.showAddComment = this.preferences.showAddComment;
   // }
 
+  goBack() {
+    this.route.paramMap.subscribe((paramMap) => {
+      const id = paramMap.get('id');
+      if (id) {
+        this.router.navigate(['/snipe/detail', id]);
+      } else {
+        this.router.navigate(['/root/snipes']);
+      }
+    });
+  }
+
   private dialog_shown(): void {
     this.viewModel.manualEntry = false;
 
@@ -190,7 +201,7 @@ export class EditSnipeController implements OnInit {
   }
 
   cancel_click(): void {
-    this.location.back();
+    this.goBack();;
   }
 
   secondShotHelpIcon_click(): void {
@@ -200,7 +211,6 @@ export class EditSnipeController implements OnInit {
   }
 
   async addSnipe_click(): Promise<void> {
-
     if (!(await this.isValidSnipe())) {
       await this.presentToast('Snipe is not valid!', 'danger');
       return;
@@ -238,7 +248,7 @@ export class EditSnipeController implements OnInit {
       if (result.success) {
         await this.presentToast('Snipe updated!', 'success');
         this.dataSource.activeSnipes?.push(result.snipe);
-        this.location.back();
+        this.goBack();;
       } else {
         if (result.message.Level == -1) {
           await this.presentToast(`${result.message.MessageContent}`, 'danger');
@@ -276,7 +286,7 @@ export class EditSnipeController implements OnInit {
       }
 
       // Navigate back to snipe list after updating
-      this.location.back();
+      this.goBack();;
     }
   }
 
