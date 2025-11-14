@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar class="custom-header">
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" *ngIf="viewModel.tokenIsValid">
       <ion-back-button color="light" defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-title mode="md"> eBay Connection </ion-title>

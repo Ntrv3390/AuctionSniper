@@ -5,6 +5,7 @@ import { PreferencesService } from 'src/app/services/Preferences';
 import { NavController } from '@ionic/angular';
 import { PluginsService } from 'src/app/services/Plugins';
 import { Router } from '@angular/router';
+import { EbayService } from 'src/app/services/Ebay';
 
 @Component({
   selector: 'app-splash',
@@ -18,7 +19,8 @@ export class SplashController implements OnInit {
     private preferences: PreferencesService,
     private navCtrl: NavController,
     private plugins: PluginsService,
-    private router: Router
+    private router: Router,
+    private ebay: EbayService
   ) {
     console.log('SplashController: Constructor called');
   }
@@ -66,6 +68,12 @@ export class SplashController implements OnInit {
         this.preferences.isUserLoggedIn
       );
       if (this.preferences.isUserLoggedIn) {
+        try {
+          await this.ebay.ensureValidEbayToken(true, true);
+        } catch (err) {
+          this.navCtrl.navigateRoot('/ebay-token');
+          return;
+        }
         // User is logged in, go to root page with default tab
         const savedPin = this.preferences.pin;
 

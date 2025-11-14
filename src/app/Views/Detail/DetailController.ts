@@ -433,7 +433,7 @@ export class DetailController implements OnInit {
       if (!itemInfoResult?.success) {
         this.viewModel.showError = true;
         if (itemInfoResult?.message?.MessageContent == compareError) {
-          this.apiError = "Sorry, we're having trouble loading this item from ebay.";
+          this.apiError = "Details for this item are no longer available because it ended over 60 days ago.";
         } else {
           this.apiError =
             itemInfoResult?.message?.MessageContent ?? 'Item error';

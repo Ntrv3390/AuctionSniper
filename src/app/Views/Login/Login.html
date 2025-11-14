@@ -44,7 +44,7 @@
               <ion-icon name="person-outline" slot="start"></ion-icon>
               <ion-input
                 type="text"
-                placeholder="Username"
+                [placeholder]="isSignIn ? 'Username or Email' : 'Username'"
                 formControlName="userId"
                 autocapitalize="none"
                 autocomplete="off"
@@ -184,6 +184,10 @@
       </form>
     </div>
 
+    <div class="success-message" *ngIf="successMessage">
+      <ion-text color="success"> {{ successMessage }} </ion-text>
+    </div>
+
     <!-- Toggle Auth Mode Button -->
     <div class="auth-toggle-button" *ngIf="isSignIn">
       <p>Don't have an account?</p>
@@ -197,10 +201,6 @@
       <ion-button fill="clear" (click)="toggleAuthMode(true)">
         <ion-text>Sign In</ion-text>
       </ion-button>
-    </div>
-
-    <div class="success-message" *ngIf="successMessage">
-      <ion-text color="success"> {{ successMessage }} </ion-text>
     </div>
 
     <!-- Version Info -->

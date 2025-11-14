@@ -53,6 +53,7 @@ export class NavigatorService {
     try {
       await this.ebay.ensureValidEbayToken(true, true);
     } catch (err) {
+      this.navCtrl.navigateRoot('/ebay-token');
       return;
     }
 
