@@ -15,16 +15,6 @@
   --ion-safe-area-right: env(safe-area-inset-right, 0px);
 }
 
-html.platform-ios {
-  --safe-area-top: env(safe-area-inset-top);
-  --safe-area-bottom: env(safe-area-inset-bottom);
-}
-
-html.platform-ios .ios-header {
-  padding-top: var(--safe-area-top);
-}
-
-
 ion-header {
   --ion-safe-area-top: constant(safe-area-inset-top);
   --ion-safe-area-top: env(safe-area-inset-top);

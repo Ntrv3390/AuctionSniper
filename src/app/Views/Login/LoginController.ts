@@ -167,7 +167,7 @@ export class LoginPage implements OnInit {
   }
 
   onForgotPassword(): void {
-    const forgotUrl = `https://main1.auctionsniper.com/resetpassword.aspx`;
+    const forgotUrl = `https://auctionsniper.com/resetpassword.aspx`;
     window.open(forgotUrl, '_system');
   }
 
@@ -221,7 +221,13 @@ export class LoginPage implements OnInit {
           }, 2500);
         } else {
           this.successMessage = '';
-          this.errorHandler.handleApiResult(result, 'Registration', true, false, true);
+          this.errorHandler.handleApiResult(
+            result,
+            'Registration',
+            true,
+            false,
+            true
+          );
         }
       },
       error: (error) => {

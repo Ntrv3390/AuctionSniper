@@ -31,7 +31,7 @@ const defaultBuildVars: BuildVars = {
   config: {
     ApplicationName: 'Auction Sniper',
     ApplicationDescription: 'eBay auction sniping application',
-    AppVersion: '3.18.2',
+    AppVersion: '3.18.0',
     AuthorName: 'AuctionSniper.com',
     AuthorEmail: 'support@auctionsniper.com',
     AuthorWebsite: 'https://auctionsniper.com',
