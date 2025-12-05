@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.auctiva.auctionsniper;
 
 import com.getcapacitor.BridgeActivity;
 
