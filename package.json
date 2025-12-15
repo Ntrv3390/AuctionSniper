@@ -14,7 +14,7 @@
   "private": true,
   "dependencies": {
     "@awesome-cordova-plugins/in-app-browser": "^8.0.2",
-    "@capacitor-firebase/crashlytics": "^7.4.0",
+    "@capacitor-firebase/crashlytics": "^7.5.0",
     "@capacitor/action-sheet": "^7.0.2",
     "@capacitor/android": "^7.4.2",
     "@capacitor/app": "^7.0.2",

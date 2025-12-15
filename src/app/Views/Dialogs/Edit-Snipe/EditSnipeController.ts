@@ -201,7 +201,7 @@ export class EditSnipeController implements OnInit {
   }
 
   cancel_click(): void {
-    this.goBack();;
+    this.goBack();
   }
 
   secondShotHelpIcon_click(): void {
@@ -248,7 +248,7 @@ export class EditSnipeController implements OnInit {
       if (result.success) {
         await this.presentToast('Snipe updated!', 'success');
         this.dataSource.activeSnipes?.push(result.snipe);
-        this.goBack();;
+        this.goBack();
       } else {
         if (result.message.Level == -1) {
           await this.presentToast(`${result.message.MessageContent}`, 'danger');
@@ -274,7 +274,6 @@ export class EditSnipeController implements OnInit {
       if (result.message?.Level === 0) {
         await this.presentToast('Snipe updated!', 'success');
       }
-
       // Update activeSnipes cache
       const snipe = this.dataSource.activeSnipes?.find(
         (s) => s.Item === result.snipe.Item
@@ -286,7 +285,8 @@ export class EditSnipeController implements OnInit {
       }
 
       // Navigate back to snipe list after updating
-      this.goBack();;
+      this.router.navigate(['/snipe/detail', result.snipe.Item]);
+      // this.goBack();
     }
   }
 

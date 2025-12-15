@@ -356,7 +356,7 @@ export class DetailController implements OnInit {
     const itemNumber = this.route.snapshot.paramMap.get('id');
     if (!itemNumber) {
       this.viewModel.showError = true;
-      this.apiError = 'lol';
+      this.apiError = 'id not found';
       this.isError = true;
       this.viewModel.showSpinner = false;
       this.logger.error('DetailController', 'refresh', 'No ID provided.');
@@ -433,7 +433,8 @@ export class DetailController implements OnInit {
       if (!itemInfoResult?.success) {
         this.viewModel.showError = true;
         if (itemInfoResult?.message?.MessageContent == compareError) {
-          this.apiError = "Details for this item are no longer available because it ended over 60 days ago.";
+          this.apiError =
+            'Details for this item are no longer available because it ended over 60 days ago.';
         } else {
           this.apiError =
             itemInfoResult?.message?.MessageContent ?? 'Item error';
@@ -452,7 +453,8 @@ export class DetailController implements OnInit {
     } catch (err: any) {
       this.isError = true;
       if (err?.message?.MessageContent == compareError) {
-        this.apiError = "Sorry, we're having trouble loading this item from ebay.";
+        this.apiError =
+          "Sorry, we're having trouble loading this item from ebay.";
       } else {
         this.apiError = err?.message?.MessageContent ?? 'Item error';
       }

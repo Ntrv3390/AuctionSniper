@@ -864,7 +864,7 @@ export class AuctionSniperApiService {
     id: string,
     blocking: boolean = true
   ): Observable<AuctionSniperApiTypes.SearchItemInfoResult> {
-    const url = this.getApiUrl('/Search/ItemInfo');
+    const url = this.getApiUrl('Search/ItemInfo');
     const params = { Id: id };
     const headers = {
       'Content-Type': 'application/json',
