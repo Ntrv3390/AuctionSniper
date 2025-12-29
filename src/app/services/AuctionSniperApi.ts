@@ -73,6 +73,7 @@ const logApiError = (method: string, url: string, error: any) => {
 })
 export class AuctionSniperApiService {
   private baseUrl: string;
+  private searchUrl: string;
 
   constructor(
     private http: HttpClient,
@@ -83,6 +84,7 @@ export class AuctionSniperApiService {
   ) {
     // Initialize baseUrl based on platform
     this.baseUrl = this.getApiUrl('/Account');
+    this.searchUrl = this.getApiUrl('/Search');
   }
 
   private getApiUrl(endpoint: string): string {
@@ -749,7 +751,7 @@ export class AuctionSniperApiService {
   }
 
   deals(): Observable<AuctionSniperApiTypes.DealsResult> {
-    const url = `${this.baseUrl}/Deals`;
+    const url = `${this.searchUrl}/Deals`;
     const headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json',

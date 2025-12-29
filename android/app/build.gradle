@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     namespace "com.auctiva.auctionsniper"
@@ -7,8 +9,8 @@ android {
         applicationId "com.auctiva.auctionsniper"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3180000
-        versionName "3.19.0"
+        versionCode 3191000
+        versionName "3.19.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -40,6 +42,15 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+
+  implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+
+  // Add the dependencies for the Crashlytics and Analytics libraries
+  // When using the BoM, you don't specify versions in Firebase library dependencies
+  implementation("com.google.firebase:firebase-crashlytics")
+  implementation("com.google.firebase:firebase-analytics") {
+    exclude group: 'com.google.android.gms', module: 'play-services-ads'
+  }
 }
 
 apply from: 'capacitor.build.gradle'

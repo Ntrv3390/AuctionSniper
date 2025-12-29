@@ -13,14 +13,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="detail-content">
-  <!-- Loading -->
+  <!-- ================= LOADING ================= -->
   <div class="loading-state" *ngIf="viewModel.showSpinner">
     <ion-spinner name="crescent" color="primary"></ion-spinner>
     <p>Loading item details...</p>
   </div>
 
-  <!-- Error -->
-  <div class="error-state" *ngIf="viewModel.showError">
+  <!-- ================= ERROR ================= -->
+  <div class="error-state" *ngIf="!viewModel.showSpinner && isError">
     <ion-card class="error-card">
       <ion-card-content>
         <ion-icon
@@ -28,8 +28,11 @@
           color="danger"
           class="error-icon"
         ></ion-icon>
-        <h3>{{isError ? "Error Occured" : "Connection Error"}}</h3>
-        <p>{{isError ? apiError : "Unexpected error; please try again."}}</p>
+
+        <h3>Error</h3>
+
+        <p>{{ apiError || 'Something went wrong. Please try again.' }}</p>
+
         <ion-button fill="solid" color="primary" (click)="retry_click()">
           <ion-icon name="refresh-outline" slot="start"></ion-icon>
           Try Again
@@ -38,12 +41,9 @@
     </ion-card>
   </div>
 
-  <!-- Main Content -->
-  <div
-    *ngIf="!viewModel.showError && !viewModel.showSpinner"
-    class="detail-container"
-  >
-    <!-- Hero Section -->
+  <!-- ================= MAIN CONTENT ================= -->
+  <div *ngIf="!viewModel.showSpinner && !isError" class="detail-container">
+    <!-- HERO -->
     <div class="hero-section" *ngIf="viewModel.item">
       <div class="item-image-container">
         <img
@@ -52,6 +52,7 @@
           class="item-image"
           (error)="onImageError($event)"
         />
+
         <div
           class="status-badge"
           [ngClass]="{ 'ended': viewModel.item.HasEnded }"
@@ -59,15 +60,15 @@
           <ion-icon
             [name]="viewModel.item.HasEnded ? 'close-circle-outline' : 'time-outline'"
           ></ion-icon>
-          <span
-            >{{ viewModel.item.HasEnded ? 'Ended' : viewModel.item.CountDownTime
-            }}</span
-          >
+          <span>
+            {{ viewModel.item.HasEnded ? 'Ended' : viewModel.item.CountDownTime
+            }}
+          </span>
         </div>
       </div>
     </div>
 
-    <!-- Product Detail Card -->
+    <!-- DETAILS -->
     <div class="details-section" *ngIf="viewModel.item">
       <ion-card class="detail-card">
         <ion-card-content>
@@ -78,6 +79,7 @@
               {{ viewModel.item.Currency }}{{ viewModel.item.CurrentPrice |
               number:'1.2-2' }}
             </span>
+
             <div class="bids">
               <ion-icon name="hammer-outline" color="medium"></ion-icon>
               <span>{{ viewModel.item.Bids }} bids</span>
@@ -87,15 +89,17 @@
           <div class="meta-info">
             <div class="meta-item">
               <ion-icon name="calendar-outline" color="medium"></ion-icon>
-              <span
-                >Ends: {{ viewModel.item.EndTime | date:"MM/dd/yyyy 'at' h:mma"
-                }}</span
-              >
+              <span>
+                Ends: {{ viewModel.item.EndTime | date:"MM/dd/yyyy 'at' h:mma"
+                }}
+              </span>
             </div>
+
             <div class="meta-item" *ngIf="viewModel.item.FreeShipping">
               <ion-icon name="car-outline" color="success"></ion-icon>
               <span>Free Shipping</span>
             </div>
+
             <div class="meta-item" *ngIf="!viewModel.item.Auction">
               <ion-icon name="pricetag-outline" color="warning"></ion-icon>
               <span>Fixed Price</span>
@@ -105,14 +109,15 @@
       </ion-card>
     </div>
 
-    <!-- Actions Section -->
+    <!-- ACTIONS -->
     <div class="actions-section" *ngIf="viewModel.item">
+      <!-- SNIPE ACTIONS -->
       <ion-card class="actions-card" *ngIf="!viewModel.item.HasEnded">
         <ion-card-content>
           <ion-button
             expand="block"
-            [disabled]="!viewModel.item.Auction"
             *ngIf="!viewModel.itemHasActiveSnipe"
+            [disabled]="!viewModel.item.Auction"
             (click)="addToSnipes_click()"
           >
             <ion-icon name="crosshairs-outline" slot="start"></ion-icon>
@@ -141,7 +146,8 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card class="actions-card" *ngIf="!viewModel.item.HasEnded">
+      <!-- WATCH ACTIONS -->
+      <ion-card class="actions-card">
         <ion-card-content>
           <ion-button
             expand="block"
@@ -176,6 +182,7 @@
         </ion-card-content>
       </ion-card>
 
+      <!-- VIEW ON EBAY -->
       <ion-card class="actions-card">
         <ion-card-content>
           <ion-button
