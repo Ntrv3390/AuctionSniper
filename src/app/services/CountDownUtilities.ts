@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { Subject, interval, Subscription } from 'rxjs';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -145,6 +146,23 @@ export class CountDownUtilitiesService {
         const endTime = this.getDateFromEntity(entity);
         const format = this.doCountdown(endTime, now);
         entity[this.displayField] = format;
+
+        if (!entity._CountDownDebugLogged) {
+          const diff = endTime - now;
+          console.log('[CountDownDebug]', {
+            targetField: this.targetField,
+            rawEndTime: entity[this.targetField],
+            parsedEndTimeMs: endTime,
+            parsedEndTimeIso: Number.isFinite(endTime)
+              ? new Date(endTime).toISOString()
+              : 'Invalid Date',
+            deviceNowMs: now,
+            deviceNowIso: new Date(now).toISOString(),
+            diffMs: diff,
+            computedDisplay: format,
+          });
+          entity._CountDownDebugLogged = true;
+        }
         
         // Check if the item has just ended
         if (format === 'Ended') {
@@ -171,17 +189,64 @@ export class CountDownUtilitiesService {
    * Memoizes parsed end time from target field.
    */
   private getDateFromEntity(entity: any): number {
-    if (entity._EndTime) return entity._EndTime;
+    const rawEndTime = entity[this.targetField];
+    if (
+      Number.isFinite(entity._EndTime) &&
+      entity._EndTimeRaw === rawEndTime
+    ) {
+      return entity._EndTime;
+    }
 
-    const time = new Date(entity[this.targetField]).getTime();
+    const time = this.parseEndTime(rawEndTime);
     entity._EndTime = time;
+    entity._EndTimeRaw = rawEndTime;
     return time;
   }
+
+  /**
+   * Parses end time from API data while handling ISO strings, local display strings,
+   * epoch milliseconds, and epoch seconds.
+   */
+  private parseEndTime(rawEndTime: any): number {
+    if (rawEndTime == null) {
+      return NaN;
+    }
+
+    if (typeof rawEndTime === 'number') {
+      return rawEndTime < 1e12 ? rawEndTime * 1000 : rawEndTime;
+    }
+
+    if (rawEndTime instanceof Date) {
+      return rawEndTime.getTime();
+    }
+
+    const value = String(rawEndTime).trim();
+    if (!value) {
+      return NaN;
+    }
+
+    // Numeric strings may be seconds or milliseconds.
+    if (/^\d+$/.test(value)) {
+      const numeric = Number(value);
+      return numeric < 1e12 ? numeric * 1000 : numeric;
+    }
+
+    const nativeParsed = Date.parse(value);
+    if (Number.isFinite(nativeParsed)) {
+      return nativeParsed;
+    }
+
+    // Fallback for known non-ISO formats emitted by API mapping.
+    const fallback = moment(value, ['MM/DD/YYYY h:mm:ss A', 'MM/DD/YYYY h:mm A'], true);
+    return fallback.isValid() ? fallback.valueOf() : NaN;
+  }
+
 
   /**
    * Converts time difference into formatted countdown.
    */
   private doCountdown(endTime: number, now: number): string {
+    if (!Number.isFinite(endTime)) return 'Ended';
     if (now >= endTime) return 'Ended';
 
     const diff = endTime - now;

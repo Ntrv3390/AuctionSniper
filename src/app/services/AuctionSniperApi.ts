@@ -589,16 +589,66 @@ export class AuctionSniperApiService {
       );
   }
 
-  private getLocalEndTime(dateString: string): string {
-    if (!dateString) {
+    private getLocalEndTime(dateString: string): string {
+      if (!dateString) {
+        return '';
+      }
+
+      // EndTimeUtc values are expected to be UTC. Convert once to device local time.
+      const localMoment = moment.utc(dateString).local();
+      if (!localMoment.isValid()) {
+        return '';
+      }
+
+      return localMoment.format('MM/DD/YYYY h:mm:ss A');
+    }
+
+  private getExistingLocalDisplay(value: any): string {
+    if (value == null) {
       return '';
     }
 
-    const datetime = new Date(dateString);
-    const offset = datetime.getTimezoneOffset();
-    datetime.setMinutes(datetime.getMinutes() - offset);
+    const raw = String(value).trim();
+    if (!raw) {
+      return '';
+    }
 
-    return moment.utc(datetime).local().format('MM/DD/YYYY h:mm:ss A');
+    // Common backend local display formats; keep as-is to avoid double conversion.
+    const localDisplayPattern = /^\d{1,2}\/\d{1,2}\/\d{4}\s+\d{1,2}:\d{2}(:\d{2})?\s*(AM|PM)$/i;
+    return localDisplayPattern.test(raw) ? raw : '';
+  }
+
+  private toDisplayTime(value: any, assumeUtc: boolean): string {
+    if (value == null) {
+      return '';
+    }
+
+    const format = 'MM/DD/YYYY h:mm:ss A';
+
+    if (typeof value === 'number') {
+      const timestamp = value < 1e12 ? value * 1000 : value;
+      return moment.utc(timestamp).local().format(format);
+    }
+
+    const raw = String(value).trim();
+    if (!raw) {
+      return '';
+    }
+
+    if (/^\d+$/.test(raw)) {
+      const numeric = Number(raw);
+      const timestamp = numeric < 1e12 ? numeric * 1000 : numeric;
+      return moment.utc(timestamp).local().format(format);
+    }
+
+    const hasTimezone = /(?:Z|[+\-]\d{2}:?\d{2})$/i.test(raw);
+    const parsed = hasTimezone
+      ? moment.parseZone(raw).local()
+      : assumeUtc
+      ? moment.utc(raw).local()
+      : moment.utc(Date.parse(raw)).local();
+
+    return parsed.isValid() ? parsed.format(format) : '';
   }
 
   public getSavedSearches(): Observable<AuctionSniperApiTypes.ListSavedSearchResults> {

@@ -142,24 +142,8 @@
         button
       >
         <div class="deal-image-container">
-          <img
-            [src]="deal.SmallPictureUrl"
-            [alt]="deal.Title"
-            class="deal-image"
-          />
-          <div class="deal-badge">
-            <ion-icon name="flash" color="warning"></ion-icon>
-          </div>
+          <img [src]="deal.SmallPictureUrl" [alt]="deal.Title" />
         </div>
-        <ion-card-content class="deal-content">
-          <h4 class="deal-title">{{ deal.Title }}</h4>
-          <div class="deal-price">
-            <span class="currency">{{ deal.Currency }}</span>
-            <span class="price"
-              >{{ deal.ConvertedCurrentPrice | number:'1.2-2' }}</span
-            >
-          </div>
-        </ion-card-content>
       </ion-card>
     </div>
   </div>
@@ -310,10 +294,7 @@
         <p>
           Try a different search term or adjust your filters to find more items.
         </p>
-        <ion-button
-          fill="outline"
-          (click)="clearSearch_click()"
-        >
+        <ion-button fill="outline" (click)="clearSearch_click()">
           <ion-icon name="refresh-outline" slot="start"></ion-icon>
           Try New Search
         </ion-button>

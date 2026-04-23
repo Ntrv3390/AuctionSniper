@@ -31,31 +31,6 @@
   font-size: 15px;
   --padding-start: 0;
   --padding-end: 0;
-  --padding-top: 0;
-  --padding-bottom: 0;
-  --background: transparent;
-}
-
-.search-button {
-  --background: #75a8ccaa; /* iOS blue */
-  --background-activated: #145583;
-  --border-radius: 8px;
-  height: 32px;
-  padding: 0 14px;
-  margin-left: 8px;
-  font-size: 14px;
-  line-height: 1;
-}
-
-ion-header {
-  padding-top: 0 !important;
-}
-ion-toolbar {
-  --padding-top: 0 !important;
-  --min-height: 56px;
-}
-
-.search-content {
   --background: #f8f9fa;
 
   padding-top: var(--safe-area-inset-top, var(--safe-area-inset-top-fallback));
