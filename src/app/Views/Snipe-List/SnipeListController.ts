@@ -32,7 +32,7 @@ import {
 import _ from 'lodash';
 import moment from 'moment';
 import { ActionSheetController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SnipeCacheService } from 'src/app/services/SnipeCacheService';
 
 // Services
@@ -110,8 +110,9 @@ export class SnipeListPage implements OnInit {
     private popoverCtrl: PopoverController,
     private actionSheetCtrl: ActionSheetController,
     private router: Router,
+    private route: ActivatedRoute,
     private messageExtractor: ApiMessageExtractorService,
-    private cacheService: SnipeCacheService
+    private cacheService: SnipeCacheService,
   ) {}
 
   apiError: string | null = '';
@@ -189,7 +190,23 @@ export class SnipeListPage implements OnInit {
   }
 
   protected async view_beforeEnter(): Promise<void> {
-    // Only refresh if we don't have data or it's the first load
+    const forceRefresh =
+      this.route.snapshot.queryParamMap.get('forceRefresh') === 'true';
+
+    // Force refresh when explicitly requested via navigation query param.
+    if (forceRefresh) {
+      this.viewModel.showSpinner = true;
+      await this.refresh(true);
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { forceRefresh: null },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+      return;
+    }
+
+    // Only refresh if we don't have data or it's the first load.
     if (this.viewModel.snipes.length === 0) {
       this.viewModel.showSpinner = true;
       await this.refresh();
@@ -272,7 +289,7 @@ export class SnipeListPage implements OnInit {
 
     this.viewModel.snipes = this.sortSnipesListByEndTime(
       this.viewModel.snipes,
-      sortDirection
+      sortDirection,
     );
     if (this.content) {
       this.content.scrollToTop(300);
@@ -325,7 +342,7 @@ export class SnipeListPage implements OnInit {
 
       this.viewModel.snipes = this.sortSnipesListByEndTime(
         snipes,
-        sortDirection
+        sortDirection,
       );
       this.initializeCountDown(status);
     } catch (err: any) {
@@ -340,7 +357,7 @@ export class SnipeListPage implements OnInit {
         'SnipeListPage',
         'refresh',
         'Error refreshing snipes',
-        err
+        err,
       );
     }
   }
@@ -364,7 +381,7 @@ export class SnipeListPage implements OnInit {
             'SnipeListPage',
             'initializeCountDown',
             'Unable to initialize count down; unknown snipe status.',
-            status
+            status,
           );
           return;
       }
@@ -374,7 +391,7 @@ export class SnipeListPage implements OnInit {
         dataSourceName,
         'EndTime',
         'CountDownTime',
-        this.viewModel
+        this.viewModel,
       );
     } catch (e) {
       // Don't let count down errors affect the UI
@@ -383,7 +400,7 @@ export class SnipeListPage implements OnInit {
 
   private sortSnipesListByEndTime(
     snipes: AuctionSniperApiTypes.Snipe[],
-    direction: SortDirection
+    direction: SortDirection,
   ): AuctionSniperApiTypes.Snipe[] {
     if (!snipes || snipes.length === 0) {
       return snipes;

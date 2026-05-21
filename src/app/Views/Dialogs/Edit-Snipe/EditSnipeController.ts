@@ -83,7 +83,7 @@ export class EditSnipeController implements OnInit {
     private auctionSniperApi: AuctionSniperApiService,
     private dataSource: DataSourceService,
     private tracker: TrackerService,
-    private toastController: ToastController
+    private toastController: ToastController,
   ) {}
 
   ngOnInit() {
@@ -133,9 +133,14 @@ export class EditSnipeController implements OnInit {
     this.route.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
       if (id) {
-        this.router.navigate(['/snipe/detail', id]);
+        // this.router.navigate(['/snipe/detail', id]);
+        this.router.navigate(['/root/snipes'], {
+          queryParams: { forceRefresh: true },
+        });
       } else {
-        this.router.navigate(['/root/snipes']);
+        this.router.navigate(['/root/snipes'], {
+          queryParams: { forceRefresh: true },
+        });
       }
     });
   }
@@ -179,7 +184,7 @@ export class EditSnipeController implements OnInit {
   private async loadSnipe(id: number) {
     try {
       const result = await firstValueFrom(
-        this.auctionSniperApi.getSnipeInfo(id)
+        this.auctionSniperApi.getSnipeInfo(id),
       );
       if (result.success) {
         this.viewModel.maximumBid = result.snipe.MaxBid
@@ -206,7 +211,7 @@ export class EditSnipeController implements OnInit {
 
   secondShotHelpIcon_click(): void {
     this.ui.showInfoSnackbar(
-      'Second Shot retries bidding if the first attempt fails.'
+      'Second Shot retries bidding if the first attempt fails.',
     );
   }
 
@@ -243,19 +248,20 @@ export class EditSnipeController implements OnInit {
       };
 
       const result = await firstValueFrom(
-        this.auctionSniperApi.createSnipe(addParams)
+        this.auctionSniperApi.createSnipe(addParams),
       );
       if (result.success) {
-        await this.presentToast('Snipe updated!', 'success');
-        this.dataSource.activeSnipes?.push(result.snipe);
-        this.goBack();
+        await this.presentToast('Snipe added!', 'success');
+        this.router.navigate(['/root/snipes'], {
+          queryParams: { forceRefresh: true },
+        });
       } else {
         if (result.message.Level == -1) {
           await this.presentToast(`${result.message.MessageContent}`, 'danger');
         } else {
           await this.presentToast(
             'Something went wrong! Please try again later.',
-            'danger'
+            'danger',
           );
         }
       }
@@ -263,12 +269,12 @@ export class EditSnipeController implements OnInit {
   }
 
   private async updateSnipe(
-    updateParams: AuctionSniperApiTypes.CreateSnipeParameters
+    updateParams: AuctionSniperApiTypes.CreateSnipeParameters,
   ) {
     // Hide keyboard
     if (!(await this.isValidSnipe())) return;
     const result = await firstValueFrom(
-      this.auctionSniperApi.updateSnipe(updateParams)
+      this.auctionSniperApi.updateSnipe(updateParams),
     );
     if (result.success) {
       if (result.message?.Level === 0) {
@@ -276,7 +282,7 @@ export class EditSnipeController implements OnInit {
       }
       // Update activeSnipes cache
       const snipe = this.dataSource.activeSnipes?.find(
-        (s) => s.Item === result.snipe.Item
+        (s) => s.Item === result.snipe.Item,
       );
       if (snipe) {
         snipe.CurrentPrice = result.snipe.CurrentPrice;
@@ -285,7 +291,10 @@ export class EditSnipeController implements OnInit {
       }
 
       // Navigate back to snipe list after updating
-      this.router.navigate(['/snipe/detail', result.snipe.Item]);
+      // this.router.navigate(['/snipe/detail', result.snipe.Item]);
+      this.router.navigate(['/root/snipes'], {
+        queryParams: { forceRefresh: true },
+      });
       // this.goBack();
     }
   }
@@ -302,7 +311,7 @@ export class EditSnipeController implements OnInit {
     if (isNaN(maximumBid) || maximumBid <= 0) {
       await this.presentToast(
         'A valid maximum bid amount is required.',
-        'warning'
+        'warning',
       );
       return false;
     }
@@ -310,7 +319,7 @@ export class EditSnipeController implements OnInit {
     if (isNaN(leadTime) || leadTime < 2 || leadTime > 120) {
       await this.presentToast(
         'Bid lead time must be between 2 and 120 seconds.',
-        'warning'
+        'warning',
       );
       return false;
     }
@@ -319,7 +328,7 @@ export class EditSnipeController implements OnInit {
     if (!reg.test(this.viewModel.maximumBid.toString())) {
       await this.presentToast(
         'Maximum bid must be a valid currency amount.',
-        'warning'
+        'warning',
       );
       return false;
     }
